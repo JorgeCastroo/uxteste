@@ -1,7 +1,8 @@
 import React from 'react'
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack'
 import { AuthRoutesParams } from '../interfaces/AuthRoutesParams'
-import AuthLoginIndex from '../screens/AuthLoginIndex'
+import AuthLocation from '../screens/AuthLocation'
+import AuthLogin from '../screens/AuthLogin'
 
 const AuthRoutes: React.FC = () => {
 
@@ -10,12 +11,14 @@ const AuthRoutes: React.FC = () => {
     return(
 
         <Stack.Navigator
-            initialRouteName = 'authLoginIndex'
+            initialRouteName = 'authLogin'
             screenOptions = {{
+                headerShown: false,
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
-            <Stack.Screen name = "authLoginIndex" component = {AuthLoginIndex} />
+            <Stack.Screen name = "authLocation" component = {AuthLocation} />
+            <Stack.Screen name = "authLogin" component = {AuthLogin} />
         </Stack.Navigator>
 
     )

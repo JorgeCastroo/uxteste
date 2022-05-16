@@ -1,3 +1,4 @@
 export type AuthRoutesParams = {
-    authLoginIndex: undefined
+    authLocation: undefined
+    authLogin: undefined
 }

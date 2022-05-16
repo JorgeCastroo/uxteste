@@ -25,7 +25,7 @@ const Routes: React.FC = () => {
     return(
 
         <>
-            {authLoading && <ActivityIndicator color = {themes.colors.primary} /> || (!isLogged && <AppRoutes /> || <AuthRoutes />)}
+            {authLoading && <ActivityIndicator color = {themes.colors.primary} /> || (isLogged && <AppRoutes /> || <AuthRoutes />)}
         </>
 
     )

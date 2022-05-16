@@ -21,6 +21,7 @@ export const status = {
 
 export const gradient = {
     primary: [colors.primary, colors.secondary],
+    secondary: [status.info.primary, status.info.secondary],
     disabled: ['#EDEDED', '#A49A9A'],
 }
 
