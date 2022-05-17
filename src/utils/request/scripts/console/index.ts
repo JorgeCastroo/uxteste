@@ -4,7 +4,7 @@ const SHOW_LOG = {
     REQUEST: true,
     HEADER: false,
     BODY: true,
-    RESPONSE: false,
+    RESPONSE: true,
 }
 
 const line = () => console.log('------------------------------------------------------')
