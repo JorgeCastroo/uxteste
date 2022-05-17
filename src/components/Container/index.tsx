@@ -8,6 +8,7 @@ const Container: React.FC <ContainerProps> = ({ children, type, ...props }) => {
 
     const styles = {
         center: !!props.center,
+        wid: props.width ?? '100%',
         between: !!props.between,
         pad: props.padding ?? true,
         marginTop: props.marginTop ?? 0,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
-import { ColetasRoutesParams } from '../screens/interfaces/ColetasRoutesParams'
+import { ColetasRoutesParams } from '../interfaces/ColetasRoutesParams'
 import ColetasDownload from '../screens/ColetasDownload'
 import ColetasList from '../screens/ColetasList'
 
@@ -11,7 +11,7 @@ const ColetasRoutes: React.FC = () => {
     return(
 
         <Stack.Navigator
-            initialRouteName = "coletasDownload"
+            initialRouteName = "coletasList"
             screenOptions = {{
                 headerShown: false,
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

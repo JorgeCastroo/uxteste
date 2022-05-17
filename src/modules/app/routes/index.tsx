@@ -12,7 +12,7 @@ const AppRoutes: React.FC = () => {
     return(
 
         <Tab.Navigator
-            initialRouteName = "coletasRoutes"
+            initialRouteName = "home"
             screenOptions = {{
                 headerShown: false
             }}

@@ -1,5 +1,6 @@
 export interface ContainerProps {
     type?: 'column' | 'row'
+    width?: string
     center?: boolean,
     between?: boolean,
     padding?: boolean
