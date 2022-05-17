@@ -14,7 +14,7 @@ const Tabbar: React.FC <BottomTabBarProps> = ({ navigation, state }) => {
                 <S.Container style = {elevation.elevation4}>
                     <TabItem icon = 'home' active = {state.index === 0} onPress = {() => navigation.navigate('home')} />
                     <TabCenterItem onPress = {() => navigation.navigate('map')} />
-                    <TabItem icon = 'reorder-horizontal' active = {state.index === 2} onPress = {() => navigation.navigate('list')} />
+                    <TabItem icon = 'reorder-horizontal' active = {state.index === 2} onPress = {() => navigation.navigate('solicitacaoRoutes')} />
                 </S.Container>
             )}
         </>

@@ -2,6 +2,7 @@ import React from 'react'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../interfaces/SolicitacaoRoutesParams'
 import SolicitacaoList from '../screens/SolicitacaoList'
+import SolicitacaoReceivement from '../screens/SolicitacaoReceivement'
 
 const SolicitacaoRoutes: React.FC = () => {
 
@@ -17,6 +18,7 @@ const SolicitacaoRoutes: React.FC = () => {
             }}
         >
             <Stack.Screen name = "solicitacaoList" component = {SolicitacaoList} />
+            <Stack.Screen name = "solicitacaoReceivement" component = {SolicitacaoReceivement} />
         </Stack.Navigator>
 
     )

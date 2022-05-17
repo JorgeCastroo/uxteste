@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import themes from '../../../../styles/themes'
+import { useAppDispatch } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
+import getColetas from '../../scripts/getColetas'
 
 const ColetasDownload: React.FC = () => {
+
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        getColetas(dispatch)
+    }, [dispatch])
 
     return(
 

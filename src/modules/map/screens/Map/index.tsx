@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
+import { FAB } from 'react-native-paper'
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import themes from '../../../../styles/themes'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
-import { FAB } from 'react-native-paper'
 
 const Map: React.FC = () => {
 

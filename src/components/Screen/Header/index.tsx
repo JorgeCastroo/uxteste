@@ -1,19 +1,19 @@
 import React from 'react'
-import { Appbar, Menu } from 'react-native-paper'
+import { Appbar } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { ScreenHeaderProps } from './types'
 import themes from '../../../styles/themes'
 import HeaderMenu from './Menu'
 
-const Header: React.FC <ScreenHeaderProps> = ({ goBack, title, subtitle }) => {
+const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtitle }) => {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation<any>()
     const showBack = goBack ?? true
 
     return(
-
+        
         <Appbar.Header style = {{width: '100%', backgroundColor: themes.colors.primary}}>
-            {showBack && <Appbar.BackAction onPress = {() => navigation.goBack()} />}
+            {showBack && (<Appbar.BackAction onPress = {backRoute ? navigation.navigate(backRoute) : navigation.goBack()} />)}
             <Appbar.Content title = {title} subtitle = {subtitle} />
             <HeaderMenu />
         </Appbar.Header>

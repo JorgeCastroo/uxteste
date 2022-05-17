@@ -11,7 +11,7 @@ const ColetasRoutes: React.FC = () => {
     return(
 
         <Stack.Navigator
-            initialRouteName = "coletasList"
+            initialRouteName = "coletasDownload"
             screenOptions = {{
                 headerShown: false,
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
