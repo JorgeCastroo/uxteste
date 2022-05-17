@@ -9,7 +9,11 @@ const AuthLogin: React.FC = () => {
     return(
 
         <>
-            <Render statusBarOptions = {{ barStyle: 'dark-content', backgroundColor: '#fff' }} paddingBottom = {20}>
+            <Render 
+                statusBarOptions = {{ barStyle: 'dark-content', backgroundColor: '#fff' }} 
+                wrapperColor = '#fff'
+                paddingBottom = {20}
+            >
                 <Section marginTop = {60} marginBottom = {110} center>
                     <AutoHeightImage
                         source = { require('../../../../assets/images/logo2.png') }

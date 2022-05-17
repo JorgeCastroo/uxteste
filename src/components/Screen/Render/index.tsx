@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { RefreshControl, SafeAreaView, StatusBar } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -11,6 +11,10 @@ const Render: React.FC <ScreenRenderProps> = ({ children, align, wrapperColor, p
 
     const isFocused = useIsFocused()
     const [resfreshLoading, setRefreshLoading] = useState<boolean>(false)
+
+    const wrapperBackgroundColor = useMemo(() => {
+        return wrapperColor ?? '#F5F5F5'
+    }, [wrapperColor])
 
     const statusBarProps = {
         barStyle: statusBarOptions?.barStyle ?? 'dark-content',
@@ -29,10 +33,10 @@ const Render: React.FC <ScreenRenderProps> = ({ children, align, wrapperColor, p
 
         <>
             {isFocused && <StatusBar {...statusBarProps} />}
-            <SafeAreaView style = {{flex: 1, backgroundColor: wrapperColor ?? '#ffffff'}}>
+            <SafeAreaView style = {{flex: 1, backgroundColor: wrapperBackgroundColor}}>
                 <KeyboardAwareScrollView
                     style = {{}}
-                    contentContainerStyle = {{flexGrow: 1, backgroundColor: wrapperColor ?? '#ffffff'}}
+                    contentContainerStyle = {{flexGrow: 1, backgroundColor: wrapperBackgroundColor}}
                     keyboardShouldPersistTaps = "handled"
                     refreshControl = {onRefresh && (
                         <RefreshControl

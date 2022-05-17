@@ -7,6 +7,6 @@ export const Wrapper = styled.View`
     justify-content: ${props => props.align};
     align-items: ${props => props.align && props.align === 'center' ? 'center' : 'flex-start'};
     flex: 1;
-    padding-bottom: ${props => props.align && props.align === 'center' ? '0px' : props.pad ?? '92px'};
+    padding-bottom: ${props => props.align && props.align === 'center' ? '0px' : props.pad ?? '90px'};
     background-color: transparent;
 `

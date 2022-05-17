@@ -15,7 +15,7 @@ const Home: React.FC = () => {
     return(
 
         <>
-            <Render statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }}>
+            <Render statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }} paddingBottom = {20}>
                 <HomeHeader />
                 <TopBox />
                 <Section marginTop = {30} marginBottom = {20}>

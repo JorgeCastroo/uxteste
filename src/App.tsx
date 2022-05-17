@@ -4,18 +4,19 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import { NavigationContainer as NavigationProvider } from '@react-navigation/native'
 import store from './redux/store'
 import Routes from './routes'
+import theme from './constants/paper/theme'
 
 const App: React.FC = () => {
 
     return(
 
-        <ReduxProvider store = {store}>
-            <NavigationProvider>
-                <PaperProvider>
+        <NavigationProvider>
+            <ReduxProvider store = {store}>
+                <PaperProvider theme = {theme}>
                     <Routes />
                 </PaperProvider>
-            </NavigationProvider>
-        </ReduxProvider>
+            </ReduxProvider>
+        </NavigationProvider>
 
     )
 
