@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import * as S from './styles'
 import themes from '../../../../styles/themes'
@@ -8,14 +9,13 @@ import Header from '../../../../components/Screen/Header'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import Button from '../../../../components/Button'
-import { View } from 'react-native'
 
 const SolicitacaoReceivement: React.FC = () => {
 
     return(
 
         <>
-            <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {20}>
+            <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {40}>
                 <Header title = "Placeholder" goBack = {false} />
                 <Section marginTop = {20}>
                     <SolicitacaoBox />
@@ -35,6 +35,7 @@ const SolicitacaoReceivement: React.FC = () => {
                     <Button
                         color = {['#1967D3', '#074FB1']}
                         label = "Iniciar Recebimento"
+                        onPress = {() => {}}
                     />
                 </Section>
             </Render>
