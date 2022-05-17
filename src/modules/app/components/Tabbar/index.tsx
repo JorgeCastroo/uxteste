@@ -10,7 +10,7 @@ const Tabbar: React.FC <BottomTabBarProps> = ({ navigation, state }) => {
     return(
 
         <>
-            {state.index !== 1 && (
+            {state.index !== 3 && (
                 <S.Container style = {elevation.elevation4}>
                     <TabItem icon = 'home' active = {state.index === 0} onPress = {() => navigation.navigate('home')} />
                     <TabCenterItem onPress = {() => navigation.navigate('map')} />

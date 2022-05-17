@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { AppRoutesParams } from '../interfaces/AppRoutesParams'
 import Tabbar from '../components/Tabbar'
 import Home from '../../home/screens/Home'
+import Map from '../../map/screens/Map'
 import ColetasRoutes from '../../coletas/routes'
 
 const AppRoutes: React.FC = () => {
@@ -19,6 +20,8 @@ const AppRoutes: React.FC = () => {
             tabBar = {props => <Tabbar {...props} />}
         >
             <Tab.Screen name = "home" component = {Home} />
+            <Tab.Screen name = "map" component = {Map} />
+            <Tab.Screen name = "list" component = {Map} />
             <Tab.Screen name = "coletasRoutes" component = {ColetasRoutes} />
         </Tab.Navigator>
 
