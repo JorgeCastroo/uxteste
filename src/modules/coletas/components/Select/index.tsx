@@ -1,12 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RadioButton } from 'react-native-paper'
 import themes from '../../../../styles/themes'
 import Section from '../../../../components/Screen/Section'
 import ColetasSelectItem from './Item'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
+import acceptAllColetas from '../../scripts/acceptAllColetas'
 
 const ColetasSelect: React.FC = () => {
 
     const [selectAll, setSelectAll] = React.useState('0')
+    const coletas = useAppSelector(s => s.coletas.coletas)
+
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (selectAll === '0') {
+
+        } else {
+            
+        }
+    }, [selectAll])
+
 
     return(
 

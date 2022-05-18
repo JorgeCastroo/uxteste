@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { SectionProps } from './types'
 import { SectionColumn, SectionRow } from './styles'
 
-const Section: React.FC <SectionProps> = ({ children, type, ...props }) => {
+const Section: React.FC<SectionProps> = ({ children, type, ...props }) => {
 
     const renderType = useMemo(() => { return type ?? 'column' }, [type])
 
@@ -14,7 +14,7 @@ const Section: React.FC <SectionProps> = ({ children, type, ...props }) => {
         marginBottom: props.marginBottom ?? 0,
     }
 
-    return(
+    return (
 
         <>
             {renderType === 'column' && <SectionColumn {...styles}>{children}</SectionColumn> || <SectionRow {...styles}>{children}</SectionRow>}
