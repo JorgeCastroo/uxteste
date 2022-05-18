@@ -2,6 +2,7 @@ import { KeyboardTypeOptions, StyleProp, TextStyle } from "react-native"
 
 export type FormInputProps = {
     id: string,
+    mode?: "outlined" | "flat",
     label?: string,
     placeholder?: string,
     keyboardType?: KeyboardTypeOptions,

@@ -1,6 +1,8 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Text } from 'react-native-paper'
+import { StackScreenProps } from '@react-navigation/stack'
+import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import * as S from './styles'
 import themes from '../../../../styles/themes'
 import { elevation } from '../../../../styles/layout'
@@ -10,7 +12,7 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import Button from '../../../../components/Button'
 
-const SolicitacaoReceivement: React.FC = () => {
+const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
     return(
 
@@ -33,9 +35,10 @@ const SolicitacaoReceivement: React.FC = () => {
                 </Section>
                 <Section marginTop = {40} center>
                     <Button
-                        color = {['#1967D3', '#074FB1']}
                         label = "Iniciar Recebimento"
-                        onPress = {() => {}}
+                        onPress = {() => {
+                            navigation.navigate('solicitacaoCode')
+                        }}
                     />
                 </Section>
             </Render>
