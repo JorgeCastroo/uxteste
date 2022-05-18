@@ -6,10 +6,10 @@ import BarcodeMask from "react-native-barcode-mask"
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import Render from '../../../../components/Screen/Render'
-//@ts-ignore
-import Beep from '../../../../assets/audio/beep.mp3'
 import info from '../../../../utils/info'
 import sleep from '../../../../utils/sleep'
+//@ts-ignore
+import Beep from '../../../../assets/audio/beep.mp3'
 
 Sound.setCategory('Playback')
 

@@ -7,10 +7,12 @@ import TabCenterItem from './Center'
 
 const Tabbar: React.FC <BottomTabBarProps> = ({ navigation, state }) => {
 
+    const SHOW_TABBAR = state.index !== 3 && state.routes[2].state?.index !== 3
+
     return(
 
         <>
-            {state.index !== 3 && (
+            {SHOW_TABBAR && (
                 <S.Container style = {elevation.elevation4}>
                     <TabItem icon = 'home' active = {state.index === 0} onPress = {() => navigation.navigate('home')} />
                     <TabCenterItem onPress = {() => navigation.navigate('map')} />
