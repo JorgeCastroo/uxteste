@@ -1,4 +1,7 @@
 export interface UserData {
-    id: number
+    idUser: number
     nome: string
+    placa?: string
+    telefone?: string
+    veiculos?: string
 }

@@ -25,11 +25,11 @@ const Form: React.FC = () => {
                 {({ values, errors, handleSubmit, setFieldValue }) => (
                     <>
                         <Section marginBottom = {16}>
-                            <FormLabel label = "Email" />
+                            <FormLabel label = "Login" />
                             <FormInput
-                                id = "email"
-                                error = {!!errors.email}
-                                value = {values.email}
+                                id = "login"
+                                error = {!!errors.login}
+                                value = {values.login}
                                 handleChange = {setFieldValue}
                             />
                         </Section>

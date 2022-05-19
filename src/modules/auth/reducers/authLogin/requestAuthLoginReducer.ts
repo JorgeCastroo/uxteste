@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { UserData } from "../../../../interfaces/UserData"
-import { ResponseDefault, ResponsePattern } from "../../../../utils/response/types"
+import { ResponseDefault, ResponsePattern, ResponseStatesPattern } from "../../../../utils/response/types"
 import { responseInitialValues } from "../../../../utils/response"
 
 interface State {
-    requestSendAuthLogin: ResponseDefault<UserData>
+    requestSendAuthLogin: ResponseStatesPattern<UserData>
 }
 
 const initialState: State = {
@@ -19,7 +19,7 @@ const requestSendAuthLoginSlice = createSlice({
             state.requestSendAuthLogin.loading = true
             state.requestSendAuthLogin.error = false
         },
-        setRequestSendAuthLoginData: (state, action: PayloadAction<ResponsePattern<UserData>>) => {
+        setRequestSendAuthLoginData: (state, action: PayloadAction<UserData>) => {
             state.requestSendAuthLogin.data = action.payload
             state.requestSendAuthLogin.loading = false
             state.requestSendAuthLogin.error = false
