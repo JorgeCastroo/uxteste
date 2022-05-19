@@ -1,11 +1,11 @@
 import * as yup from 'yup'
 
 export const loginFormSchema = yup.object().shape({
-    email: yup.string().email().required(),
+    login: yup.string().required(),
     senha: yup.string().required(),
 })
 
 export const loginFormValues = {
-    email: '',
+    login: '',
     senha: '',
 }

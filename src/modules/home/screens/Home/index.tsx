@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text } from 'react-native-paper'
 import themes from '../../../../styles/themes'
+import { useAppSelector } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
 import HomeHeader from '../../components/HomeHeader'
 import Section from '../../../../components/Screen/Section'
@@ -12,6 +13,10 @@ import HomeMessage from '../../components/Message'
 
 const Home: React.FC = () => {
 
+    const { userData } = useAppSelector(s => s.auth)
+
+    const userName = userData?.nome ?? 'Usuário'
+
     return(
 
         <>
@@ -20,7 +25,7 @@ const Home: React.FC = () => {
                 <TopBox />
                 <Section marginTop = {30} marginBottom = {20}>
                     <Text style = {{color: '#333333', fontSize: 18}}>{dayMoment()}</Text>
-                    <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>UserName</Text>
+                    <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userName}</Text>
                 </Section>
                 <HomeMessage />
                 <GroupInfo />
