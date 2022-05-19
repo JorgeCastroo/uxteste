@@ -37,7 +37,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                     <Button
                         label = "Iniciar Recebimento"
                         onPress = {() => {
-                            navigation.navigate('solicitacaoCode')
+                            navigation.navigate('solicitacaoScan')
                         }}
                     />
                 </Section>

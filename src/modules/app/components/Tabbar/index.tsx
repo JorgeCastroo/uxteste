@@ -7,7 +7,7 @@ import TabCenterItem from './Center'
 
 const Tabbar: React.FC <BottomTabBarProps> = ({ navigation, state }) => {
 
-    const SHOW_TABBAR = state.index !== 3 && state.routes[2].state?.index !== 3
+    const SHOW_TABBAR = state.index !== 3 && state.routes[2].state?.index !== 2
 
     return(
 

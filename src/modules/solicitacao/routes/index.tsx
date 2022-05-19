@@ -3,8 +3,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { SolicitacaoRoutesParams } from '../interfaces/SolicitacaoRoutesParams'
 import SolicitacaoList from '../screens/SolicitacaoList'
 import SolicitacaoReceivement from '../screens/SolicitacaoReceivement'
-import SolicitacaoCode from '../screens/SolicitacaoCode'
-import SolicitacaoCamera from '../screens/SolicitacaoCamera'
+import SolicitacaoScan from '../screens/SolicitacaoScan'
 
 const SolicitacaoRoutes: React.FC = () => {
 
@@ -21,8 +20,7 @@ const SolicitacaoRoutes: React.FC = () => {
         >
             <Stack.Screen name = "solicitacaoList" component = {SolicitacaoList} />
             <Stack.Screen name = "solicitacaoReceivement" component = {SolicitacaoReceivement} />
-            <Stack.Screen name = "solicitacaoCode" component = {SolicitacaoCode} />
-            <Stack.Screen name = "solicitacaoCamera" component = {SolicitacaoCamera} />
+            <Stack.Screen name = "solicitacaoScan" component = {SolicitacaoScan} />
         </Stack.Navigator>
 
     )

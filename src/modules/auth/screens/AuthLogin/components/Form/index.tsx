@@ -40,6 +40,7 @@ const Form: React.FC = () => {
                         <Section marginTop = {80}>
                             <Button
                                 label = "Entrar"
+                                onPress = {handleSubmit}
                             />
                         </Section>
                     </>
