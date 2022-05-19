@@ -9,23 +9,42 @@ import storage from '../utils/storage'
 import AppRoutes from '../modules/app/routes'
 import AuthRoutes from '../modules/auth/routes'
 
+import { DataSource } from "typeorm/browser"
+
+const AppDataSource = new DataSource({
+    database: "first_mile",
+    type: "react-native",
+    location: "default",
+    synchronize: true,
+    entities: [],
+})
+
 const Routes: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { isLogged, authLoading } = useAppSelector(s => s.auth)
 
+    const Database = async () => {
+        await AppDataSource.initialize()
+        console.log("DATABASE ONLINE!")
+    }
+
     useEffect(() => {
-        (async() => {
+        (async () => {
             const localUser = await storage.getItem<UserData>('userData')
-            if(!!localUser) await setUserData(dispatch, localUser, true)
+            if (!!localUser) await setUserData(dispatch, localUser, true)
             else dispatch(setAuthLoading(false))
         })()
     }, [dispatch])
 
-    return(
+    useEffect(() => {
+        Database()
+    }, [])
+
+    return (
 
         <>
-            {(authLoading && <ActivityIndicator color = {themes.colors.primary} />) || (!isLogged && <AppRoutes /> || <AuthRoutes />)}
+            {(authLoading && <ActivityIndicator color={themes.colors.primary} />) || (!isLogged && <AppRoutes /> || <AuthRoutes />)}
         </>
 
     )

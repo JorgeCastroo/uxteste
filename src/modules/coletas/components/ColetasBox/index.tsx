@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { List } from 'react-native-paper'
 import * as S from './styles'
 import themes from '../../../../styles/themes'
 import { elevation } from '../../../../styles/layout'
 import Container from '../../../../components/Container'
 import ColetaBoxSelect from './Select'
-import acceptColeta from '../../scripts/acceptColeta'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
+import { setIdsColetas, setRemoveIdsColetas } from '../../reducers/coletas/coletas'
 
 interface Props {
     id: number,
@@ -23,6 +23,13 @@ const ColetasBox: React.FC<Props> = ({ id, quantidade, logradouro, numero, bairr
 
     const theme = themes.colors.tertiary
     const dispatch = useAppDispatch()
+    const idsAprovadas = useAppSelector(s => s.coletas.idsColetasAprovadas)
+    const idsReprovadas = useAppSelector(s => s.coletas.idsColetasReprovadas)
+
+    useEffect(() => {
+        console.log(idsAprovadas)
+        console.log(idsReprovadas)
+    }, [])
 
     return (
 
@@ -41,12 +48,12 @@ const ColetasBox: React.FC<Props> = ({ id, quantidade, logradouro, numero, bairr
                 <ColetaBoxSelect
                     icon="close"
                     color={themes.status.error.primary}
-                    onPress={() => { }}
+                    onPress={() => { dispatch(setRemoveIdsColetas(id))}}
                 />
                 <ColetaBoxSelect
                     icon="check"
                     color={themes.status.success.primary}
-                    onPress={() => acceptColeta(dispatch, id, 100) }
+                    onPress={() => dispatch(setIdsColetas(id)) }
                 />
             </Container>
         </S.Box>
