@@ -5,7 +5,6 @@ import { loginFormSchema, loginFormValues } from './constants'
 import FormLabel from '../../../../../../components/Form/Label'
 import FormInput from '../../../../../../components/Form/Input'
 import Button from '../../../../../../components/Button'
-import { View } from 'react-native'
 
 const Form: React.FC = () => {
 
@@ -41,6 +40,7 @@ const Form: React.FC = () => {
                         <Section marginTop = {80}>
                             <Button
                                 label = "Entrar"
+                                onPress = {handleSubmit}
                             />
                         </Section>
                     </>

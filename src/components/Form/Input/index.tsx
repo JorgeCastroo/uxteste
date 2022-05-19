@@ -4,7 +4,7 @@ import TextInputMask from 'react-native-text-input-mask'
 import { FormInputProps } from './types'
 import themes from '../../../styles/themes'
 
-const FormInput: React.FC <FormInputProps> = ({ id, label, placeholder, keyboardType, value, error, editable, secure, mask, lines, style, handleChange }) => {
+const FormInput: React.FC <FormInputProps> = ({ id, mode, label, placeholder, keyboardType, value, error, editable, secure, mask, lines, style, handleChange }) => {
 
     const inputRef = useRef(null)
     const [showSecure, setShowSecure] = useState<boolean | undefined>(secure)
@@ -40,7 +40,7 @@ const FormInput: React.FC <FormInputProps> = ({ id, label, placeholder, keyboard
             {mask ? (
                 <TextInput
                     {...inputProps}
-                    mode = {'outlined'}
+                    mode = {mode ?? 'outlined'}
                     autoCapitalize = 'none'
                     style = {{fontWeight: 'bold'}}
                     placeholder = {placeholder}
@@ -61,7 +61,7 @@ const FormInput: React.FC <FormInputProps> = ({ id, label, placeholder, keyboard
             ) : (
                 <TextInput
                     {...inputProps}
-                    mode = {'outlined'}
+                    mode = {mode ?? 'outlined'}
                     autoCapitalize = 'none'
                     style = {{fontWeight: 'bold'}}
                     placeholder = {placeholder}
