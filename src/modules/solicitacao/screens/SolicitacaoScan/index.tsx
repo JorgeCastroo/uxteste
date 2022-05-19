@@ -3,7 +3,6 @@ import { StatusBar, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import { RNCamera } from 'react-native-camera'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-//@ts-ignore
 import Sound from 'react-native-sound'
 import BarcodeMask from "react-native-barcode-mask"
 import { showMessage } from "react-native-flash-message"
@@ -17,13 +16,22 @@ import Form from './components/Form'
 import info from '../../../../utils/info'
 import sleep from '../../../../utils/sleep'
 //@ts-ignore
-import BeepSuccess from '../../../../assets/audio/beep.mp3'
+import BeepSuccessAudio from '../../../../assets/audio/beep_success.mp3'
+//@ts-ignore
+import BeepErrorAudio from '../../../../assets/audio/beep_error.mp3'
 
 Sound.setCategory('Playback')
 
-const beepAudio = new Sound(BeepSuccess, error => {
+const beepSuccess = new Sound(BeepSuccessAudio, error => {
     if(error){
-        info.error('beepAudio',error)
+        info.error('beepSuccess',error)
+        return
+    }
+})
+
+const beepError = new Sound(BeepErrorAudio, error => {
+    if(error){
+        info.error('beepError',error)
         return
     }
 })
@@ -38,21 +46,23 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
     const handleScan = useCallback(async () => {
         dispatch(setScanning(true))
         
-        beepAudio.play()
         if(!scannedSolicitacoes.includes(scannedCode!)){
+            beepSuccess.play()
             dispatch(addScannedSolicitacao(scannedCode!))
             showMessage({
                 message: 'Código lido com sucesso!',
                 type: 'success',
                 statusBarHeight: StatusBar.currentHeight,
             })
-            await sleep(300)
+            await sleep(400)
         }else{
+            beepError.play()
             showMessage({
                 message: 'Código já inserido!',
                 type: 'danger',
                 statusBarHeight: StatusBar.currentHeight,
             })
+            await sleep(700)
         }
         
         dispatch(setScanning(false))
@@ -78,6 +88,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
+                    barCodeTypes = {[RNCamera.Constants.BarCodeType.qr, RNCamera.Constants.BarCodeType.code39]}
                     onBarCodeRead = {code => {
                         if(!isScanning && !modalVisible) setScannedCode(code.data)
                     }}
