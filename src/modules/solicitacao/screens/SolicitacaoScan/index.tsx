@@ -10,16 +10,16 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { addScannedSolicitacao, setModalVisible, setScanning } from '../../reducers/solicitacaoCamera/solicitacaoCameraReducer'
+import { addScannedSolicitacao, setModalVisible, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
+import Header from './components/Header'
 import info from '../../../../utils/info'
 import sleep from '../../../../utils/sleep'
 //@ts-ignore
 import BeepSuccessAudio from '../../../../assets/audio/beep_success.mp3'
 //@ts-ignore
 import BeepErrorAudio from '../../../../assets/audio/beep_error.mp3'
-import Header from './components/Header'
 
 Sound.setCategory('Playback')
 
@@ -41,7 +41,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
-    const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoCamera)
+    const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoScan)
     const [scannedCode, setScannedCode] = useState<string | null>(null)
 
     const handleScan = useCallback(async () => {
@@ -90,15 +90,15 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    barCodeTypes = {[scanMode]}
+                    barCodeTypes = {[scanMode as any]}
                     onBarCodeRead = {code => {
                         if(!isScanning && !modalVisible) setScannedCode(code.data)
                     }}
                 >
                     <BarcodeMask 
-                        height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 280 : 100}
+                        width = {260}
+                        height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 260 : 100}
                         showAnimatedLine = {false}
-                        //onLayoutMeasured = {l => console.log(l.nativeEvent.layout)}
                     />
                 </RNCamera>
                 <S.ScanControlsContainer>

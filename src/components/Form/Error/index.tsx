@@ -14,7 +14,7 @@ const FormError: React.FC <FormErrorProps & Partial<SectionProps>> = ({ visible,
         <>
             {visible && (
                 <Section {...sectionStyles} type = "row" center>
-                    <Text style = {{color: themes.status.error.primary, fontSize: 16, fontWeight: 'bold'}}>{message}</Text>
+                    <Text style = {{color: themes.status.error.primary, fontSize: 14, fontWeight: 'bold'}}>{message}</Text>
                 </Section>
             )}
         </>

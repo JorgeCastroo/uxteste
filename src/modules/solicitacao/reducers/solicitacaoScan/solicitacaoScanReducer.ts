@@ -1,28 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RNCamera } from "react-native-camera"
+import { ScanModes } from "../../../../config/types"
 
 interface State {
     modalVisible: boolean
-    scanMode: typeof RNCamera.Constants.BarCodeType["qr"] | typeof RNCamera.Constants.BarCodeType["code39"]
+    scanMode: ScanModes
     isScanning: boolean
     scannedSolicitacoes: string[]
 }
 
 const initialState: State = {
     modalVisible: false,
-    scanMode: RNCamera.Constants.BarCodeType.code39,
+    scanMode: 'CODE_39',
     isScanning: false,
     scannedSolicitacoes: [],
 }
 
-const solicitacaoCameraSlice = createSlice({
-    name: 'solicitacaoCamera',
+const solicitacaoScanSlice = createSlice({
+    name: 'solicitacaoScan',
     initialState,
     reducers: {
         setModalVisible: (state, action: PayloadAction<boolean>) => {
             state.modalVisible = action.payload
         },
-        setScanMode: (state, action: PayloadAction<typeof RNCamera.Constants.BarCodeType>) => {
+        setScanMode: (state, action: PayloadAction<ScanModes>) => {
             state.scanMode = action.payload
         },
         setScanning: (state, action: PayloadAction<boolean>) => {
@@ -36,5 +36,5 @@ const solicitacaoCameraSlice = createSlice({
     }
 })
 
-export const { setModalVisible, setScanning, setScanMode, addScannedSolicitacao } = solicitacaoCameraSlice.actions
-export default solicitacaoCameraSlice.reducer
+export const { setModalVisible, setScanning, setScanMode, addScannedSolicitacao } = solicitacaoScanSlice.actions
+export default solicitacaoScanSlice.reducer

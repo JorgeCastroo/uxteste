@@ -3,14 +3,14 @@ import { View } from 'react-native'
 import { RNCamera } from 'react-native-camera'
 import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
-import { setScanMode } from '../../../../reducers/solicitacaoCamera/solicitacaoCameraReducer'
+import { setScanMode } from '../../../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Button from '../Button'
 import Container from '../../../../../../components/Container'
 
 const Header: React.FC = () => {
 
     const dispatch = useAppDispatch()
-    const { scanMode } = useAppSelector(s => s.solicitacaoCamera)
+    const { scanMode } = useAppSelector(s => s.solicitacaoScan)
     const scanTypes = RNCamera.Constants.BarCodeType
 
     return(
