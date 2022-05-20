@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../../modules/auth/reducers/authReducer'
 import requestAuthLoginReducer from '../../modules/auth/reducers/authLogin/requestAuthLoginReducer'
-import solicitacaoCameraReducer from '../../modules/solicitacao/reducers/solicitacaoCamera/solicitacaoCameraReducer'
+import solicitacaoScanReducer from '../../modules/solicitacao/reducers/solicitacaoScan/solicitacaoScanReducer'
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
         requestSendAuthLogin: requestAuthLoginReducer,
-        solicitacaoCamera: solicitacaoCameraReducer,
+        solicitacaoScan: solicitacaoScanReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware({
         serializableCheck: false

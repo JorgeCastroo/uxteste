@@ -1,0 +1,1 @@
+export type ScanModes = 'QR_CODE' | 'CODE_39'
