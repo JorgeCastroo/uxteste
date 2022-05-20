@@ -5,6 +5,8 @@ import solicitacaoScanReducer from '../../modules/solicitacao/reducers/solicitac
 import solicitacaoReducer from '../../modules/solicitacao/reducers/solicitacaoReducer'
 import listaReducer from '../../modules/solicitacao/reducers/lista/listaReducer'
 import requestListaReducer from '../../modules/solicitacao/reducers/lista/requestListaReducer'
+import coletasReducer from '../../modules/coletas/reducers/coletas/coletas'
+import requestColetasReducer from '../../modules/coletas/reducers/coletas/requestColetasReducer'
 
 const store = configureStore({
     reducer: {
@@ -16,6 +18,9 @@ const store = configureStore({
 
         solicitacao: solicitacaoReducer,
         solicitacaoScan: solicitacaoScanReducer,
+        
+        coletas: coletasReducer,
+        requestColetas: requestColetasReducer
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware({
         serializableCheck: false,
