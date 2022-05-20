@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import getColetas from '../../scripts/getColetas';
 import { Button, Text } from 'react-native';
 import acceptColeta from '../../scripts/acceptColeta';
+import { setColetasOffline, setVolumesOffline } from '../../reducers/coletas/coletas';
 
 const ColetasList: React.FC = () => {
     const loading = useAppSelector(s => s.requestColetas.requestColeta.loading);
@@ -21,10 +22,10 @@ const ColetasList: React.FC = () => {
 
     useEffect(() => {
         getColetas(dispatch, 450);
-    }, [idsColetasAprovadas, idsColetasReprovadas]);
+    }, []);
 
     const handleAcceptColeta = () => {
-        acceptColeta(dispatch, {
+        acceptColeta(dispatch, idsColetasAprovadas, coletas.coletas, {
             idUsuario: 100,
             dados: [
                 {
@@ -38,6 +39,10 @@ const ColetasList: React.FC = () => {
             ],
         })
     }
+
+    useEffect(() => {
+
+    }, [])
 
     return (
         <>

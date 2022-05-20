@@ -23,13 +23,6 @@ const ColetasBox: React.FC<Props> = ({ id, quantidade, logradouro, numero, bairr
 
     const theme = themes.colors.tertiary
     const dispatch = useAppDispatch()
-    const idsAprovadas = useAppSelector(s => s.coletas.idsColetasAprovadas)
-    const idsReprovadas = useAppSelector(s => s.coletas.idsColetasReprovadas)
-
-    useEffect(() => {
-        console.log(idsAprovadas)
-        console.log(idsReprovadas)
-    }, [])
 
     return (
 

@@ -27,8 +27,19 @@ export interface Coletas {
     dtCadastro: Date;
 }
 
+interface Volumes {
+    id: number,
+    idLista: number,
+    etiqueta: string,
+    dtLeitura: Date,
+    status: string
+}
+
 interface State {
     coletas: Coletas[],
+    volumes: Volumes[],
+    coletasOffline: Coletas[],
+    volumesOffline: Volumes[],
     coletaAceita: boolean | null,
     idsColetasAprovadas: number[],
     idsColetasReprovadas: number[],
@@ -45,6 +56,9 @@ interface State {
 
 const initialState: State = {
     coletas: [],
+    volumes: [],
+    coletasOffline: [],
+    volumesOffline: [],
     coletaAceita: null,
     idsColetasAprovadas: [],
     idsColetasReprovadas: [],
@@ -63,6 +77,22 @@ const coletasSlice = createSlice({
     reducers: {
         setColetas: (state, action: PayloadAction<any>) => {
             state.coletas = action.payload
+        },
+        setVolumes: (state, action: PayloadAction<any>) => {
+            state.volumes = action.payload
+        },
+        setColetasOffline: (state, action: PayloadAction<any>) => {
+            for (let i in state.coletasOffline) {
+                if (action.payload.id === state.coletasOffline[i].id)
+                    state.coletasOffline.push(action.payload)
+            }
+        },
+        setVolumesOffline: (state) => {
+            for (let i in state.idsColetasAprovadas) {
+                if (state.volumes[i].id === state.idsColetasAprovadas[i]) {
+                    state.volumesOffline.push(state.volumes[i])
+                }
+            }
         },
         setIdsColetas: (state, action: PayloadAction<any>) => {
             if (!state.idsColetasAprovadas.includes(action.payload) && !state.idsColetasReprovadas.includes(action.payload)) {
@@ -95,8 +125,11 @@ const coletasSlice = createSlice({
 
 export const {
     setColetas,
+    setVolumes,
     setIdsColetas,
     setRemoveIdsColetas,
+    setColetasOffline,
+    setVolumesOffline,
     setRemoveAllIdsColetas,
     setAcceptAllColetas } = coletasSlice.actions
 export default coletasSlice.reducer

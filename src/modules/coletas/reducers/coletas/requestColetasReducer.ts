@@ -36,6 +36,7 @@ const requestColetas = createSlice({
         },
         setRequestAcceptColetaData: (state, action: PayloadAction<any>) => {
             state.requestColeta.aceitaData = action.payload
+            state.requestColeta.loading = false
             state.requestColeta.aceita = true
         },
         setRequestRefuseColetaData: (state, action: PayloadAction<any>) => {
