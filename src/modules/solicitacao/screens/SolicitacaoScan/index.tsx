@@ -19,6 +19,7 @@ import sleep from '../../../../utils/sleep'
 import BeepSuccessAudio from '../../../../assets/audio/beep_success.mp3'
 //@ts-ignore
 import BeepErrorAudio from '../../../../assets/audio/beep_error.mp3'
+import Header from './components/Header'
 
 Sound.setCategory('Playback')
 
@@ -40,7 +41,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
-    const { isScanning, modalVisible, scannedSolicitacoes } = useAppSelector(s => s.solicitacaoCamera)
+    const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoCamera)
     const [scannedCode, setScannedCode] = useState<string | null>(null)
 
     const handleScan = useCallback(async () => {
@@ -76,6 +77,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
         <>
             <Render statusBarOptions = {{barStyle: 'light-content', translucent: true}} paddingBottom = {0}>
+                <Header />
                 <RNCamera
                     ref = {cameraRef}
                     type = {RNCamera.Constants.Type.back}
@@ -88,14 +90,15 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    barCodeTypes = {[RNCamera.Constants.BarCodeType.qr, RNCamera.Constants.BarCodeType.code39]}
+                    barCodeTypes = {[scanMode]}
                     onBarCodeRead = {code => {
                         if(!isScanning && !modalVisible) setScannedCode(code.data)
                     }}
                 >
                     <BarcodeMask 
-                        height = {100}
+                        height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 280 : 100}
                         showAnimatedLine = {false}
+                        //onLayoutMeasured = {l => console.log(l.nativeEvent.layout)}
                     />
                 </RNCamera>
                 <S.ScanControlsContainer>
