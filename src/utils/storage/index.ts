@@ -7,7 +7,7 @@ async function getItem<T>(key: string){
         if(!!local) return JSON.parse(local) as T
         else throw new Error(`No data found with key: ${key}`)
     } catch (error) {
-        info.error('getItem', error)
+        info.error('storage getItem', error)
         return null
     }
 }
@@ -16,7 +16,7 @@ async function setItem(key: string, value: any){
     try {
         await AsyncStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
-        info.error('setItem', error)
+        info.error('storage setItem', error)
     }
 }
 
@@ -24,12 +24,20 @@ async function removeItem(key: string){
     try {
         await AsyncStorage.removeItem(key)
     } catch (error) {
-        info.error('removeItem', error)
+        info.error('storage removeItem', error)
+    }
+}
+
+async function clear(){
+    try {
+        await AsyncStorage.clear()
+    } catch (error) {
+        info.error('storage clear', error)
     }
 }
 
 const storage = {
-    getItem, setItem, removeItem
+    getItem, setItem, removeItem, clear
 }
 
 export default storage

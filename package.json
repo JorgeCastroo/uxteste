@@ -50,6 +50,7 @@
     "react-redux": "^8.0.1",
     "redux": "^4.2.0",
     "rxjs": "^7.5.5",
+    "socket.io-client": "^4.5.1",
     "styled-components": "^5.3.5",
     "yup": "^0.32.11"
   },

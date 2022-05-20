@@ -1,0 +1,20 @@
+import { resetLista } from "../reducers/lista/listaReducer"
+import { resetSolicitacoes } from "../reducers/solicitacaoReducer"
+import { resetRequestGetLista, resetRequestSaveLista } from "../reducers/lista/requestListaReducer"
+import info from "../../../utils/info"
+import storage from "../../../utils/storage"
+
+export default async function closeLista(dispatch: Function){
+    try {
+        await storage.removeItem('lista')
+        dispatch(resetLista())
+        
+        await storage.removeItem('solicitacoes')
+        dispatch(resetSolicitacoes())
+
+        dispatch(resetRequestGetLista())
+        dispatch(resetRequestSaveLista())
+    } catch (error: any) {
+        info.error('closeLista',error)
+    }
+}

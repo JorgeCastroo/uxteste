@@ -6,10 +6,10 @@ import Render from '../../../../components/Screen/Render'
 import HomeHeader from '../../components/HomeHeader'
 import Section from '../../../../components/Screen/Section'
 import TopBox from '../../components/TopBox'
-import dayMoment from '../../../../utils/dayMoment'
 import GroupInfo from '../../components/Group/Info'
 import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
+import dayMoment from '../../../../utils/dayMoment'
 
 const Home: React.FC = () => {
 
