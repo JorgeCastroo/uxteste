@@ -42,20 +42,17 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
     const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoScan)
-    const [scannedCode, setScannedCode] = useState<string | null>(null)
 
-    const handleScan = useCallback(async () => {
+    const handleScan = useCallback(async (code: string, scanned: string[]) => {
         dispatch(setScanning(true))
-        
-        if(!scannedSolicitacoes.includes(scannedCode!)){
+        if(!scanned.includes(code)){
+            dispatch(addScannedSolicitacao(code))
             beepSuccess.play()
-            dispatch(addScannedSolicitacao(scannedCode!))
             showMessage({
                 message: 'Código lido com sucesso!',
                 type: 'success',
                 statusBarHeight: StatusBar.currentHeight,
             })
-            await sleep(400)
         }else{
             beepError.play()
             showMessage({
@@ -63,15 +60,15 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                 type: 'danger',
                 statusBarHeight: StatusBar.currentHeight,
             })
-            await sleep(700)
         }
         
+        await sleep(2000)
         dispatch(setScanning(false))
-    }, [scannedCode])
+    }, [])
 
     useEffect(() => {
-        if(!!scannedCode) handleScan()
-    }, [scannedCode])
+        console.log(scannedSolicitacoes)
+    }, [scannedSolicitacoes])
 
     return(
 
@@ -90,9 +87,9 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    barCodeTypes = {[scanMode as any]}
+                    //barCodeTypes = {[scanMode as any]}
                     onBarCodeRead = {code => {
-                        if(!isScanning && !modalVisible) setScannedCode(code.data)
+                        if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
                     }}
                 >
                     <BarcodeMask 
@@ -105,7 +102,9 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                     <TouchableOpacity onPress = {() => navigation.goBack()}>
                         <MaterialCommunityIcons name = "close" size = {24} color = "#fff" />
                     </TouchableOpacity>
-                    <Text style = {{color: '#fff', fontWeight: 'bold'}}>{`${scannedSolicitacoes.length} códigos scaneados`}</Text>
+                    <TouchableOpacity onPress = {() => scannedSolicitacoes .length > 0 && navigation.navigate('solicitacaoScanList')}>
+                        <Text style = {{color: '#fff', fontWeight: 'bold'}}>{`${scannedSolicitacoes.length} códigos scaneados`}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress = {() => dispatch(setModalVisible(true))}>
                         <MaterialCommunityIcons name = "keyboard" size = {24} color = "#fff" />
                     </TouchableOpacity>

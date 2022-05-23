@@ -29,12 +29,12 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 <Section type = "row" marginTop = {8} between>
                     <S.Box style = {elevation.elevation2}>
                         <Text style = {{color: '#333333', fontSize: 22}}>Recebidos</Text>
-                        <Text style = {{marginTop: 20, color: themes.status.success.primary, fontSize: 32, fontWeight: 'bold'}}>50</Text>
+                        <Text style = {{marginTop: 20, color: themes.status.success.primary, fontSize: 32, fontWeight: 'bold'}}>0</Text>
                     </S.Box>
                     <View style = {{marginRight: 20}} />
                     <S.Box style = {elevation.elevation2}>
                         <Text style = {{color: '#333333', fontSize: 22}}>Pendentes</Text>
-                        <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>50</Text>
+                        <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>0</Text>
                     </S.Box>
                 </Section>
                 <Section marginTop = {40} center>

@@ -13,7 +13,7 @@ const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtit
     return(
         
         <Appbar.Header style = {{width: '100%', backgroundColor: themes.colors.primary}}>
-            {showBack && (<Appbar.BackAction onPress = {backRoute ? navigation.navigate(backRoute) : navigation.goBack()} />)}
+            {showBack && (<Appbar.BackAction onPress = {() => backRoute ? navigation.navigate(backRoute) : navigation.goBack()} />)}
             <Appbar.Content title = {title} subtitle = {subtitle} />
             <HeaderMenu />
         </Appbar.Header>

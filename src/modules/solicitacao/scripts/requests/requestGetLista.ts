@@ -1,10 +1,9 @@
 import { Solicitacao } from "../../interfaces/Solicitacao"
 import { ResponsePattern } from "../../../../utils/response/types"
-import * as R from "../../reducers/requestSolicitacaoReducer"
-import { setSolicitacoes } from "../../reducers/solicitacaoReducer"
+import * as R from "../../reducers/lista/requestListaReducer"
 import request from "../../../../utils/request"
-import storage from "../../../../utils/storage"
 import info from "../../../../utils/info"
+import localSetLista from "../local/localSetLista"
 
 export default async function getLista(dispatch: Function){
     try {
@@ -16,8 +15,7 @@ export default async function getLista(dispatch: Function){
         if(response){
             dispatch(R.setRequestGetListaData(response))
             if(!response.flagErro){
-                await storage.setItem('lista', response.listaResultados)
-                dispatch(setSolicitacoes(response.listaResultados))
+                localSetLista(dispatch, response.listaResultados)
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {

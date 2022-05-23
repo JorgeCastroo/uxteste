@@ -13,10 +13,7 @@ import Loader from './components/Loader'
 const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
-    const { solicitacoes } = useAppSelector(s => s.solicitacao)
-
-    const MOCK_LOADING = true
-    const MOCK_DATA = !MOCK_LOADING
+    const { solicitacoes, loadingRoute } = useAppSelector(s => s.solicitacao)
 
     const handleNavigate = () => {
         navigation.navigate('solicitacaoReceivement')
@@ -28,10 +25,10 @@ const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
             <Render 
                 statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} 
                 paddingBottom = {20} 
-                align = {MOCK_LOADING ? 'space-between' : undefined}
+                align = {loadingRoute ? 'space-between' : undefined}
             >
                 <Header title = "Listas" goBack = {false} />
-                {MOCK_DATA && (
+                {!loadingRoute && (
                     <>
                         <SolicitacaoListSearchbar />
                         <Section>
@@ -39,7 +36,7 @@ const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         </Section>
                     </>
                 )}
-                {MOCK_LOADING && <Loader />}
+                {loadingRoute && <Loader />}
                 <Section />
             </Render>
         </>
