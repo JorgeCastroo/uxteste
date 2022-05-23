@@ -1,13 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Coletas } from "../reducers/coletas/coletas"
 
-export const saveColetasOnAsyncStorage = async (idsColetasAprovadas: number[], coletas: Coletas[]) => {
-    const coletasAprovadas = coletas.filter(coleta => idsColetasAprovadas.includes(coleta.id))
+export const saveColetasOnAsyncStorage = async (coletas: Coletas[]) => {
     const coletasAsyncStorage = await AsyncStorage.getItem("coletas")
     const coletasAsyncStorageJson = coletasAsyncStorage !== null ? JSON.parse(coletasAsyncStorage) as Coletas[] : []
 
-    for (const coleta of coletasAprovadas) {
-        const coletaInclusa = coletasAsyncStorageJson.find(item => item.id)
+    for (const coleta of coletas) {
+        const coletaInclusa = coletasAsyncStorageJson.find(() => coleta.id)
         if (!coletaInclusa) coletasAsyncStorageJson.push(coleta)
     }
 
