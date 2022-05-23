@@ -12,7 +12,6 @@ export default async function send(dispatch: Function, values: typeof loginFormV
         dispatch(R.setRequestSendAuthLoginLoading())
         
         const endpoint = `${TRUX_ENDPOINT}/Motoristas/MotoristaLogin`
-        console.log("🚀 ~ file: send.ts ~ line 15 ~ send ~ endpoint", endpoint)
         const body = values
         const response = await request.post<UserData>({ endpoint, body })
         
