@@ -8,11 +8,15 @@ import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import SolicitacaoListSearchbar from './components/Searchbar'
+import Loader from './components/Loader'
 
 const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { solicitacoes } = useAppSelector(s => s.solicitacao)
+
+    const MOCK_LOADING = true
+    const MOCK_DATA = !MOCK_LOADING
 
     const handleNavigate = () => {
         navigation.navigate('solicitacaoReceivement')
@@ -21,12 +25,22 @@ const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
     return(
 
         <>
-            <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {20}>
+            <Render 
+                statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} 
+                paddingBottom = {20} 
+                align = {MOCK_LOADING ? 'space-between' : undefined}
+            >
                 <Header title = "Listas" goBack = {false} />
-                <SolicitacaoListSearchbar />
-                <Section>
-                    <SolicitacaoBox onPress = {handleNavigate} />
-                </Section>
+                {MOCK_DATA && (
+                    <>
+                        <SolicitacaoListSearchbar />
+                        <Section>
+                            <SolicitacaoBox onPress = {handleNavigate} />
+                        </Section>
+                    </>
+                )}
+                {MOCK_LOADING && <Loader />}
+                <Section />
             </Render>
         </>
 
