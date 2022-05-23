@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import getColetas from '../../scripts/getColetas';
 import { Button, Text } from 'react-native';
 import acceptColeta from '../../scripts/acceptColeta';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ColetasList: React.FC = () => {
     const loading = useAppSelector(s => s.requestColetas.requestColeta.loading);
@@ -16,6 +18,9 @@ const ColetasList: React.FC = () => {
     const idsColetasAprovadas = useAppSelector(s => s.coletas.idsColetasAprovadas);
     const idsColetasReprovadas = useAppSelector(s => s.coletas.idsColetasReprovadas)
     const statusColetas = useAppSelector(s => s.coletas.idStatusColetas);
+    const acceptLoading = useAppSelector(s => s.requestColetas.requestColeta.acceptLoading)
+
+    const navigation = useNavigation<any>()
 
     const dispatch = useAppDispatch();
 
@@ -23,8 +28,8 @@ const ColetasList: React.FC = () => {
         getColetas(dispatch, 450);
     }, []);
 
-    const handleAcceptColeta = () => {
-        acceptColeta(dispatch, idsColetasAprovadas, coletas.coletas, {
+    const handleAcceptColeta = async () => {
+        acceptColeta(dispatch, {
             idUsuario: 100,
             dados: [
                 {
@@ -40,8 +45,8 @@ const ColetasList: React.FC = () => {
     }
 
     useEffect(() => {
-
-    }, [])
+        if (!!acceptLoading) navigation.navigate("solicitacaoList")
+    }, [acceptLoading])
 
     return (
         <>
@@ -79,6 +84,7 @@ const ColetasList: React.FC = () => {
                             onPress={handleAcceptColeta}
                         />
                     )}
+                    {acceptLoading && <Text>Loading...</Text>}
                 </Render>
             )}
         </>

@@ -2,11 +2,10 @@
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
-import { setRequestAcceptColetaData, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
-import { Coletas, setColetasOffline, setVolumesOffline } from "../reducers/coletas/coletas"
-
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { setRequestAcceptColetasData, setRequestAcceptColetasLoading } from "../reducers/coletas/requestColetasReducer"
+import { setLista } from "../../solicitacao/reducers/lista/listaReducer"
 import { saveColetasOnAsyncStorage } from "./saveColetasOnAsyncStorage"
+import { Coletas } from "../reducers/coletas/coletas"
 
 interface Body {
     idUsuario: number,
@@ -22,20 +21,18 @@ interface Body {
     ]
 }
 
-export default async function acceptColeta(dispatch: Function, idsColetasAprovadas: number[], coletas: Coletas[], body: Body) {
+export default async function acceptColeta(dispatch: Function, body: Body) {
     try {
+        dispatch(setRequestAcceptColetasLoading())
+
         const endpoint = `https://first-mile.herokuapp.com/acceptOrRefuseList/`
         const response = await request.post<ResponsePattern<any>>({ endpoint, body })
 
-        dispatch(setRequestColetasLoading)
-
         if (response) {
-            dispatch(setRequestAcceptColetaData(response))
+            dispatch(setRequestAcceptColetasData(response))
             if (!response.flagErro) {
-                // setando coletas para salvalas depois no async storage
-                dispatch(setColetasOffline(response.listaResultados))
-                saveColetasOnAsyncStorage(idsColetasAprovadas, coletas)
-
+                dispatch(setLista(response.listaResultados))
+                saveColetasOnAsyncStorage([response.listaResultados])
             } else throw new Error(response.listaMensagens[0])
         } else throw new Error('Erro na requisição')
     } catch (error: any) {

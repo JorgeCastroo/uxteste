@@ -4,6 +4,7 @@ import { Coletas } from "./coletas";
 interface State {
     requestColeta: {
         loading: boolean;
+        acceptLoading: boolean;
         data: Coletas[] | null;
         erro: boolean | null;
         aceita: boolean;
@@ -14,6 +15,7 @@ interface State {
 const initialState: State = {
     requestColeta: {
         loading: true,
+        acceptLoading: false,
         data: null,
         erro: null,
         aceita: false,
@@ -34,17 +36,16 @@ const requestColetas = createSlice({
             state.requestColeta.loading = true
             state.requestColeta.erro = false
         },
-        setRequestAcceptColetaData: (state, action: PayloadAction<any>) => {
+        setRequestAcceptColetasData: (state, action: PayloadAction<any>) => {
             state.requestColeta.aceitaData = action.payload
-            state.requestColeta.loading = false
+            state.requestColeta.acceptLoading = false
             state.requestColeta.aceita = true
         },
-        setRequestRefuseColetaData: (state, action: PayloadAction<any>) => {
-            state.requestColeta.aceitaData = action.payload
-            state.requestColeta.aceita = false
-        }
+        setRequestAcceptColetasLoading: (state) => {
+            state.requestColeta.acceptLoading = true
+        },
     }
 })
 
-export const { setRequestColetasData, setRequestColetasLoading, setRequestAcceptColetaData, setRequestRefuseColetaData } = requestColetas.actions
+export const { setRequestColetasData, setRequestColetasLoading, setRequestAcceptColetasData,setRequestAcceptColetasLoading } = requestColetas.actions
 export default requestColetas.reducer

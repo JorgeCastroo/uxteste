@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import themes from '../../../../styles/themes'
@@ -14,6 +14,7 @@ const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const dispatch = useAppDispatch()
     const { solicitacoes } = useAppSelector(s => s.solicitacao)
+    const lista = useAppSelector(s => s.lista)
 
     const MOCK_LOADING = true
     const MOCK_DATA = !MOCK_LOADING
