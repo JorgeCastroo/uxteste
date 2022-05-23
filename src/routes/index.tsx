@@ -1,34 +1,35 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator } from 'react-native-paper'
-import { UserData } from '../interfaces/UserData'
 import themes from '../styles/themes'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { setAuthLoading } from '../modules/auth/reducers/authReducer'
-import setUserData from '../modules/auth/scripts/setUserData'
-import storage from '../utils/storage'
 import AppRoutes from '../modules/app/routes'
+import { setAuthLoading } from '../modules/auth/reducers/authReducer'
 import AuthRoutes from '../modules/auth/routes'
+import getUserData from '../modules/auth/scripts/getUserData'
+import localSetLista from '../modules/solicitacao/scripts/local/localSetLista'
+import localGetLista from '../modules/solicitacao/scripts/local/localGetLista'
 
 const Routes: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { isLogged, authLoading } = useAppSelector(s => s.auth)
+    const { lista, oldLista } = useAppSelector(s => s.lista)
 
     useEffect(() => {
         (async() => {
-            const localUser = await storage.getItem<UserData>('userData')
-            if(!!localUser) await setUserData(dispatch, localUser, true)
-            else dispatch(setAuthLoading(false))
+            await getUserData(dispatch)
+            await localGetLista(dispatch)
+
+            dispatch(setAuthLoading(false))
         })()
     }, [dispatch])
 
-    return(
+    useEffect(() => {
+        if(!!lista && JSON.stringify(lista) !== JSON.stringify(oldLista ?? [])) localSetLista(dispatch, lista)
+    }, [dispatch, lista])
 
-        <>
-            {(authLoading && <ActivityIndicator color = {themes.colors.primary} />) || (isLogged && <AppRoutes /> || <AuthRoutes />)}
-        </>
-
-    )
+    if(authLoading) return <ActivityIndicator color = {themes.colors.primary} />
+    else return isLogged ? <AppRoutes /> : <AuthRoutes />
 
 }
 

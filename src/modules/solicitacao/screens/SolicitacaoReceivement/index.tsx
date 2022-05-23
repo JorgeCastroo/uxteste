@@ -6,6 +6,7 @@ import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParam
 import * as S from './styles'
 import themes from '../../../../styles/themes'
 import { elevation } from '../../../../styles/layout'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
 import Section from '../../../../components/Screen/Section'
@@ -13,6 +14,9 @@ import SolicitacaoBox from '../../components/SolicitacaoBox'
 import Button from '../../../../components/Button'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
+
+    const dispatch = useAppDispatch()
+    const { currentSolicitacao } = useAppSelector(s => s.solicitacao)
 
     return(
 
