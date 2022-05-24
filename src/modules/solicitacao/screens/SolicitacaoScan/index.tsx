@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState} from 'react'
+import React, { useCallback, useRef } from 'react'
 import { StatusBar, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import { RNCamera } from 'react-native-camera'
@@ -10,7 +10,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { addScannedSolicitacao, setModalVisible, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { addScannedSolicitacao, setModalVisible, setScanLayout, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
@@ -61,14 +61,9 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                 statusBarHeight: StatusBar.currentHeight,
             })
         }
-        
-        await sleep(2000)
+        await sleep(3000)
         dispatch(setScanning(false))
     }, [])
-
-    useEffect(() => {
-        console.log(scannedSolicitacoes)
-    }, [scannedSolicitacoes])
 
     return(
 
@@ -87,7 +82,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    //barCodeTypes = {[scanMode as any]}
+                    //barCodeTypes = {[scanMode as any]} //! REMOVE IN PROD
                     onBarCodeRead = {code => {
                         if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
                     }}
@@ -96,6 +91,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         width = {260}
                         height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 260 : 100}
                         showAnimatedLine = {false}
+                        //onLayoutMeasured = {({ nativeEvent: { layout } }) => dispatch(setScanLayout(layout))}
                     />
                 </RNCamera>
                 <S.ScanControlsContainer>

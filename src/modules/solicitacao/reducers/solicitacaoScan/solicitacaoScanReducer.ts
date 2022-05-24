@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { LayoutRectangle } from "react-native-barcode-mask"
 import { ScanModes } from "../../../../config/types"
 
 interface State {
     modalVisible: boolean
     scanMode: ScanModes
+    scanLayout: LayoutRectangle | null
     isScanning: boolean
     scannedSolicitacoes: string[]
 }
@@ -11,6 +13,7 @@ interface State {
 const initialState: State = {
     modalVisible: false,
     scanMode: 'CODE_39',
+    scanLayout: null,
     isScanning: false,
     scannedSolicitacoes: [],
 }
@@ -25,6 +28,9 @@ const solicitacaoScanSlice = createSlice({
         setScanMode: (state, action: PayloadAction<ScanModes>) => {
             state.scanMode = action.payload
         },
+        setScanLayout: (state, action: PayloadAction<LayoutRectangle>) => {
+            state.scanLayout = action.payload
+        },
         setScanning: (state, action: PayloadAction<boolean>) => {
             state.isScanning = action.payload
         },
@@ -34,5 +40,5 @@ const solicitacaoScanSlice = createSlice({
     }
 })
 
-export const { setModalVisible, setScanning, setScanMode, addScannedSolicitacao } = solicitacaoScanSlice.actions
+export const { setModalVisible, setScanning, setScanMode, setScanLayout, addScannedSolicitacao } = solicitacaoScanSlice.actions
 export default solicitacaoScanSlice.reducer
