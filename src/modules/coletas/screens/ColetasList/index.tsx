@@ -7,86 +7,79 @@ import ColetasBox from '../../components/ColetasBox';
 import ColetasSelect from '../../components/Select';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import getColetas from '../../scripts/getColetas';
-import { Button, Text } from 'react-native';
+import { Button } from 'react-native';
 import acceptColeta from '../../scripts/acceptColeta';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import { setLoadingSendColeta } from '../../reducers/coletas/coletas';
 
 const ColetasList: React.FC = () => {
-    const loading = useAppSelector(s => s.requestColetas.requestColeta.loading);
     const coletas = useAppSelector(s => s.coletas);
-    const idsColetasAprovadas = useAppSelector(s => s.coletas.idsColetasAprovadas);
-    const idsColetasReprovadas = useAppSelector(s => s.coletas.idsColetasReprovadas)
     const statusColetas = useAppSelector(s => s.coletas.idStatusColetas);
-    const acceptLoading = useAppSelector(s => s.requestColetas.requestColeta.acceptLoading)
+    const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
+    const coletasReprovadas = useAppSelector(s => s.coletas.coletasReprovadas)
+    const isFocused = useIsFocused()
 
     const navigation = useNavigation<any>()
 
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        getColetas(dispatch, 450);
-    }, []);
-
     const handleAcceptColeta = async () => {
-        acceptColeta(dispatch, {
-            idUsuario: 100,
-            dados: [
-                {
-                    idsLista: idsColetasAprovadas,
-                    idStatus: statusColetas.APROVADO,
-                },
-                {
-                    idsLista: idsColetasReprovadas,
-                    idStatus: statusColetas.REPROVADO,
-                },
-            ],
-        })
+        dispatch(setLoadingSendColeta(true))
+        coletasAprovadas.forEach(async item => {
+            await acceptColeta(dispatch, {
+                idLista: item.id,
+                idStatusLista: statusColetas.APROVADO,
+                latitude: item.latitudeDestino,
+                longitude: item.latitudeDestino
+            })
+        });
+        dispatch(setLoadingSendColeta(false))
+        navigation.navigate("solicitacaoRoutes")
     }
 
     useEffect(() => {
-        if (!!acceptLoading) navigation.navigate("solicitacaoList")
-    }, [acceptLoading])
+        console.log("APROVADAS: ", coletasAprovadas.map(item => item.id))
+        console.log("REPROVADAS: ", coletasReprovadas.map(item => item.id))
+    }, [isFocused, coletasAprovadas, coletasReprovadas])
 
     return (
         <>
-            {loading ? (
-                <Text>Loading...</Text>
-            ) : (
-                <Render
-                    statusBarOptions={{
-                        barStyle: 'light-content',
-                        backgroundColor: themes.colors.primary,
-                    }}>
-                    <Header title="Coletas encontradas" goBack={false} />
-                    <ColetasSelect />
-                    {coletas.coletas?.map(coleta => {
-                        return (
-                            <Section key={coleta.id}>
-                                <ColetasBox
-                                    id={coleta.id}
-                                    quantidade={coleta.qtdeVolumes}
-                                    logradouro={coleta.logradouro}
-                                    numero={coleta.numero}
-                                    bairro={coleta.bairro}
-                                    cidade={coleta.cidade}
-                                    uf={coleta.uf}
-                                    cep={coleta.cep}
-                                />
-                            </Section>
-                        );
-                    })}
-                    {idsColetasAprovadas.length <= 0 ? (
-                        <></>
-                    ) : (
-                        <Button
-                            title="Aceitar coletas!"
-                            onPress={handleAcceptColeta}
-                        />
-                    )}
-                    {acceptLoading && <Text>Loading...</Text>}
-                </Render>
-            )}
+
+            <Render
+                statusBarOptions={{
+                    barStyle: 'light-content',
+                    backgroundColor: themes.colors.primary,
+                }}>
+                <Header title="Coletas encontradas" goBack={false} />
+                <ColetasSelect />
+                {coletas.coletas?.map(coleta => {
+                    return (
+                        <Section key={coleta.id}>
+                            <ColetasBox
+                                id={coleta.id}
+                                coleta={coleta}
+                                quantidade={coleta.qtdeVolumes}
+                                logradouro={coleta.logradouro}
+                                numero={coleta.numero}
+                                bairro={coleta.bairro}
+                                cidade={coleta.cidade}
+                                uf={coleta.uf}
+                                cep={coleta.cep}
+                            />
+                        </Section>
+                    );
+                })}
+                {coletasAprovadas.length <= 0 ? (
+                    <></>
+                ) : (
+                    <Button
+                        title="Prosseguir!"
+                        onPress={handleAcceptColeta}
+                    />
+                )}
+            </Render>
+
         </>
     );
 };

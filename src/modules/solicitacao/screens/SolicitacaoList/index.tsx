@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import themes from '../../../../styles/themes'
@@ -9,38 +9,58 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import SolicitacaoListSearchbar from './components/Searchbar'
 import Loader from './components/Loader'
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Coletas } from '../../../coletas/types/coletas'
+import { useIsFocused } from '@react-navigation/native'
 
-const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
+const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { solicitacoes } = useAppSelector(s => s.solicitacao)
-    const lista = useAppSelector(s => s.lista)
+    const lista = useAppSelector(s => s.lista.lista)
+    const [coletas, setColetas] = useState<Coletas[]>()
+    const isFocused = useIsFocused()
 
-    const MOCK_LOADING = true
-    const MOCK_DATA = !MOCK_LOADING
+    const [loading, setLoading] = useState<boolean>(true)
 
     const handleNavigate = () => {
         navigation.navigate('solicitacaoReceivement')
     }
 
-    return(
+    const getColetas = async () => {
+        const coletasAsyncStorage = await AsyncStorage.getItem("coletas")
+        const coletasAsyncStorageJSON = coletasAsyncStorage != null ? JSON.parse(coletasAsyncStorage) : []
+        setColetas(coletasAsyncStorageJSON)
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000)
+    }
+
+    useEffect(() => {
+        setLoading(true)
+        if (isFocused) getColetas()
+    }, [isFocused])
+
+    return (
 
         <>
-            <Render 
-                statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} 
-                paddingBottom = {20} 
-                align = {MOCK_LOADING ? 'space-between' : undefined}
+            <Render
+                statusBarOptions={{ barStyle: 'light-content', backgroundColor: themes.colors.primary }}
+                paddingBottom={20}
+                align={loading ? 'space-between' : undefined}
             >
-                <Header title = "Listas" goBack = {false} />
-                {MOCK_DATA && (
+                <Header title="Listas" goBack={false} />
+                {!loading && (
                     <>
                         <SolicitacaoListSearchbar />
                         <Section>
-                            <SolicitacaoBox onPress = {handleNavigate} />
+                            {coletas?.map((item) => {
+                                return <SolicitacaoBox coleta={item} key={item.id} onPress={handleNavigate} />
+                            })}
                         </Section>
                     </>
                 )}
-                {MOCK_LOADING && <Loader />}
+                {loading && <Loader />}
                 <Section />
             </Render>
         </>

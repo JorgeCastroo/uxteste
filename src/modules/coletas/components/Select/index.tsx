@@ -4,21 +4,20 @@ import themes from '../../../../styles/themes'
 import Section from '../../../../components/Screen/Section'
 import ColetasSelectItem from './Item'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setAcceptAllColetas, setRemoveAllIdsColetas, setRemoveIdsColetas } from '../../reducers/coletas/coletas'
+import { setAcceptAllColetas, setRemoveAllColetas, setRemoveIdsColetas } from '../../reducers/coletas/coletas'
 
 const ColetasSelect: React.FC = () => {
 
     const [selectAll, setSelectAll] = React.useState('0')
     const coletas = useAppSelector(s => s.coletas.coletas)
-    const idsColetas = coletas.map(item => item.id)
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (selectAll === '0') {
-            dispatch(setRemoveAllIdsColetas([]))
+            dispatch(setRemoveAllColetas([]))
         } else {
-            dispatch(setAcceptAllColetas(idsColetas))
+            dispatch(setAcceptAllColetas(coletas))
         }
     }, [selectAll])
 

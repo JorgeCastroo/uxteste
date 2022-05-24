@@ -1,4 +1,4 @@
-export interface Lista {
+export interface Coletas {
     id: number;
     idUsuario: number;
     nomeCliente: string;
@@ -24,3 +24,12 @@ export interface Lista {
     situacao: string;
     dtCadastro: Date;
 }
+
+export interface Volumes {
+    id: number,
+    idLista: number,
+    etiqueta: string,
+    dtLeitura: Date,
+    status: string
+}
+

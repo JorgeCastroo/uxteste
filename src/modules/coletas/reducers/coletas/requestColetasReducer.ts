@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Coletas } from "./coletas";
+import { Coletas } from "../../types/coletas";
 
 interface State {
     requestColeta: {
@@ -47,5 +47,5 @@ const requestColetas = createSlice({
     }
 })
 
-export const { setRequestColetasData, setRequestColetasLoading, setRequestAcceptColetasData,setRequestAcceptColetasLoading } = requestColetas.actions
+export const { setRequestColetasData, setRequestColetasLoading, setRequestAcceptColetasData, setRequestAcceptColetasLoading } = requestColetas.actions
 export default requestColetas.reducer

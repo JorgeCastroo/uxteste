@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lista } from "../../interfaces/Lista"
 
 interface State {
-    lista: Lista | null
+    lista: Lista[] | null
     oldLista: Lista | null
 }
 
@@ -15,10 +15,10 @@ const listaSlice = createSlice({
     name: 'lista',
     initialState,
     reducers: {
-        setLista: (state, action: PayloadAction<Lista>) => {
+        setLista: (state, action: PayloadAction<any>) => {
             state.lista = action.payload
         },
-        setOldLista: (state, action: PayloadAction<Lista>) => {
+        setOldLista: (state, action: PayloadAction<any>) => {
             state.oldLista = action.payload
         },
 

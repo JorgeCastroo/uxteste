@@ -5,34 +5,40 @@ import { ResponsePattern } from "../../../utils/response/types"
 import { setRequestAcceptColetasData, setRequestAcceptColetasLoading } from "../reducers/coletas/requestColetasReducer"
 import { setLista } from "../../solicitacao/reducers/lista/listaReducer"
 import { saveColetasOnAsyncStorage } from "./saveColetasOnAsyncStorage"
-import { Coletas } from "../reducers/coletas/coletas"
+import { TRUX_ENDPOINT } from "@env"
+
+// interface Body {
+//     idUsuario: number,
+//     dados: [
+//         {
+//             idsLista: number[],
+//             idStatusLista: 2 // COLETA APROVADA - 2
+//         },
+//         {
+//             idsLista: number[]
+//             idStatusLista: 4 // COLETA REPROVADA - 4
+//         }
+//     ]
+//}
 
 interface Body {
-    idUsuario: number,
-    dados: [
-        {
-            idsLista: number[],
-            idStatus: 2 // COLETA APROVADA - 2
-        },
-        {
-            idsLista: number[]
-            idStatus: 4 // COLETA REPROVADA - 4
-        }
-    ]
+    idLista: number,
+    idStatusLista: 2 | 4,
+    latitude: string,
+    longitude: string
 }
+
 
 export default async function acceptColeta(dispatch: Function, body: Body) {
     try {
         dispatch(setRequestAcceptColetasLoading())
 
-        const endpoint = `https://first-mile.herokuapp.com/acceptOrRefuseList/`
+        const endpoint = `${TRUX_ENDPOINT}Lista/FirstMile/AlterarStatusRomaneio`
         const response = await request.post<ResponsePattern<any>>({ endpoint, body })
 
         if (response) {
             dispatch(setRequestAcceptColetasData(response))
             if (!response.flagErro) {
-                dispatch(setLista(response.listaResultados))
-                saveColetasOnAsyncStorage([response.listaResultados])
             } else throw new Error(response.listaMensagens[0])
         } else throw new Error('Erro na requisição')
     } catch (error: any) {
