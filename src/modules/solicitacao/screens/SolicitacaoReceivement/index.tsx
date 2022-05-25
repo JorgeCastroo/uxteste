@@ -16,7 +16,7 @@ import Button from '../../../../components/Button'
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
-    const { currentSolicitacao } = useAppSelector(s => s.solicitacao)
+    const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
 
     return(
 
@@ -24,7 +24,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {40}>
                 <Header title = "Placeholder" goBack = {false} />
                 <Section marginTop = {20}>
-                    <SolicitacaoBox />
+                    <SolicitacaoBox {...currentSolicitacao!} />
                 </Section>
                 <Section type = "row" marginTop = {8} between>
                     <S.Box style = {elevation.elevation2}>
