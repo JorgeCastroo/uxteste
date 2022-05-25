@@ -18,10 +18,8 @@ const ColetasList: React.FC = () => {
     const coletas = useAppSelector(s => s.coletas);
     const statusColetas = useAppSelector(s => s.coletas.idStatusColetas);
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
-    const coletasReprovadas = useAppSelector(s => s.coletas.coletasReprovadas)
     const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
  
-    const isFocused = useIsFocused()
     const navigation = useNavigation<any>()
     const dispatch = useAppDispatch();
 
@@ -52,18 +50,12 @@ const ColetasList: React.FC = () => {
 
         if (!!response) {
             console.log(response)
-            if (response.flagErro) navigation.navigate("solicitacaoRoutes")
+            if (!response.flagErro) navigation.navigate("solicitacaoRoutes")
             else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
             console.log(response)
         }
     }
-
-    useEffect(() => {
-        console.log("=========================")
-        console.log("APROVADAS: ", coletasAprovadas.map(item => item.id))
-        console.log("REPROVADAS: ", coletasReprovadas.map(item => item.id))
-    }, [isFocused, coletasAprovadas, coletasReprovadas])
 
     return (
         <>

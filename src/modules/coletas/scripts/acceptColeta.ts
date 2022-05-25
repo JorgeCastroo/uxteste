@@ -20,7 +20,6 @@ export default async function acceptColeta(dispatch: Function, body: Body) {
 
         const endpoint = `${ALTERAR_STATUS_ROMANEIO}`
         const response = await request.post<ResponsePattern<any>>({ authorization, endpoint, body })
-        console.log("RESPONSE", response)
 
         if (response) {
             dispatch(setRequestColetasAceitasData(response))
