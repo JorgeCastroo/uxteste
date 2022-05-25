@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { Animated } from 'react-native'
 import { Text } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { LoaderProps } from './types'
 import * as S from './styles'
 import themes from '../../../../../../styles/themes'
 import { useAppDispatch } from '../../../../../../redux/hooks'
 import Container from '../../../../../../components/Container'
 import Section from '../../../../../../components/Screen/Section'
-import sleep from '../../../../../../utils/sleep'
-import { setLoadingRoute } from '../../../../reducers/solicitacaoReducer'
 
-const Loader: React.FC = () => {
+const Loader: React.FC <LoaderProps> = ({ percent }) => {
 
     const dispatch = useAppDispatch()
     const [animationValue] = useState(new Animated.Value(0))
-    const animationDuration = 3000
+    const animationDuration = 5000
 
     const animatedStyle = {
         width: animationValue.interpolate({
@@ -24,17 +23,12 @@ const Loader: React.FC = () => {
     }
 
     useEffect(() => {
-        (async() => {
-            dispatch(setLoadingRoute(true))
-            Animated.timing(animationValue, {
-                toValue: 100,
-                duration: animationDuration,
-                useNativeDriver: false,
-            }).start()
-            await sleep(animationDuration)
-            dispatch(setLoadingRoute(false))
-        })()
-    }, [dispatch])
+        Animated.timing(animationValue, {
+            toValue: percent,
+            duration: animationDuration,
+            useNativeDriver: false,
+        }).start()
+    }, [dispatch, percent])
 
     return(
 

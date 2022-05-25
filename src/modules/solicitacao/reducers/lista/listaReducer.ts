@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { idStatusLista } from "../../../../constants/idStatusLista"
 import { Lista, ListaVolume } from "../../interfaces/Lista"
 
 interface State {
@@ -9,6 +10,8 @@ interface State {
 
     currentSolicitacao: Lista | null
     currentVolumes: ListaVolume[] | null
+
+    loadingNewLista: boolean
 }
 
 const initialState: State = {
@@ -19,6 +22,8 @@ const initialState: State = {
 
     currentSolicitacao: null,
     currentVolumes: null,
+
+    loadingNewLista: false,
 }
 
 const listaSlice = createSlice({
@@ -42,6 +47,11 @@ const listaSlice = createSlice({
             state.currentVolumes = action.payload
         },
 
+        updateSituacao: (state) => {
+            state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.situacao = idStatusLista['COLETANDO']
+            state.currentSolicitacao!.situacao = idStatusLista['COLETANDO']
+            state.lista = [...state.lista!]
+        },
         updateVolume: (state, action: PayloadAction<string>) => {
             const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
             
@@ -56,13 +66,18 @@ const listaSlice = createSlice({
             state.currentSolicitacao = null
             state.currentVolumes = null
         },
+
+        setLoadingNewLista: (state, action: PayloadAction<boolean>) => {
+            state.loadingNewLista = action.payload
+        },
     }
 })
 
 export const { 
     setLista, setOldLista, setFilteredLista,
     setCurrentSolicitacao, setCurrentVolumes,
-    updateVolume,
-    resetLista
+    updateVolume, updateSituacao,
+    setLoadingNewLista,
+    resetLista,
 } = listaSlice.actions
 export default listaSlice.reducer

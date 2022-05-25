@@ -1,19 +1,17 @@
-import React, { useCallback, useEffect, useRef } from 'react'
-import { StatusBar, TouchableOpacity } from 'react-native'
-import { Text } from 'react-native-paper'
+import React, { useCallback, useRef } from 'react'
+import { StatusBar } from 'react-native'
 import { RNCamera } from 'react-native-camera'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Sound from 'react-native-sound'
 import BarcodeMask from "react-native-barcode-mask"
 import { showMessage } from "react-native-flash-message"
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
-import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { addScannedSolicitacao, setModalVisible, setScanLayout, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { addScannedSolicitacao, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
+import Control from './components/Control'
 import info from '../../../../utils/info'
 import sleep from '../../../../utils/sleep'
 //@ts-ignore
@@ -104,17 +102,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         //onLayoutMeasured = {({ nativeEvent: { layout } }) => dispatch(setScanLayout(layout))}
                     />
                 </RNCamera>
-                <S.ScanControlsContainer>
-                    <TouchableOpacity onPress = {() => navigation.goBack()}>
-                        <MaterialCommunityIcons name = "close" size = {24} color = "#fff" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress = {() => scannedSolicitacoes .length > 0 && navigation.navigate('solicitacaoScanList')}>
-                        <Text style = {{color: '#fff', fontWeight: 'bold'}}>{`${scannedSolicitacoes.length} códigos scaneados`}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress = {() => dispatch(setModalVisible(true))}>
-                        <MaterialCommunityIcons name = "keyboard" size = {24} color = "#fff" />
-                    </TouchableOpacity>
-                </S.ScanControlsContainer>
+                <Control navigation = {navigation} />
             </Render>
             <Form />
         </>

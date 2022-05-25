@@ -15,7 +15,7 @@ export interface Lista {
     telPrincipal:         string;
     latitudeDestino:      string;
     longitudeDestino:     string;
-    situacao:             string;
+    situacao:             number;
     dtCadastro:           Date;
     listaVolumes:         ListaVolume[];
 }

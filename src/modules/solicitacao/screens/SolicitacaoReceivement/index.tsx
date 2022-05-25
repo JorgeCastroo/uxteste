@@ -14,25 +14,26 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import Button from '../../../../components/Button'
 import findLista from '../../scripts/findLista'
-import { buttonLabel, buttonFunction } from './buttonController'
+import startReceivingLista from '../../scripts/requests/requestStartReceivingLista'
+import { idStatusLista } from '../../../../constants/idStatusLista'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
-    const { scannedSolicitacoes } = useAppSelector(s => s.solicitacaoScan)
+    const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
 
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
         if(scannedVolumes.length > 0) scannedVolumes.map(item => item.etiqueta).map(item => dispatch(addScannedSolicitacao(item)))
-        buttonFunction(lista!, currentSolicitacao!.idLista, navigation.navigate)
+        navigation.navigate('solicitacaoScan')
     }
 
     return(
 
         <>
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {40}>
-                <Header title = "Placeholder" goBack = {false} />
+                <Header title = "Lista" />
                 <Section marginTop = {20}>
                     <SolicitacaoBox {...currentSolicitacao!} />
                 </Section>
@@ -47,10 +48,31 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                         <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}</Text>
                     </S.Box>
                 </Section>
-                <Section marginTop = {40} center>
+                <Section marginTop = {40}>
+                    {currentSolicitacao!.situacao === idStatusLista['ENVIADO'] && (
+                        <Button
+                            label = "Iniciar Recebimento"
+                            marginHorizontal
+                            marginBottom = {8}
+                            loading = {requestStartReceivingLista.loading}
+                            disabled = {requestStartReceivingLista.loading}
+                            onPress = {() => startReceivingLista(dispatch, currentSolicitacao!.idLista, {latitude: 0, longitude: 0}, handleNavigate)}
+                        />
+                    )}
+                    {currentSolicitacao!.situacao === idStatusLista['COLETANDO'] && (
+                        <Button
+                            label = "Receber"
+                            marginHorizontal
+                            marginBottom = {8}
+                            onPress = {handleNavigate}
+                        />
+                    )}
                     <Button
-                        label = {buttonLabel(lista!, currentSolicitacao!.idLista)}
-                        onPress = {handleNavigate}
+                        label = "Finalizar Recebimento"
+                        marginHorizontal
+                        loading = {false}
+                        disabled = {requestStartReceivingLista.loading}
+                        onPress = {() => {}}
                     />
                 </Section>
             </Render>

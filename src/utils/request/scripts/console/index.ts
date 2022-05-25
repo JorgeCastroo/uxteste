@@ -3,8 +3,8 @@ import { RequestMethods } from "../../types"
 const SHOW_LOG = {
     REQUEST: true,
     HEADER: false,
-    BODY: false,
-    RESPONSE: false,
+    BODY: true,
+    RESPONSE: true,
 }
 
 const line = () => console.log('------------------------------------------------------')
