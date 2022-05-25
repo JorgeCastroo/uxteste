@@ -4,7 +4,7 @@ import themes from '../../../../styles/themes'
 import Section from '../../../../components/Screen/Section'
 import ColetasSelectItem from './Item'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setAcceptAllColetas, setRemoveAllColetas, setRemoveIdsColetas } from '../../reducers/coletas/coletas'
+import { setAcceptAllColetas, setRemoveAllColetas } from '../../reducers/coletas/coletas'
 
 const ColetasSelect: React.FC = () => {
 
@@ -15,7 +15,7 @@ const ColetasSelect: React.FC = () => {
 
     useEffect(() => {
         if (selectAll === '0') {
-            dispatch(setRemoveAllColetas([]))
+            dispatch(setRemoveAllColetas(coletas))
         } else {
             dispatch(setAcceptAllColetas(coletas))
         }

@@ -1,25 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Coletas } from "../../types/coletas";
+import { Data } from "../../types/data";
 
 interface State {
     requestColeta: {
         loading: boolean;
-        acceptLoading: boolean;
-        data: Coletas[] | null;
+        loadingColetasAceitas: boolean;
+        data: object | null;
         erro: boolean | null;
-        aceita: boolean;
-        aceitaData: object | null;
+        coletasAceitasData: Data | null;
     }
 }
 
 const initialState: State = {
     requestColeta: {
         loading: true,
-        acceptLoading: false,
+        loadingColetasAceitas: false,
         data: null,
         erro: null,
-        aceita: false,
-        aceitaData: null,
+        coletasAceitasData: null
     }
 }
 
@@ -36,16 +34,15 @@ const requestColetas = createSlice({
             state.requestColeta.loading = true
             state.requestColeta.erro = false
         },
-        setRequestAcceptColetasData: (state, action: PayloadAction<any>) => {
-            state.requestColeta.aceitaData = action.payload
-            state.requestColeta.acceptLoading = false
-            state.requestColeta.aceita = true
+        setRequestColetasAceitasData: (state, action: PayloadAction<any>) => {
+            state.requestColeta.coletasAceitasData = action.payload
+            state.requestColeta.loadingColetasAceitas = false
         },
         setRequestAcceptColetasLoading: (state) => {
-            state.requestColeta.acceptLoading = true
+            state.requestColeta.loadingColetasAceitas = true
         },
     }
 })
 
-export const { setRequestColetasData, setRequestColetasLoading, setRequestAcceptColetasData, setRequestAcceptColetasLoading } = requestColetas.actions
+export const { setRequestColetasData, setRequestColetasLoading, setRequestColetasAceitasData, setRequestAcceptColetasLoading } = requestColetas.actions
 export default requestColetas.reducer

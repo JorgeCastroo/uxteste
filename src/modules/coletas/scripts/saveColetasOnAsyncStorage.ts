@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Coletas } from "../../coletas/reducers/coletas/coletas"
+import { Coletas } from "../types/coletas"
 
 export const saveColetasOnAsyncStorage = async (coletas: Coletas[]) => {
     const coletasAsyncStorage = await AsyncStorage.getItem("coletas")
