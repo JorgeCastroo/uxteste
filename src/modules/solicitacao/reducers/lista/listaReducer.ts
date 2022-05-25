@@ -5,14 +5,20 @@ interface State {
     lista: Lista[] | null
     oldLista: Lista[] | null
 
+    filteredLista: Lista[] | null
+
     currentSolicitacao: Lista | null
+    currentVolumes: ListaVolume[] | null
 }
 
 const initialState: State = {
     lista: null,
     oldLista: null,
 
+    filteredLista: null,
+
     currentSolicitacao: null,
+    currentVolumes: null,
 }
 
 const listaSlice = createSlice({
@@ -25,28 +31,37 @@ const listaSlice = createSlice({
         setOldLista: (state, action: PayloadAction<Lista[]>) => {
             state.oldLista = action.payload
         },
+        setFilteredLista: (state, action: PayloadAction<Lista[] | null>) => {
+            state.filteredLista = action.payload
+        },
 
         setCurrentSolicitacao: (state, action: PayloadAction<Lista>) => {
             state.currentSolicitacao = action.payload
         },
+        setCurrentVolumes: (state, action: PayloadAction<ListaVolume[]>) => {
+            state.currentVolumes = action.payload
+        },
 
-        updateVolume: (state, action: PayloadAction<ListaVolume>) => {
-            const volumeIndex = state.lista?.find(lista => lista.idLista === action.payload.idLista)!.listaVolumes.findIndex(volume => volume.idVolume === action.payload.idVolume)!
+        updateVolume: (state, action: PayloadAction<string>) => {
+            const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
             
-            state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
+            state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
+            state.lista = [...state.lista!]
         },
 
         resetLista: (state) => {
             state.lista = null
             state.oldLista = null
+            state.filteredLista = null
             state.currentSolicitacao = null
+            state.currentVolumes = null
         },
     }
 })
 
 export const { 
-    setLista, setOldLista, 
-    setCurrentSolicitacao,
+    setLista, setOldLista, setFilteredLista,
+    setCurrentSolicitacao, setCurrentVolumes,
     updateVolume,
     resetLista
 } = listaSlice.actions

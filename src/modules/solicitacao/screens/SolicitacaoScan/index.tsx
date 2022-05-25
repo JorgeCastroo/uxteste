@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { StatusBar, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import { RNCamera } from 'react-native-camera'
@@ -41,22 +41,32 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
+    const { currentVolumes } = useAppSelector(s => s.lista)
     const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoScan)
 
     const handleScan = useCallback(async (code: string, scanned: string[]) => {
         dispatch(setScanning(true))
-        if(!scanned.includes(code)){
-            dispatch(addScannedSolicitacao(code))
-            beepSuccess.play()
-            showMessage({
-                message: 'Código lido com sucesso!',
-                type: 'success',
-                statusBarHeight: StatusBar.currentHeight,
-            })
+        if(currentVolumes!.map(item => item.etiqueta).includes(code)){
+            if(!scanned.includes(code)){
+                dispatch(addScannedSolicitacao(code))
+                beepSuccess.play()
+                showMessage({
+                    message: 'Código lido com sucesso!',
+                    type: 'success',
+                    statusBarHeight: StatusBar.currentHeight,
+                })
+            }else{
+                beepError.play()
+                showMessage({
+                    message: 'Código já inserido!',
+                    type: 'danger',
+                    statusBarHeight: StatusBar.currentHeight,
+                })
+            }
         }else{
             beepError.play()
             showMessage({
-                message: 'Código já inserido!',
+                message: 'Código não existe nos volumes!',
                 type: 'danger',
                 statusBarHeight: StatusBar.currentHeight,
             })

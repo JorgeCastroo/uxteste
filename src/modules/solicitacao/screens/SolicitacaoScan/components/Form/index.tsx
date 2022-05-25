@@ -1,16 +1,18 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { StatusBar } from 'react-native'
 import { Button, Dialog, Portal, TextInput } from 'react-native-paper'
 import FlashMessage, { showMessage } from 'react-native-flash-message'
 import themes from '../../../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
 import { addScannedSolicitacao, setModalVisible } from '../../../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { updateVolume } from '../../../../reducers/lista/listaReducer'
 import FormError from '../../../../../../components/Form/Error'
 
 const Form: React.FC = () => {
 
     const messageRef = useRef<FlashMessage>(null)
     const dispatch = useAppDispatch()
+    const { currentVolumes } = useAppSelector(s => s.lista)
     const { modalVisible, scannedSolicitacoes } = useAppSelector(s => s.solicitacaoScan)
     const [code, setCode] = React.useState('')
 
@@ -19,23 +21,32 @@ const Form: React.FC = () => {
         dispatch(setModalVisible(false))
     }
 
-    const handleCode = useCallback(() => {
-        if(!scannedSolicitacoes.includes(code)){
-            dispatch(addScannedSolicitacao(code))
-            dispatch(setModalVisible(false))
-            showMessage({
-                message: 'Código lido com sucesso!',
-                type: 'success',
-                statusBarHeight: StatusBar.currentHeight,
-            })
+    const handleCode = useCallback((cod: string) => {
+        if(currentVolumes!.map(item => item.etiqueta).includes(cod)){
+            if(!scannedSolicitacoes.includes(cod)){
+                dispatch(addScannedSolicitacao(cod))
+                dispatch(updateVolume(cod))
+                onClose()
+                showMessage({
+                    message: 'Código lido com sucesso!',
+                    type: 'success',
+                    statusBarHeight: StatusBar.currentHeight,
+                })
+            }else{
+                messageRef.current!.showMessage({
+                    message: 'Código já inserido!',
+                    type: 'danger',
+                    statusBarHeight: StatusBar.currentHeight,
+                })
+            }
         }else{
             messageRef.current!.showMessage({
-                message: 'Código já inserido!',
+                message: 'Código não existe nos volumes!',
                 type: 'danger',
                 statusBarHeight: StatusBar.currentHeight,
             })
         }
-    }, [code])
+    }, [])
 
     return(
 
@@ -71,7 +82,7 @@ const Form: React.FC = () => {
                         uppercase = {false} 
                         disabled = {code === ''}
                         color = {themes.status.success.primary} 
-                        onPress = {handleCode}
+                        onPress = {() => handleCode(code)}
                     >Ok</Button>
                 </Dialog.Actions>
             </Dialog>
