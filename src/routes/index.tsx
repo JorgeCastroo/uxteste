@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator } from 'react-native-paper'
+import { useNetInfo } from '@react-native-community/netinfo'
 import themes from '../styles/themes'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import AppRoutes from '../modules/app/routes'
@@ -15,6 +16,7 @@ const Routes: React.FC = () => {
     const dispatch = useAppDispatch()
     const { isLogged, authLoading } = useAppSelector(s => s.auth)
     const { lista, oldLista } = useAppSelector(s => s.lista)
+    const netInfo = useNetInfo()
 
     useEffect(() => {
         (async() => {
