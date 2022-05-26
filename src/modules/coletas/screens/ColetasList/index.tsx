@@ -19,18 +19,9 @@ const ColetasList: React.FC = () => {
     const statusColetas = useAppSelector(s => s.coletas.idStatusColetas);
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
     const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
- 
+
     const navigation = useNavigation<any>()
     const dispatch = useAppDispatch();
-
-    const enviarColetaMocada = async () => {
-        acceptColeta(dispatch, {
-            idLista: 333025,
-            idStatusLista: statusColetas.APROVADO,
-            latitude: "",
-            longitude: ""
-        })
-    }
 
     const handleAceitarColetas = async () => {
         dispatch(setloadingColetasAprovadas(true))
@@ -49,7 +40,6 @@ const ColetasList: React.FC = () => {
         dispatch(setloadingColetasAprovadas(false))
 
         if (!!response) {
-            console.log(response)
             if (!response.flagErro) navigation.navigate("solicitacaoRoutes")
             else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
