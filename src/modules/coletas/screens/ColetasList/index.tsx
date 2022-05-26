@@ -30,7 +30,7 @@ const ColetasList: React.FC = () => {
 
         for (const coleta of coletasAprovadas) {
             response = await acceptColeta(dispatch, {
-                idLista: coleta.id,
+                idLista: coleta.idLista,
                 idStatusLista: statusColetas.APROVADO,
                 latitude: coleta.latitudeDestino,
                 longitude: coleta.latitudeDestino
@@ -51,7 +51,7 @@ const ColetasList: React.FC = () => {
         <>
 
             <Render
-                onRefresh={async () => await getColetas(dispatch, 450)}
+                onRefresh={async () => await getColetas(dispatch)}
                 statusBarOptions={{
                     barStyle: 'light-content',
                     backgroundColor: themes.colors.primary,
@@ -60,9 +60,9 @@ const ColetasList: React.FC = () => {
                 <ColetasSelect />
                 {coletas.coletas?.map(coleta => {
                     return (
-                        <Section key={coleta.id}>
+                        <Section key={coleta.idLista}>
                             <ColetasBox
-                                id={coleta.id}
+                                id={coleta.idLista}
                                 cliente={coleta.nomeCliente}
                                 coleta={coleta}
                                 quantidade={coleta.qtdeVolumes}

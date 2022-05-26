@@ -1,19 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState} from 'react'
-import { StatusBar, TouchableOpacity } from 'react-native'
-import { Text } from 'react-native-paper'
+import React, { useCallback, useRef } from 'react'
+import { StatusBar } from 'react-native'
 import { RNCamera } from 'react-native-camera'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Sound from 'react-native-sound'
 import BarcodeMask from "react-native-barcode-mask"
 import { showMessage } from "react-native-flash-message"
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
-import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { addScannedSolicitacao, setModalVisible, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { addScannedSolicitacao, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
+import Control from './components/Control'
 import info from '../../../../utils/info'
 import sleep from '../../../../utils/sleep'
 //@ts-ignore
@@ -41,37 +39,39 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
+    const { currentVolumes } = useAppSelector(s => s.lista)
     const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoScan)
-    const [scannedCode, setScannedCode] = useState<string | null>(null)
 
-    const handleScan = useCallback(async () => {
+    const handleScan = useCallback(async (code: string, scanned: string[]) => {
         dispatch(setScanning(true))
-        
-        if(!scannedSolicitacoes.includes(scannedCode!)){
-            beepSuccess.play()
-            dispatch(addScannedSolicitacao(scannedCode!))
-            showMessage({
-                message: 'Código lido com sucesso!',
-                type: 'success',
-                statusBarHeight: StatusBar.currentHeight,
-            })
-            await sleep(400)
+        if(currentVolumes!.map(item => item.etiqueta).includes(code)){
+            if(!scanned.includes(code)){
+                dispatch(addScannedSolicitacao(code))
+                beepSuccess.play()
+                showMessage({
+                    message: 'Código lido com sucesso!',
+                    type: 'success',
+                    statusBarHeight: StatusBar.currentHeight,
+                })
+            }else{
+                beepError.play()
+                showMessage({
+                    message: 'Código já inserido!',
+                    type: 'danger',
+                    statusBarHeight: StatusBar.currentHeight,
+                })
+            }
         }else{
             beepError.play()
             showMessage({
-                message: 'Código já inserido!',
+                message: 'Código não existe nos volumes!',
                 type: 'danger',
                 statusBarHeight: StatusBar.currentHeight,
             })
-            await sleep(700)
         }
-        
+        await sleep(3000)
         dispatch(setScanning(false))
-    }, [scannedCode])
-
-    useEffect(() => {
-        if(!!scannedCode) handleScan()
-    }, [scannedCode])
+    }, [])
 
     return(
 
@@ -90,26 +90,19 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    barCodeTypes = {[scanMode as any]}
+                    //barCodeTypes = {[scanMode as any]} //! REMOVE IN PROD
                     onBarCodeRead = {code => {
-                        if(!isScanning && !modalVisible) setScannedCode(code.data)
+                        if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
                     }}
                 >
                     <BarcodeMask 
                         width = {260}
                         height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 260 : 100}
                         showAnimatedLine = {false}
+                        //onLayoutMeasured = {({ nativeEvent: { layout } }) => dispatch(setScanLayout(layout))}
                     />
                 </RNCamera>
-                <S.ScanControlsContainer>
-                    <TouchableOpacity onPress = {() => navigation.goBack()}>
-                        <MaterialCommunityIcons name = "close" size = {24} color = "#fff" />
-                    </TouchableOpacity>
-                    <Text style = {{color: '#fff', fontWeight: 'bold'}}>{`${scannedSolicitacoes.length} códigos scaneados`}</Text>
-                    <TouchableOpacity onPress = {() => dispatch(setModalVisible(true))}>
-                        <MaterialCommunityIcons name = "keyboard" size = {24} color = "#fff" />
-                    </TouchableOpacity>
-                </S.ScanControlsContainer>
+                <Control navigation = {navigation} />
             </Render>
             <Form />
         </>

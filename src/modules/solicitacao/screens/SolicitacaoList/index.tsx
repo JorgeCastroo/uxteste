@@ -1,66 +1,61 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
+import { Lista } from '../../interfaces/Lista'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
+import { setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
+import { resetScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import SolicitacaoListSearchbar from './components/Searchbar'
 import Loader from './components/Loader'
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Coletas } from '../../../coletas/types/coletas'
-import { useIsFocused } from '@react-navigation/native'
+import localGetLista from '../../scripts/local/localGetLista'
+import { idStatusLista } from '../../../../constants/idStatusLista'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
-    const { solicitacoes } = useAppSelector(s => s.solicitacao)
-    const lista = useAppSelector(s => s.lista.lista)
-    const [coletas, setColetas] = useState<Coletas[]>()
-    const isFocused = useIsFocused()
+    const { lista, filteredLista, loadingNewLista } = useAppSelector(s => s.lista)
+    const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
+    const { requestGetLista } = useAppSelector(s => s.requestLista)
 
-    const [loading, setLoading] = useState<boolean>(true)
+    const SHOW_LOADING = loadingNewLista
+    const SHOW_LISTA = !SHOW_LOADING && !!lista
+    const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
+    const SHOW_LISTA_DATA = !SHOW_LOADING && !!lista && !SHOW_FILTERED_LISTA_DATA
 
-    const handleNavigate = () => {
+    const loaderPercent = requestGetLista.data ? 100 : 0
+
+    const handleNavigate = (item: Lista) => {
+        dispatch(resetScannedSolicitacoes())
+        dispatch(setCurrentSolicitacao(item))
+        dispatch(setCurrentVolumes(item.listaVolumes))
         navigation.navigate('solicitacaoReceivement')
     }
-
-    const getColetas = async () => {
-        const coletasAsyncStorage = await AsyncStorage.getItem("coletas")
-        const coletasAsyncStorageJSON = coletasAsyncStorage != null ? JSON.parse(coletasAsyncStorage) : []
-        setColetas(coletasAsyncStorageJSON)
-        setTimeout(() => {
-            setLoading(false)
-        }, 2000)
-    }
-
-    useEffect(() => {
-        setLoading(true)
-        if (isFocused) getColetas()
-    }, [isFocused])
 
     return (
 
         <>
-            <Render
-                statusBarOptions={{ barStyle: 'light-content', backgroundColor: themes.colors.primary }}
-                paddingBottom={20}
-                align={loading ? 'space-between' : undefined}
+            <Render 
+                statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} 
+                paddingBottom = {20} 
+                align = {SHOW_LOADING ? 'space-between' : undefined}
+                onRefresh = {async () => await localGetLista(dispatch)}
             >
-                <Header title="Listas" goBack={false} />
-                {!loading && (
+                <Header title = "Listas" goBack = {false} screenName = "solicitacaoList" />
+                {SHOW_LISTA && (
                     <>
                         <SolicitacaoListSearchbar />
                         <Section>
-                            {coletas?.map((item) => {
-                                return <SolicitacaoBox coleta={item} key={item.id} onPress={handleNavigate} />
-                            })}
+                            {SHOW_LISTA_DATA && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).map(item => <SolicitacaoBox {...item} key = {item.idLista} onPress = {() => handleNavigate(item)} />)}
+                            {SHOW_FILTERED_LISTA_DATA && filteredLista.map(item => <SolicitacaoBox {...item} key = {item.idLista} onPress = {() => handleNavigate(item)} />)}
                         </Section>
                     </>
                 )}
-                {loading && <Loader />}
+                {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 <Section />
             </Render>
         </>

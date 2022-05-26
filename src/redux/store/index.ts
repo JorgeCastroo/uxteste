@@ -7,6 +7,8 @@ import listaReducer from '../../modules/solicitacao/reducers/lista/listaReducer'
 import requestListaReducer from '../../modules/solicitacao/reducers/lista/requestListaReducer'
 import coletasReducer from '../../modules/coletas/reducers/coletas/coletas'
 import requestColetasReducer from '../../modules/coletas/reducers/coletas/requestColetasReducer'
+import requestRoteirizacaoReducer from '../../modules/roteirizacao/reducers/requestRoteirizacaoReducer'
+import roteirizacaoReducer from '../../modules/roteirizacao/reducers/roteirizacaoReducer'
 
 const store = configureStore({
     reducer: {
@@ -20,7 +22,10 @@ const store = configureStore({
         solicitacaoScan: solicitacaoScanReducer,
         
         coletas: coletasReducer,
-        requestColetas: requestColetasReducer
+        requestColetas: requestColetasReducer,
+
+        roteirizacao: roteirizacaoReducer,
+        requestRoteirizacao: requestRoteirizacaoReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware({
         serializableCheck: false,

@@ -15,7 +15,7 @@ const ColetasDownload: React.FC = () => {
     const isFocused = useIsFocused()
 
     useEffect(() => {
-        getColetas(dispatch, 450);
+        getColetas(dispatch)
     }, [isFocused])
 
     useEffect(() => {

@@ -7,6 +7,8 @@ interface State {
     filteredSolicitacoes: Solicitacao[] | null
     
     currentSolicitacao: Solicitacao | null
+
+    loadingRoute: boolean
 }
 
 const initialState: State = {
@@ -14,6 +16,8 @@ const initialState: State = {
     oldSolicitacoes: null,
     filteredSolicitacoes: null,
     currentSolicitacao: null,
+
+    loadingRoute: false,
 }
 
 const solicitacaoSlice = createSlice({
@@ -43,8 +47,12 @@ const solicitacaoSlice = createSlice({
             state.filteredSolicitacoes = null
             state.currentSolicitacao = null
         },
+
+        setLoadingRoute: (state, action: PayloadAction<boolean>) => {
+            state.loadingRoute = action.payload
+        },
     }
 })
 
-export const { setSolicitacoes, setOldSolicitacoes, setFilteredSolicitacoes, setCurrentSolicitacao, resetSolicitacoes, updateSolicitacao } = solicitacaoSlice.actions
+export const { setSolicitacoes, setOldSolicitacoes, setFilteredSolicitacoes, setCurrentSolicitacao, resetSolicitacoes, updateSolicitacao, setLoadingRoute } = solicitacaoSlice.actions
 export default solicitacaoSlice.reducer

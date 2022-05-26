@@ -4,20 +4,22 @@ import { ResponseDefault, ResponsePattern } from "../../../../utils/response/typ
 import { responseInitialValues } from '../../../../utils/response'
 
 interface State {
-    requestGetLista: ResponseDefault<Lista>
+    requestGetLista: ResponseDefault<Lista[]>
     requestSaveLista: ResponseDefault<any>
+    requestStartReceivingLista: ResponseDefault<any>
 }
 
 const initialState: State = {
     requestGetLista: responseInitialValues,
     requestSaveLista: responseInitialValues,
+    requestStartReceivingLista: responseInitialValues,
 }
 
 const requestListaSlice = createSlice({
     name: 'requestLista',
     initialState,
     reducers: {
-        setRequestGetListaData: (state, action: PayloadAction<ResponsePattern<Lista>>) => {
+        setRequestGetListaData: (state, action: PayloadAction<ResponsePattern<Lista[]>>) => {
             state.requestGetLista.data = action.payload
             state.requestGetLista.loading = false
             state.requestGetLista.error = false
@@ -56,11 +58,32 @@ const requestListaSlice = createSlice({
         resetRequestSaveLista: (state) => {
             state.requestSaveLista = {...responseInitialValues}
         },
+
+        setRequestStartReceivingListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestStartReceivingLista.data = action.payload
+            state.requestStartReceivingLista.loading = false
+            state.requestStartReceivingLista.error = false
+        },
+        setRequestStartReceivingListaLoading: (state) => {
+            state.requestStartReceivingLista.loading = true
+            state.requestStartReceivingLista.error = false
+        },
+        setRequestStartReceivingListaError: (state) => {
+            state.requestStartReceivingLista.loading = false
+            state.requestStartReceivingLista.error = true
+        },
+        setRequestStartReceivingListaMessage: (state, action: PayloadAction<string>) => {
+            state.requestStartReceivingLista.message = action.payload
+        },
+        resetRequestStartReceivingLista: (state) => {
+            state.requestStartReceivingLista = {...responseInitialValues}
+        },
     }
 })
 
 export const {
     setRequestGetListaLoading, setRequestGetListaData, setRequestGetListaError, setRequestGetListaMessage, resetRequestGetLista,
     setRequestSaveListaLoading, setRequestSaveListaData, setRequestSaveListaError, setRequestSaveListaMessage, resetRequestSaveLista,
+    setRequestStartReceivingListaLoading, setRequestStartReceivingListaData, setRequestStartReceivingListaError, setRequestStartReceivingListaMessage, resetRequestStartReceivingLista,
 } = requestListaSlice.actions
 export default requestListaSlice.reducer

@@ -1,17 +1,22 @@
 import React from 'react'
+import { TouchableOpacity, View } from 'react-native'
 import { List, Text } from 'react-native-paper'
+import { SolicitacaoBoxProps } from './types'
+import { Lista } from '../../interfaces/Lista'
 import * as S from './styles'
 import { elevation } from '../../../../styles/layout'
 import themes from '../../../../styles/themes'
-import { BoxContentProps, SolicitacaoBoxProps } from './types'
-import { TouchableOpacity, View } from 'react-native'
+import { idStatusLista } from '../../../../constants/idStatusLista'
 
-
-const BoxContent: React.FC<BoxContentProps> = ({ coleta }) => {
-
+const BoxContent: React.FC <Lista> = lista => {
+    
     const theme = themes.colors.tertiary
-
-    const endereco = `${coleta?.logradouro}, ${coleta?.bairro}, ${coleta?.cidade}, ${coleta?.complemento}.`
+    const enderecoCompleto = `${lista.logradouro}, ${lista.numero}, ${lista.cep} - ${lista.bairro}`
+    
+    const getStatus = () => {
+        if(lista.situacao === 1) return 'Em aberto'
+        else return Object.keys(idStatusLista).find(f => (idStatusLista as any)[f] === lista.situacao)!
+    }
 
     return (
 
@@ -20,22 +25,22 @@ const BoxContent: React.FC<BoxContentProps> = ({ coleta }) => {
                 <Text style={{ color: theme, fontSize: 16, fontWeight: 'bold' }}>1</Text>
             </S.PositionIndicator>
             <List.Item
-                title="Empresa"
-                description={coleta?.nomeCliente}
-                left={props => <List.Icon {...props} icon="office-building" color={theme} />}
+                title = {lista.nomeCliente}
+                description = {`Quantidade ${lista.qtdeVolumes}`}
+                left = {props => <List.Icon {...props} icon = "office-building" color = {theme} />}
             />
             <List.Item
-                title="Responsável"
-                description={coleta?.nomeResponsavel}
-                left={props => <List.Icon {...props} icon="truck" color={theme} />}
+                title = "Responsável"
+                description = {lista.nomeResponsavel}
+                left = {props => <List.Icon {...props} icon = "truck" color = {theme} />}
             />
             <List.Item
-                title="Endereço"
-                description={endereco}
-                left={props => <List.Icon {...props} icon="map-marker" color={theme} />}
+                title = "Endereço"
+                description = {enderecoCompleto}
+                left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
             />
-            <S.StatusContainer theme={'#CCE0FF'}>
-                <Text style={{ color: theme, fontSize: 18, fontWeight: 'bold' }}>{coleta?.situacao}</Text>
+            <S.StatusContainer theme = {'#CCE0FF'}>
+                <Text style = {{color: theme, fontSize: 18, fontWeight: 'bold'}}>{getStatus().toUpperCase()}</Text>
             </S.StatusContainer>
         </>
 
@@ -43,20 +48,20 @@ const BoxContent: React.FC<BoxContentProps> = ({ coleta }) => {
 
 }
 
-const SolicitacaoBox: React.FC<SolicitacaoBoxProps> = ({ onPress, coleta }) => {
+const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Lista> = ({ onPress, ...props }) => {
 
     return (
 
         <>
             {(!!onPress && (
-                <TouchableOpacity style={[S.styles.Box, elevation.elevation4]} onPress={onPress}>
-                    <BoxContent coleta={coleta} />
+                <TouchableOpacity style = {[S.styles.Box, elevation.elevation4]} onPress = {onPress}>
+                    <BoxContent {...props} />
                 </TouchableOpacity>
             )) || (
-                    <View style={[S.styles.Box, elevation.elevation4]}>
-                        <BoxContent coleta={coleta} />
-                    </View>
-                )}
+                <View style = {[S.styles.Box, elevation.elevation4]}>
+                    <BoxContent {...props} />
+                </View>
+            )}
         </>
 
     )
