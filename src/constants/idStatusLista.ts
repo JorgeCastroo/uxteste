@@ -3,5 +3,5 @@ export const idStatusLista = {
     APROVADO: 2,
     COLETANDO: 3,
     REPROVADO: 4,
-    FINALIZADO: 5
+    FINALIZADO: 5,
 }

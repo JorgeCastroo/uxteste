@@ -8,10 +8,11 @@ import ColetaBoxSelect from './Select'
 import { useAppDispatch } from '../../../../redux/hooks'
 import { setColetasAprovadas, setColetasReprovadas } from '../../reducers/coletas/coletas'
 import { Coletas } from '../../types/coletas'
+import { Lista } from '../../../solicitacao/interfaces/Lista'
 
 interface Props {
     id: number,
-    coleta: Coletas,
+    coleta: Lista,
     cliente: string,
     quantidade: number,
     logradouro: string,

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Menu } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { Lista } from '../../interfaces/Lista'
