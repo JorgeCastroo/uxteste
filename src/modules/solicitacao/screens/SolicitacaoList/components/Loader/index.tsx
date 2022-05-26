@@ -5,15 +5,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { LoaderProps } from './types'
 import * as S from './styles'
 import themes from '../../../../../../styles/themes'
-import { useAppDispatch } from '../../../../../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
 import Container from '../../../../../../components/Container'
 import Section from '../../../../../../components/Screen/Section'
 
 const Loader: React.FC <LoaderProps> = ({ percent }) => {
 
     const dispatch = useAppDispatch()
+    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const [animationValue] = useState(new Animated.Value(0))
-    const animationDuration = 5000
+    const animationDuration = 2000
 
     const animatedStyle = {
         width: animationValue.interpolate({
@@ -45,14 +46,18 @@ const Loader: React.FC <LoaderProps> = ({ percent }) => {
                     </Animated.View>
                 </S.LoadingBarContainer> 
             </Container>
-            <Container type = "row" padding = {false} center>
-                <Text style = {{marginRight: 8, color: '#787878', fontSize: 22, fontWeight: 'bold'}}>Distância total:</Text>
-                <Text style = {{color: themes.colors.primary, fontSize: 22, fontWeight: 'bold'}}>{`${100} Km`}</Text>
-            </Container>
-            <Container type = "row" padding = {false} center>
-                <Text style = {{marginRight: 8, color: '#787878', fontSize: 22, fontWeight: 'bold'}}>Tempo:</Text>
-                <Text style = {{color: themes.colors.primary, fontSize: 22, fontWeight: 'bold'}}>{`${1}h${0}`}</Text>
-            </Container>
+            {!!roteirizacao && (
+                <>
+                    <Container type = "row" padding = {false} center>
+                        <Text style = {{marginRight: 8, color: '#787878', fontSize: 22, fontWeight: 'bold'}}>Distância total:</Text>
+                        <Text style = {{color: themes.colors.primary, fontSize: 22, fontWeight: 'bold'}}>{roteirizacao.formatedDistance}</Text>
+                    </Container>
+                    <Container type = "row" padding = {false} center>
+                        <Text style = {{marginRight: 8, color: '#787878', fontSize: 22, fontWeight: 'bold'}}>Tempo:</Text>
+                        <Text style = {{color: themes.colors.primary, fontSize: 22, fontWeight: 'bold'}}>{roteirizacao.formatedDuration ?? '0'}</Text>
+                    </Container>
+                </>
+            )}
         </Section>
 
     )
