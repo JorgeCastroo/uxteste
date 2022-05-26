@@ -24,7 +24,7 @@ export default async function startReceivingLista(dispatch: Function, idLista: n
         if(response){
             dispatch(R.setRequestStartReceivingListaData(response))
             if(!response.flagErro){
-                dispatch(updateSituacao())
+                dispatch(updateSituacao('COLETANDO'))
                 redirect()   
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')

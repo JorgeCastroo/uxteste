@@ -15,7 +15,7 @@ export default async function getColetas(dispatch: Function) {
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: 9453,
+            idMotorista: 2640,
             idStatusLista: 1
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })

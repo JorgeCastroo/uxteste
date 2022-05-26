@@ -15,8 +15,8 @@ export default async function getLista(dispatch: Function){
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: 9453,
-            idStatusLista: idStatusLista['COLETANDO'],
+            idMotorista: 2640,
+            idStatusLista: idStatusLista['ENVIADO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
 

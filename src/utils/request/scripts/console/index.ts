@@ -3,8 +3,8 @@ import { RequestMethods } from "../../types"
 const SHOW_LOG = {
     REQUEST: true,
     HEADER: false,
-    BODY: true,
-    RESPONSE: true,
+    BODY: false,
+    RESPONSE: false,
 }
 
 const line = () => console.log('------------------------------------------------------')
@@ -26,17 +26,19 @@ function headerLog(method: RequestMethods, endpoint: string, header: HeadersInit
     }
 }
 
-function bodyLog(body: any){
+function bodyLog(body: any, endpoint: string){
     if(SHOW_LOG.BODY){
         line()
+        console.log('INIT:',endpoint)
         console.log('BODY:',body)
         line()
     }
 }
 
-function responseLog(response: any){
+function responseLog(response: any, endpoint: string){
     if(SHOW_LOG.RESPONSE){
         line()
+        console.log('INIT:',endpoint)
         console.log('RESPONSE:',response)
         line()
     }

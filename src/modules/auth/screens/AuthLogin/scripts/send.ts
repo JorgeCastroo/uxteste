@@ -1,11 +1,11 @@
 
 import { TRUX_ENDPOINT } from "@env"
-import { UserData } from "../../../../../../interfaces/UserData"
-import * as R from "../../../../reducers/authLogin/requestAuthLoginReducer"
-import info from "../../../../../../utils/info"
-import request from "../../../../../../utils/request"
-import setUserData from "../../../../scripts/setUserData"
-import { loginFormValues } from "../Form/constants"
+import { UserData } from "../../../../../interfaces/UserData"
+import * as R from "../../../reducers/authLogin/requestAuthLoginReducer"
+import info from "../../../../../utils/info"
+import request from "../../../../../utils/request"
+import setUserData from "../../../scripts/setUserData"
+import { loginFormValues } from "../components/Form/constants"
 
 export default async function send(dispatch: Function, values: typeof loginFormValues) {
     try {

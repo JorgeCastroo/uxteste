@@ -13,7 +13,7 @@ async function requestGet<T>({authorization, endpoint, params}: RequestPattern){
             headers: createRequestHeaders(authorization)
         })
         const jsonResponse = await response.json()
-        responseLog(jsonResponse)
+        responseLog(jsonResponse, input)
         return jsonResponse as T
     } catch (error) {
         errorLog('GET', input, error)
@@ -26,14 +26,14 @@ async function requestPost<T>({authorization, endpoint, params, body}: RequestPa
     try {
         requestLog('POST', input)
         //headerLog('POST', input, createRequestHeaders(headers))
-        bodyLog(body)
+        bodyLog(body, input)
         const response = await fetch(input, {
             method: 'POST',
             headers: createRequestHeaders(authorization),
             body: JSON.stringify(body)
         })
         const jsonResponse = await response.json()
-        responseLog(jsonResponse)
+        responseLog(jsonResponse, input)
         return jsonResponse as T
     } catch (error) {
         errorLog('POST', input, error)
@@ -46,14 +46,14 @@ async function requestDelete<T>({authorization, endpoint, params, body}: Request
     try {
         requestLog('DELETE', input)
         //headerLog('DELETE', input, createRequestHeaders(headers))
-        bodyLog(body)
+        bodyLog(body, input)
         const response = await fetch(input, {
             method: 'DELETE',
             headers: createRequestHeaders(authorization),
             body: JSON.stringify(body)
         })
         const jsonResponse = await response.json()
-        responseLog(jsonResponse)
+        responseLog(jsonResponse, input)
         return jsonResponse as T
     } catch (error) {
         errorLog('DELETE', input, error)
@@ -66,14 +66,14 @@ async function requestPut<T>({authorization, endpoint, params, body}: RequestPat
     try {
         requestLog('PUT', input)
         //headerLog('PUT', input, createRequestHeaders(headers))
-        bodyLog(body)
+        bodyLog(body, input)
         const response = await fetch(input, {
             method: 'PUT',
             headers: createRequestHeaders(authorization),
             body: JSON.stringify(body)
         })
         const jsonResponse = await response.json()
-        responseLog(jsonResponse)
+        responseLog(jsonResponse, input)
         return jsonResponse as T
     } catch (error) {
         errorLog('PUT', input, error)

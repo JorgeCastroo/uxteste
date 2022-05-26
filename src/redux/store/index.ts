@@ -11,10 +11,12 @@ import requestRoteirizacaoReducer from '../../modules/roteirizacao/reducers/requ
 import roteirizacaoReducer from '../../modules/roteirizacao/reducers/roteirizacaoReducer'
 import appReducer from '../../modules/app/reducers/appReducer'
 import mapReducer from '../../modules/map/reducers/mapReducer'
+import syncReducer from '../../modules/sync/reducers/syncReducer'
 
 const store = configureStore({
     reducer: {
         app: appReducer,
+        sync: syncReducer,
         
         auth: authReducer,
         requestSendAuthLogin: requestAuthLoginReducer,

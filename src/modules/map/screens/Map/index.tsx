@@ -24,22 +24,23 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
     const dispatch = useAppDispatch()
     const { lista } = useAppSelector(s => s.lista)
     const { renderMap, route } = useAppSelector(s => s.map)
-    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    const { roteirizacao, startCoords, endCoords } = useAppSelector(s => s.roteirizacao)
     const isFocused = useIsFocused()
 
-    const SHOW_DATA = !!lista && !!route && renderMap
+    const LOAD_DATA = !!lista && !!route && !!roteirizacao && !!startCoords && !!endCoords
+    const SHOW_DATA = LOAD_DATA && renderMap 
 
     useEffect(() => {
         (async() => {
-            if(roteirizacao && lista){
+            if(roteirizacao && lista && startCoords && endCoords){
                 dispatch(setRenderMap(false))
                 createRoute(dispatch, roteirizacao.geometry)
                 await sleep(200)
                 dispatch(setRenderMap(true))
-                fitMap(lista, mapRef.current!)
+                fitMap(mapRef.current!, lista, startCoords!, endCoords!)
             }
         })()
-    }, [roteirizacao, lista])
+    }, [roteirizacao, lista, startCoords, endCoords])
 
     return(
 
@@ -61,10 +62,19 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                     {SHOW_DATA && (
                         <>
                             <Geojson geojson = {route} strokeColor = {themes.colors.primary} strokeWidth = {3} />
-                            {lista.map(item => (
+                            <Marker pinColor = "orange" coordinate = {startCoords!}>
+                                <Callout>
+                                    <Text>Início</Text>
+                                </Callout>
+                            </Marker>
+                            <Marker pinColor = "orange" coordinate = {endCoords!}>
+                                <Callout>
+                                    <Text>Fim</Text>
+                                </Callout>
+                            </Marker>
+                            {lista.map((item, index) => (
                                 <Marker
-                                    key = {item.idLista}
-                                    style = {{ width: 200 }}
+                                    key = {index}
                                     pinColor = "red"
                                     coordinate = {{
                                         latitude: Number(item.latitudeDestino),
@@ -72,6 +82,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                                     }}
                                 >
                                     <Callout
+                                        style = {{ width: 200 }}
                                         onPress = {() => {
                                             dispatch(resetScannedSolicitacoes())
                                             dispatch(setCurrentSolicitacao(item))
@@ -91,7 +102,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                         icon = "map-marker-multiple"
                         color = {themes.colors.primary}
                         style = {{position: 'absolute', bottom: 20, right: 20, backgroundColor: '#fff'}}
-                        onPress = {() => fitMap(lista!, mapRef.current!)}
+                        onPress = {() => fitMap(mapRef.current!, lista, startCoords!, endCoords!)}
                     />
                 )}
             </Render>
