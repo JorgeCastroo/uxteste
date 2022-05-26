@@ -16,7 +16,7 @@ const MOCK_LISTA = [
         "telPrincipal": "4532545388",
         "latitudeDestino": "",
         "longitudeDestino": "",
-        "situacao": "Enviado",
+        "situacao": 1,
         "dtCadastro": "2022-05-23T10:24:00",
         "listaVolumes": [
             {
@@ -56,7 +56,7 @@ const MOCK_LISTA = [
         "telPrincipal": "4532545388",
         "latitudeDestino": "",
         "longitudeDestino": "",
-        "situacao": "Enviado",
+        "situacao": 1,
         "dtCadastro": "2022-05-23T10:31:00",
         "listaVolumes": [
             {

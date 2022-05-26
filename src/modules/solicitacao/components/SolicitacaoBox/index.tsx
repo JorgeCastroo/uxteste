@@ -12,6 +12,11 @@ const BoxContent: React.FC <Lista> = lista => {
     
     const theme = themes.colors.tertiary
     const enderecoCompleto = `${lista.logradouro}, ${lista.numero}, ${lista.cep} - ${lista.bairro}`
+    
+    const getStatus = () => {
+        if(lista.situacao === 1) return 'Em aberto'
+        else return Object.keys(idStatusLista).find(f => (idStatusLista as any)[f] === lista.situacao)!
+    }
 
     return(
 
@@ -20,7 +25,7 @@ const BoxContent: React.FC <Lista> = lista => {
                 <Text style = {{color: theme, fontSize: 16, fontWeight: 'bold'}}>1</Text>
             </S.PositionIndicator>
             <List.Item
-                title = "Empresa"
+                title = {lista.nomeCliente}
                 description = {`Quantidade ${lista.qtdeVolumes}`}
                 left = {props => <List.Icon {...props} icon = "office-building" color = {theme} />}
             />
@@ -35,7 +40,7 @@ const BoxContent: React.FC <Lista> = lista => {
                 left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
             />
             <S.StatusContainer theme = {'#CCE0FF'}>
-                <Text style = {{color: theme, fontSize: 18, fontWeight: 'bold'}}>{Object.keys(idStatusLista).find(f => (idStatusLista as any)[f] === lista.situacao)}</Text>
+                <Text style = {{color: theme, fontSize: 18, fontWeight: 'bold'}}>{getStatus().toUpperCase()}</Text>
             </S.StatusContainer>
         </>
 
