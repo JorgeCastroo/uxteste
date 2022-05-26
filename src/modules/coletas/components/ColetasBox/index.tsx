@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { List } from 'react-native-paper'
 import * as S from './styles'
 import themes from '../../../../styles/themes'
 import { elevation } from '../../../../styles/layout'
 import Container from '../../../../components/Container'
 import ColetaBoxSelect from './Select'
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setIdsColetas, setRemoveIdsColetas } from '../../reducers/coletas/coletas'
+import { useAppDispatch } from '../../../../redux/hooks'
+import { setColetasAprovadas, setColetasReprovadas } from '../../reducers/coletas/coletas'
+import { Coletas } from '../../types/coletas'
+import { Lista } from '../../../solicitacao/interfaces/Lista'
 
 interface Props {
     id: number,
+    coleta: Lista,
+    cliente: string,
     quantidade: number,
     logradouro: string,
     numero: string,
@@ -19,16 +23,24 @@ interface Props {
     cep: string,
 }
 
-const ColetasBox: React.FC<Props> = ({ id, quantidade, logradouro, numero, bairro, cidade, uf, cep }) => {
+const ColetasBox: React.FC<Props> = ({ id, coleta, cliente, quantidade, logradouro, numero, bairro, cidade, uf, cep }) => {
 
     const theme = themes.colors.tertiary
     const dispatch = useAppDispatch()
+
+    const handleColetasAprovadas = () => {
+        dispatch(setColetasAprovadas(coleta))
+    }
+
+    const handleColetasReprovadas = () => {
+        dispatch(setColetasReprovadas(coleta))
+    }
 
     return (
 
         <S.Box style={elevation.elevation4}>
             <List.Item
-                title="Empresa"
+                title={`Empresa: ${cliente}`}
                 description={`Quantidade: ${quantidade}`}
                 left={props => <List.Icon {...props} icon="office-building" color={theme} />}
             />
@@ -41,12 +53,12 @@ const ColetasBox: React.FC<Props> = ({ id, quantidade, logradouro, numero, bairr
                 <ColetaBoxSelect
                     icon="close"
                     color={themes.status.error.primary}
-                    onPress={() => { dispatch(setRemoveIdsColetas(id))}}
+                    onPress={handleColetasReprovadas}
                 />
                 <ColetaBoxSelect
                     icon="check"
                     color={themes.status.success.primary}
-                    onPress={() => dispatch(setIdsColetas(id)) }
+                    onPress={handleColetasAprovadas}
                 />
             </Container>
         </S.Box>

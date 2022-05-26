@@ -10,18 +10,18 @@ import { loginFormValues } from "../Form/constants"
 export default async function send(dispatch: Function, values: typeof loginFormValues) {
     try {
         dispatch(R.setRequestSendAuthLoginLoading())
-        
+
         const endpoint = `${TRUX_ENDPOINT}/Motoristas/MotoristaLogin`
         const body = values
         const response = await request.post<UserData>({ endpoint, body })
-        
-        if(response){
+
+        if (response) {
             dispatch(R.setRequestSendAuthLoginData(response))
-            if(!response.idUser) setUserData(dispatch, response, true)
+            if (!response.idUser) setUserData(dispatch, response, true)
             else throw new Error("Usuário não encontrado")
-        }else throw new Error('Erro na requisição')
+        } else throw new Error('Erro na requisição')
     } catch (error: any) {
-        info.error('send loginIndex',error)
+        info.error('send loginIndex', error)
         dispatch(R.setRequestSendAuthLoginMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestSendAuthLoginError())
     }

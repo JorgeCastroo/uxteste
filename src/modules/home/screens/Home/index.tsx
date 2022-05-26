@@ -14,6 +14,7 @@ import dayMoment from '../../../../utils/dayMoment'
 const Home: React.FC = () => {
 
     const { userData } = useAppSelector(s => s.auth)
+    const { lista } = useAppSelector(s => s.lista)
 
     const userName = userData?.nome ?? 'Usuário'
 
@@ -28,8 +29,12 @@ const Home: React.FC = () => {
                     <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userName}</Text>
                 </Section>
                 <HomeMessage />
-                <GroupInfo />
-                <GroupStatus />
+                {!!lista && (
+                    <>
+                        <GroupInfo />
+                        <GroupStatus />
+                    </>
+                )}
             </Render>
         </>
 

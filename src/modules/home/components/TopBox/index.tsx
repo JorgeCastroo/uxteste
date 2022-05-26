@@ -14,7 +14,7 @@ const TopBox: React.FC = () => {
             <S.Box style = {elevation.elevation4}>
                 <MaterialCommunityIcons name = 'compass-outline' size = {24} color = {themes.colors.primary} />
                 <S.TextContainer>
-                    <Text style = {{color: '#606165', fontSize: 22}}>Placeholder</Text>
+                    <Text style = {{color: '#606165', fontSize: 22}}>Sem rota!</Text>
                 </S.TextContainer>
             </S.Box>
         </Section>
