@@ -15,6 +15,7 @@ const Home: React.FC = () => {
 
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
+    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
 
     const userName = userData?.nome ?? 'Usuário'
 
@@ -31,7 +32,7 @@ const Home: React.FC = () => {
                 <HomeMessage />
                 {!!lista && (
                     <>
-                        <GroupInfo />
+                        {!!roteirizacao && <GroupInfo />}
                         <GroupStatus />
                     </>
                 )}
