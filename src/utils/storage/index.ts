@@ -12,7 +12,7 @@ async function getItem<T>(key: string){
     }
 }
 
-async function setItem(key: string, value: any){
+async function setItem<T>(key: string, value: T){
     try {
         await AsyncStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
