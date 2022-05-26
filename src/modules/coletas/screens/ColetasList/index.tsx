@@ -8,23 +8,24 @@ import ColetasBox from '../../components/ColetasBox';
 import ColetasSelect from '../../components/Select';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import acceptColeta from '../../scripts/acceptColeta';
-import { useNavigation } from '@react-navigation/native';
-import { useIsFocused } from '@react-navigation/native';
-import { setloadingColetasAprovadas } from '../../reducers/coletas/coletas';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { setLoadingColetasAprovadas } from '../../reducers/coletas/coletas';
 import { Alert, View } from 'react-native';
 import getColetas from '../../scripts/getColetas';
+import { Text } from 'react-native-paper';
 
 const ColetasList: React.FC = () => {
     const coletas = useAppSelector(s => s.coletas);
     const statusColetas = useAppSelector(s => s.coletas.idStatusColetas);
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
-    const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
+    const loadingColetasAprovadas = useAppSelector(s => s.coletas.loadingColetasAprovadas)
 
+    const isFocused = useIsFocused()
     const navigation = useNavigation<any>()
     const dispatch = useAppDispatch();
 
     const handleAceitarColetas = async () => {
-        dispatch(setloadingColetasAprovadas(true))
+        dispatch(setLoadingColetasAprovadas(true))
 
         let response
 
@@ -37,19 +38,22 @@ const ColetasList: React.FC = () => {
             })
         }
 
-        dispatch(setloadingColetasAprovadas(false))
+        dispatch(setLoadingColetasAprovadas(false))
 
         if (!!response) {
             if (!response.flagErro) navigation.navigate("solicitacaoRoutes")
             else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
-            console.log(response)
+            console.log("RESPONSE", response)
         }
     }
 
+    useEffect(() => {
+        getColetas(dispatch)
+    }, [isFocused])
+
     return (
         <>
-
             <Render
                 onRefresh={async () => await getColetas(dispatch)}
                 statusBarOptions={{
@@ -57,25 +61,31 @@ const ColetasList: React.FC = () => {
                     backgroundColor: themes.colors.primary,
                 }}>
                 <Header title="Coletas encontradas" goBack={false} />
-                <ColetasSelect />
-                {coletas.coletas?.map(coleta => {
-                    return (
-                        <Section key={coleta.idLista}>
-                            <ColetasBox
-                                id={coleta.idLista}
-                                cliente={coleta.nomeCliente}
-                                coleta={coleta}
-                                quantidade={coleta.qtdeVolumes}
-                                logradouro={coleta.logradouro}
-                                numero={coleta.numero}
-                                bairro={coleta.bairro}
-                                cidade={coleta.cidade}
-                                uf={coleta.uf}
-                                cep={coleta.cep}
-                            />
-                        </Section>
-                    );
-                })}
+                {coletas.coletas ?
+                    (
+                        <>
+                            <ColetasSelect />
+                            {coletas.coletas.map(coleta => {
+                                return (
+                                    <Section key={coleta.idLista}>
+                                        <ColetasBox
+                                            id={coleta.idLista}
+                                            cliente={coleta.nomeCliente}
+                                            coleta={coleta}
+                                            quantidade={coleta.qtdeVolumes}
+                                            logradouro={coleta.logradouro}
+                                            numero={coleta.numero}
+                                            bairro={coleta.bairro}
+                                            cidade={coleta.cidade}
+                                            uf={coleta.uf}
+                                            cep={coleta.cep}
+                                        />
+                                    </Section>
+                                )
+                            })}
+                        </>
+                    )
+                    : <Section marginTop={150} center><Text>Nenhuma coleta encontrada...</Text></Section>}
                 {coletasAprovadas.length <= 0 ? (
                     <></>
                 ) : (
@@ -90,12 +100,11 @@ const ColetasList: React.FC = () => {
                             label="Prosseguir!"
                             marginHorizontal={true}
                             onPress={handleAceitarColetas}
-                            loading={loading}
+                            loading={loadingColetasAprovadas}
                         />
                     </View>
                 )}
             </Render>
-
         </>
     );
 };

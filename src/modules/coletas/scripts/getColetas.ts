@@ -16,14 +16,15 @@ export default async function getColetas(dispatch: Function) {
         const body = {
             idTransportadora: 18,
             idMotorista: 9453,
-            idStatusLista: 1
+            idStatusLista: 2
         }
+
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
 
         if (response) {
             dispatch(setRequestColetasData(response))
             if (!response.flagErro) {
-                dispatch(setColetas(response))
+                dispatch(setColetas(response.listaResultados))
             } else throw new Error(response.listaMensagens[0])
         } else throw new Error('Erro na requisição')
     } catch (error: any) {

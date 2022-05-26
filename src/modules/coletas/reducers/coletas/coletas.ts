@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Lista } from "../../../solicitacao/interfaces/Lista";
-import { Coletas } from "../../types/coletas";
 interface State {
     coletas: Lista[],
+    erro: boolean,
     loadingColetasAprovadas: boolean,
     coletasAprovadas: Lista[],
     coletasReprovadas: Lista[],
@@ -17,6 +17,7 @@ interface State {
 
 const initialState: State = {
     coletas: [],
+    erro: false,
     loadingColetasAprovadas: false,
     coletasAprovadas: [],
     coletasReprovadas: [],
@@ -36,7 +37,10 @@ const coletasSlice = createSlice({
         setColetas: (state, action: PayloadAction<any>) => {
             state.coletas = action.payload
         },
-        setloadingColetasAprovadas: (state, action: PayloadAction<any>) => {
+        setColetasErro: (state) => {
+            state.erro = true
+        },
+        setLoadingColetasAprovadas: (state, action: PayloadAction<any>) => {
             state.loadingColetasAprovadas = action.payload
         },
         setColetasAprovadas: (state, action: PayloadAction<any>) => {
@@ -70,7 +74,8 @@ const coletasSlice = createSlice({
 
 export const {
     setColetas,
-    setloadingColetasAprovadas,
+    setColetasErro,
+    setLoadingColetasAprovadas,
     setColetasAprovadas,
     setColetasReprovadas,
     setRemoveAllColetas,

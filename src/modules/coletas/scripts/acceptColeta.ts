@@ -3,7 +3,7 @@ import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
 import { setRequestColetasAceitasData, setRequestAcceptColetasLoading } from "../reducers/coletas/requestColetasReducer"
-import { ALTERAR_STATUS_ROMANEIO } from "@env"
+import { TRUX_HML_ENDPOINT } from "@env"
 
 interface Body {
     idLista: number,
@@ -18,7 +18,7 @@ export default async function acceptColeta(dispatch: Function, body: Body) {
 
         const authorization = "basic uxAks0947sj@hj"
 
-        const endpoint = `${ALTERAR_STATUS_ROMANEIO}`
+        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
         const response = await request.post<ResponsePattern<any>>({ authorization, endpoint, body })
 
         if (response) {
