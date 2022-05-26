@@ -10,18 +10,18 @@ const HomeMessage: React.FC = () => {
 
     const navigation = useNavigation<any>()
 
-    return(
+    return (
 
-        <Section marginBottom = {40}>
-            <S.Box style = {elevation.elevation4}>
+        <Section marginBottom={40}>
+            <S.Box style={elevation.elevation4}>
                 <S.Indicator>
-                    <Text style = {{color: '#037E41', fontSize: 50, fontWeight: 'bold'}}>!</Text>
+                    <Text style={{ color: '#037E41', fontSize: 50, fontWeight: 'bold' }}>!</Text>
                 </S.Indicator>
                 <S.TextContainer>
-                    <Text style = {{color: '#037E41', fontSize: 20, fontWeight: 'bold'}}>Novas coletas disponíveis</Text>
+                    <Text style={{ color: '#037E41', fontSize: 20, fontWeight: 'bold' }}>Novas coletas disponíveis</Text>
                 </S.TextContainer>
-                <S.IconArea onPress = {() => navigation.navigate('coletasRoutes')}>
-                    <MaterialCommunityIcons name = 'chevron-right' size = {24} color = '#B3B3B3' />
+                <S.IconArea onPress={() => navigation.navigate('coletasRoutes')}>
+                    <MaterialCommunityIcons name='chevron-right' size={24} color='#B3B3B3' />
                 </S.IconArea>
             </S.Box>
         </Section>

@@ -5,15 +5,22 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import getColetas from '../../scripts/getColetas'
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
+import { setRequestColetasLoading } from '../../reducers/coletas/requestColetasReducer'
 
 const ColetasDownload: React.FC = () => {
-
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector(s => s.requestColetas.requestColeta.loading)
     const navigation = useNavigation<any>()
+    const isFocused = useIsFocused()
 
     useEffect(() => {
-        navigation.navigate("coletasList")
-    }, [])
+        getColetas(dispatch, 450);
+    }, [isFocused])
+
+    useEffect(() => {
+        if (!loading) navigation.navigate("coletasList")
+    }, [isFocused, loading])
 
     return (
 

@@ -2,42 +2,30 @@
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
-import { setRequestAcceptColetaData, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
-import { Coletas, setColetasOffline, setVolumesOffline } from "../reducers/coletas/coletas"
-
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { saveColetasOnAsyncStorage } from "./saveColetasOnAsyncStorage"
+import { setRequestColetasAceitasData, setRequestAcceptColetasLoading } from "../reducers/coletas/requestColetasReducer"
+import { ALTERAR_STATUS_ROMANEIO } from "@env"
 
 interface Body {
-    idUsuario: number,
-    dados: [
-        {
-            idsLista: number[],
-            idStatus: 2 // COLETA APROVADA - 2
-        },
-        {
-            idsLista: number[]
-            idStatus: 4 // COLETA REPROVADA - 4
-        }
-    ]
+    idLista: number,
+    idStatusLista: 2 | 4,
+    latitude: string,
+    longitude: string
 }
 
-export default async function acceptColeta(dispatch: Function, idsColetasAprovadas: number[], coletas: Coletas[], body: Body) {
+export default async function acceptColeta(dispatch: Function, body: Body) {
     try {
-        const endpoint = `https://first-mile.herokuapp.com/acceptOrRefuseList/`
-        const response = await request.post<ResponsePattern<any>>({ endpoint, body })
+        dispatch(setRequestAcceptColetasLoading())
 
-        dispatch(setRequestColetasLoading)
+        const authorization = "basic uxAks0947sj@hj"
+
+        const endpoint = `${ALTERAR_STATUS_ROMANEIO}`
+        const response = await request.post<ResponsePattern<any>>({ authorization, endpoint, body })
 
         if (response) {
-            dispatch(setRequestAcceptColetaData(response))
-            if (!response.flagErro) {
-                // setando coletas para salvalas depois no async storage
-                dispatch(setColetasOffline(response.listaResultados))
-                saveColetasOnAsyncStorage(idsColetasAprovadas, coletas)
-
-            } else throw new Error(response.listaMensagens[0])
+            dispatch(setRequestColetasAceitasData(response))
+            return response
         } else throw new Error('Erro na requisição')
+
     } catch (error: any) {
         info.error('getColetas', error)
     }

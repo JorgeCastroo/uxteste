@@ -16,7 +16,7 @@ import Loader from './components/Loader'
 import localGetLista from '../../scripts/local/localGetLista'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 
-const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
+const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { lista, filteredLista, loadingNewLista } = useAppSelector(s => s.lista)
@@ -37,7 +37,7 @@ const SolicitacaoList: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
         navigation.navigate('solicitacaoReceivement')
     }
 
-    return(
+    return (
 
         <>
             <Render 

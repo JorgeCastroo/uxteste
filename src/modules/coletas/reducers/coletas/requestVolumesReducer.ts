@@ -7,7 +7,7 @@ interface State {
         data: Coletas[] | null;
         erro: boolean | null;
         aceita: boolean;
-        aceitaData: object | null;
+        coletasAceitasData: object | null;
     }
 }
 
@@ -17,7 +17,7 @@ const initialState: State = {
         data: null,
         erro: null,
         aceita: false,
-        aceitaData: null,
+        coletasAceitasData: null,
     }
 }
 
@@ -35,11 +35,11 @@ const requestVolumes = createSlice({
             state.requestVolumes.erro = false
         },
         setRequestAcceptColetaData: (state, action: PayloadAction<any>) => {
-            state.requestVolumes.aceitaData = action.payload
+            state.requestVolumes.coletasAceitasData = action.payload
             state.requestVolumes.aceita = true
         },
         setRequestRefuseColetaData: (state, action: PayloadAction<any>) => {
-            state.requestVolumes.aceitaData = action.payload
+            state.requestVolumes.coletasAceitasData = action.payload
             state.requestVolumes.aceita = false
         }
     }

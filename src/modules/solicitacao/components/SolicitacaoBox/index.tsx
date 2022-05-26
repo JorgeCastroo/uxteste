@@ -18,11 +18,11 @@ const BoxContent: React.FC <Lista> = lista => {
         else return Object.keys(idStatusLista).find(f => (idStatusLista as any)[f] === lista.situacao)!
     }
 
-    return(
+    return (
 
         <>
-            <S.PositionIndicator theme = {'#CCE0FF'}>
-                <Text style = {{color: theme, fontSize: 16, fontWeight: 'bold'}}>1</Text>
+            <S.PositionIndicator theme={'#CCE0FF'}>
+                <Text style={{ color: theme, fontSize: 16, fontWeight: 'bold' }}>1</Text>
             </S.PositionIndicator>
             <List.Item
                 title = {lista.nomeCliente}
@@ -50,7 +50,7 @@ const BoxContent: React.FC <Lista> = lista => {
 
 const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Lista> = ({ onPress, ...props }) => {
 
-    return(
+    return (
 
         <>
             {(!!onPress && (

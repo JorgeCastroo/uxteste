@@ -1,4 +1,4 @@
-export interface Coleta {
+export interface Coletas {
     id: number;
     idUsuario: number;
     nomeCliente: string;
@@ -24,11 +24,12 @@ export interface Coleta {
     situacao: string;
     dtCadastro: Date;
 }
-export interface SolicitacaoBoxProps {
-    onPress?: () => void,
-    coleta?: Coleta
+
+export interface Volumes {
+    id: number,
+    idLista: number,
+    etiqueta: string,
+    dtLeitura: Date,
+    status: string
 }
 
-interface BoxContentProps {
-    coleta?: Coleta
-}
