@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import acceptColeta from '../../scripts/acceptColeta'
 import { useNavigation } from '@react-navigation/native'
 import { useIsFocused } from '@react-navigation/native'
-import { setloadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
+import { setLoadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
 import { Alert, View } from 'react-native'
 import getColetas from '../../scripts/getColetas'
 import Loader from './components/Loader'
@@ -30,7 +30,7 @@ const ColetasList: React.FC = () => {
     const SHOW_LOADING = requestColeta.loading
 
     const handleAceitarColetas = async () => {
-        dispatch(setloadingColetasAprovadas(true))
+        dispatch(setLoadingColetasAprovadas(true))
 
         let response
 
@@ -43,21 +43,19 @@ const ColetasList: React.FC = () => {
             })
         }
 
-        dispatch(setloadingColetasAprovadas(false))
+        dispatch(setLoadingColetasAprovadas(false))
 
         if (!!response) {
-            if (!response.flagErro){
+            if (!response.flagErro) {
                 loadLista(dispatch)
                 dispatch(setResetColetasAprovadas())
                 navigation.navigate("solicitacaoRoutes")
-            }else Alert.alert("Erro ao prosseguir com as coletas!")
-        } else {
-            console.log('coleta',response)
+            } else Alert.alert("Erro ao prosseguir com as coletas!")
         }
     }
 
     useEffect(() => {
-        if(isFocused) getColetas(dispatch)
+        if (isFocused) getColetas(dispatch)
     }, [isFocused, dispatch])
 
     return (
@@ -68,7 +66,7 @@ const ColetasList: React.FC = () => {
                     barStyle: SHOW_LOADING ? 'dark-content' : 'light-content',
                     backgroundColor: SHOW_LOADING ? '#fff' : themes.colors.primary,
                 }}
-                align = {SHOW_LOADING ? 'center' : 'flex-start'}
+                align={SHOW_LOADING ? 'center' : 'flex-start'}
                 onRefresh={async () => !SHOW_LOADING && await getColetas(dispatch)}
             >
                 {SHOW_LOADING && <Loader />}
