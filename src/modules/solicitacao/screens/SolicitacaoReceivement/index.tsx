@@ -16,15 +16,13 @@ import Button from '../../../../components/Button'
 import findLista from '../../scripts/findLista'
 import startReceivingLista from '../../scripts/requests/requestStartReceivingLista'
 import { idStatusLista } from '../../../../constants/idStatusLista'
-import saveLista from '../../scripts/requests/requestSaveLista'
-import addToSyncStack from '../../../sync/scripts/addToSyncStack'
-import { updateSituacao } from '../../reducers/lista/listaReducer'
 import send from './scripts/send'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { network } = useAppSelector(s => s.app)
+    const { syncAddLoading } = useAppSelector(s => s.sync)
     const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
     const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
 
@@ -75,8 +73,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                     <Button
                         label = "Finalizar Recebimento"
                         marginHorizontal
-                        loading = {false}
-                        disabled = {requestStartReceivingLista.loading}
+                        loading = {requestStartReceivingLista.loading || syncAddLoading}
+                        disabled = {requestStartReceivingLista.loading || syncAddLoading}
                         onPress = {async () => 
                             await send(
                                 dispatch, 

@@ -1,4 +1,4 @@
-import { syncSaveLista } from "../modules/lista"
+import { syncSaveLista } from "../../solicitacao/scripts/syncLista"
 import info from "../../../utils/info"
 
 export default async function syncAll(dispatch: Function){

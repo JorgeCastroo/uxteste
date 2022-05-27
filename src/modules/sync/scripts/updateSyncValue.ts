@@ -2,10 +2,13 @@ import { ValueToSync } from "../interfaces/ValueToSync"
 import info from "../../../utils/info"
 import storage from "../../../utils/storage"
 
-export default async function updateSyncValue(key: string, localValues: ValueToSync<any>[], changedValue: any){
+export default async function updateSyncValue<T>(key: string, localValues: ValueToSync<T>[], changedValue: T){
     try {
         const newLocalSync = localValues.map(f => {
-            if(f.value.toString() === changedValue.toString()) f.sync = true
+            if((f.value as any).toString() === (changedValue as any).toString()){
+                f.sync = true
+                f.dtSync = new Date().toISOString()
+            }
             return f
         })
         await storage.setItem(key, newLocalSync)

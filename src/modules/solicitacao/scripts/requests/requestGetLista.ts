@@ -23,8 +23,8 @@ export default async function getLista(dispatch: Function){
         if(response){
             dispatch(R.setRequestGetListaData(response))
             if(!response.flagErro){
-                localSetLista(dispatch, response as any)
-                return response as unknown as Lista[]
+                localSetLista(dispatch, response.listaResultados)
+                return response.listaResultados
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {

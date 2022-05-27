@@ -1,11 +1,5 @@
 import { RequestMethods } from "../../types"
-
-const SHOW_LOG = {
-    REQUEST: true,
-    HEADER: false,
-    BODY: false,
-    RESPONSE: false,
-}
+import { SHOW_LOG } from "../../../../config"
 
 const line = () => console.log('------------------------------------------------------')
 

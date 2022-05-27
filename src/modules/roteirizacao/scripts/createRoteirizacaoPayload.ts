@@ -12,7 +12,7 @@ export default async function createRoteirizacaoPayload(dispatch: Function, list
         longitude: -46.4482788,
     }
     
-    //await localSetCoords(dispatch, start, end)
+    await localSetCoords(dispatch, start, end)
     
     const adresses: RoteirizacaoPayload['adresses'] = listas.map(lista => {
         return {

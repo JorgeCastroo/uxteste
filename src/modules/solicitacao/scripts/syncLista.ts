@@ -1,10 +1,10 @@
 
-import { ValueToSync } from "../interfaces/ValueToSync"
-import { setSyncLoading } from "../reducers/syncReducer"
-import saveLista from "../../solicitacao/scripts/requests/requestSaveLista"
+import { ValueToSync } from "../../sync/interfaces/ValueToSync"
+import { setSyncLoading } from "../../sync/reducers/syncReducer"
+import saveLista from "./requests/requestSaveLista"
 import info from "../../../utils/info"
 import storage from "../../../utils/storage"
-import updateSyncValue from "../scripts/updateSyncValue"
+import updateSyncValue from "../../sync/scripts/updateSyncValue"
 
 export async function syncSaveLista(dispatch: Function){
     try {
