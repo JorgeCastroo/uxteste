@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { Lista } from '../../interfaces/Lista'
-import { RoteirizacaoResponse } from '../../../../interfaces/Roteirizacao'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setCurrentPosition, setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
+import { setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
@@ -19,6 +18,7 @@ import { syncValuesLista } from '../../scripts/sync'
 import closeLista from '../../scripts/closeLista'
 import FormError from '../../../../components/Form/Error'
 import orderLista from '../../scripts/orderLista'
+import findListaPosition from '../../scripts/findListaPosition'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -36,11 +36,10 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
 
     const loaderPercent = requestGetLista.data && requestGetRoteirizacao.data ? 100 : requestGetLista.data ? 50 : 0
 
-    const handleNavigate = (item: Lista, position: number) => {
+    const handleNavigate = (item: Lista) => {
         dispatch(resetScannedSolicitacoes())
         dispatch(setCurrentSolicitacao(item))
         dispatch(setCurrentVolumes(item.listaVolumes))
-        dispatch(setCurrentPosition(position))
         navigation.navigate('solicitacaoReceivement')
     }
 
@@ -72,16 +71,16 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
-                                    position = {index+1}
-                                    onPress = {() => handleNavigate(item, index+1)} 
+                                    position = {findListaPosition(item, roteirizacao)}
+                                    onPress = {() => handleNavigate(item)} 
                                 />
                             ))}
                             {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
-                                    position = {index+1}
-                                    onPress = {() => handleNavigate(item, index+1)} 
+                                    position = {findListaPosition(item, roteirizacao)}
+                                    onPress = {() => handleNavigate(item)} 
                                 />
                             ))}
                         </Section>

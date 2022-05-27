@@ -17,6 +17,7 @@ import findLista from '../../scripts/findLista'
 import send from './scripts/send'
 import start from './scripts/start'
 import { idStatusLista } from '../../../../constants/idStatusLista'
+import findListaPosition from '../../scripts/findListaPosition'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -24,6 +25,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { network, location } = useAppSelector(s => s.app)
     const { syncAddLoading } = useAppSelector(s => s.sync)
     const { currentSolicitacao, lista, currentPosition } = useAppSelector(s => s.lista)
+    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
 
     const handleNavigate = () => {
@@ -37,10 +39,10 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         <>
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {40}>
                 <Header title = "Lista" />
-                {!!currentSolicitacao && (
+                {!!currentSolicitacao && !!roteirizacao && (
                     <>
                         <Section marginTop = {20}>
-                            <SolicitacaoBox {...currentSolicitacao!} position = {currentPosition ?? 1} />
+                            <SolicitacaoBox {...currentSolicitacao!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />
                         </Section>
                         <Section type = "row" marginTop = {8} between>
                             <S.Box style = {elevation.elevation2}>
