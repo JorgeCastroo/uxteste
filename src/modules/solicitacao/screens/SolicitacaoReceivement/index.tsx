@@ -21,7 +21,7 @@ import { idStatusLista } from '../../../../constants/idStatusLista'
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
-    const { network } = useAppSelector(s => s.app)
+    const { network, location } = useAppSelector(s => s.app)
     const { syncAddLoading } = useAppSelector(s => s.sync)
     const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
     const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
@@ -61,7 +61,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     marginBottom = {8}
                                     loading = {requestStartReceivingLista.loading}
                                     disabled = {requestStartReceivingLista.loading}
-                                    onPress = {async () => await start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, {latitude: 0, longitude: 0})}
+                                    onPress = {async () => await start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, {latitude: location![0], longitude: location![1]})}
                                 />
                             )}
                             {currentSolicitacao.situacao === idStatusLista['COLETANDO'] && (

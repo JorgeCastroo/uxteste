@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native-paper'
 import themes from '../../../../styles/themes'
-import { useAppSelector } from '../../../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
 import HomeHeader from '../../components/HomeHeader'
 import Section from '../../../../components/Screen/Section'
@@ -10,14 +10,20 @@ import GroupInfo from '../../components/Group/Info'
 import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import dayMoment from '../../../../utils/dayMoment'
+import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
 
 const Home: React.FC = () => {
 
+    const dispatch = useAppDispatch()
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
 
     const userName = userData?.nome ?? 'Usuário'
+
+    useEffect(() => {
+        getBackgroundGeolocation(dispatch)
+    }, [dispatch])
 
     return(
 

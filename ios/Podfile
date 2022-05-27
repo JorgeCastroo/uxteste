@@ -19,6 +19,8 @@ target 'UxFirstMile' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod '@mauron85_react-native-background-geolocation', :path => '../node_modules/@mauron85/react-native-background-geolocation'
+
   target 'UxFirstMileTests' do
     inherit! :complete
     # Pods for testing
