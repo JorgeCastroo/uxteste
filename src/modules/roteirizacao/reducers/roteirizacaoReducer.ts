@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RoteirizacaoResponse } from "../../../interfaces/Roteirizacao"
 import { Coordinates } from "../../../interfaces/Coordinates"
+import { RoteirizacaoResponse } from "../../../interfaces/Roteirizacao"
 
 interface State {
     roteirizacao: RoteirizacaoResponse | null
-    markers: Coordinates[] | null
+    startCoords: Coordinates | null
+    endCoords: Coordinates | null
 }
 
 const initialState: State = {
     roteirizacao: null,
-    markers: null,
+    startCoords: null,
+    endCoords: null,
 }
 
 const roteirizacaoSlice = createSlice({
@@ -19,16 +21,20 @@ const roteirizacaoSlice = createSlice({
         setRoteirizacao: (state, action: PayloadAction<RoteirizacaoResponse>) => {
             state.roteirizacao = action.payload
         },
-        setMarkers: (state, action: PayloadAction<Coordinates[]>) => {
-            state.markers = action.payload
+        setStartCoords: (state, action: PayloadAction<Coordinates>) => {
+            state.startCoords = action.payload
+        },
+        setEndCoords: (state, action: PayloadAction<Coordinates>) => {
+            state.endCoords = action.payload
         },
 
         resetRoteirizacao: (state) => {
             state.roteirizacao = null
-            state.markers = null
+            state.startCoords = null
+            state.endCoords = null
         },
     }
 })
 
-export const { setRoteirizacao, setMarkers, resetRoteirizacao } = roteirizacaoSlice.actions
+export const { setRoteirizacao, setStartCoords, setEndCoords, resetRoteirizacao } = roteirizacaoSlice.actions
 export default roteirizacaoSlice.reducer

@@ -8,17 +8,16 @@ const ColetasRoutes: React.FC = () => {
 
     const Stack = createStackNavigator<ColetasRoutesParams>()
 
-    return (
+    return(
 
         <Stack.Navigator
-            initialRouteName="coletasDownload"
-            screenOptions={{
+            initialRouteName = "coletasList"
+            screenOptions = {{
                 headerShown: false,
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
-            <Stack.Screen name="coletasDownload" component={ColetasDownload} />
-            <Stack.Screen name="coletasList" component={ColetasList} />
+            <Stack.Screen name = "coletasList" component = {ColetasList} />
         </Stack.Navigator>
 
     )

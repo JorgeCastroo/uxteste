@@ -1,31 +1,36 @@
-import React, { useEffect } from 'react';
-import themes from '../../../../styles/themes';
-import Header from '../../../../components/Screen/Header';
-import Render from '../../../../components/Screen/Render';
-import Section from '../../../../components/Screen/Section';
+import React, { useEffect } from 'react'
+import themes from '../../../../styles/themes'
+import Header from '../../../../components/Screen/Header'
+import Render from '../../../../components/Screen/Render'
+import Section from '../../../../components/Screen/Section'
 import Button from "../../../../components/Button/index"
-import ColetasBox from '../../components/ColetasBox';
-import ColetasSelect from '../../components/Select';
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import acceptColeta from '../../scripts/acceptColeta';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { setLoadingColetasAprovadas } from '../../reducers/coletas/coletas';
-import { Alert, View } from 'react-native';
-import getColetas from '../../scripts/getColetas';
-import { Text } from 'react-native-paper';
+import ColetasBox from '../../components/ColetasBox'
+import ColetasSelect from '../../components/Select'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
+import acceptColeta from '../../scripts/acceptColeta'
+import { useNavigation } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
+import { setloadingColetasAprovadas } from '../../reducers/coletas/coletas'
+import { Alert, View } from 'react-native'
+import getColetas from '../../scripts/getColetas'
+import Loader from './components/Loader'
+import loadLista from '../../../solicitacao/scripts/loadLista'
 
 const ColetasList: React.FC = () => {
-    const coletas = useAppSelector(s => s.coletas);
-    const statusColetas = useAppSelector(s => s.coletas.idStatusColetas);
-    const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
-    const loadingColetasAprovadas = useAppSelector(s => s.coletas.loadingColetasAprovadas)
 
-    const isFocused = useIsFocused()
+    const dispatch = useAppDispatch()
+    const coletas = useAppSelector(s => s.coletas)
+    const statusColetas = useAppSelector(s => s.coletas.idStatusColetas)
+    const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
+    const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
+    const { requestColeta } = useAppSelector(s => s.requestColetas)
     const navigation = useNavigation<any>()
-    const dispatch = useAppDispatch();
+    const isFocused = useIsFocused()
+
+    const SHOW_LOADING = requestColeta.loading
 
     const handleAceitarColetas = async () => {
-        dispatch(setLoadingColetasAprovadas(true))
+        dispatch(setloadingColetasAprovadas(true))
 
         let response
 
@@ -38,75 +43,80 @@ const ColetasList: React.FC = () => {
             })
         }
 
-        dispatch(setLoadingColetasAprovadas(false))
+        dispatch(setloadingColetasAprovadas(false))
 
         if (!!response) {
-            if (!response.flagErro) navigation.navigate("solicitacaoRoutes")
-            else Alert.alert("Erro ao prosseguir com as coletas!")
+            console.log(response)
+            if (!response.flagErro){
+                loadLista(dispatch)
+                navigation.navigate("solicitacaoRoutes")
+            }else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
-            console.log("RESPONSE", response)
+            console.log(response)
         }
     }
 
     useEffect(() => {
-        getColetas(dispatch)
-    }, [isFocused])
+        if(isFocused) getColetas(dispatch)
+    }, [isFocused, dispatch])
 
     return (
+
         <>
             <Render
-                onRefresh={async () => await getColetas(dispatch)}
                 statusBarOptions={{
-                    barStyle: 'light-content',
-                    backgroundColor: themes.colors.primary,
-                }}>
-                <Header title="Coletas encontradas" goBack={false} />
-                {coletas.coletas ?
-                    (
-                        <>
-                            <ColetasSelect />
-                            {coletas.coletas.map(coleta => {
-                                return (
-                                    <Section key={coleta.idLista}>
-                                        <ColetasBox
-                                            id={coleta.idLista}
-                                            cliente={coleta.nomeCliente}
-                                            coleta={coleta}
-                                            quantidade={coleta.qtdeVolumes}
-                                            logradouro={coleta.logradouro}
-                                            numero={coleta.numero}
-                                            bairro={coleta.bairro}
-                                            cidade={coleta.cidade}
-                                            uf={coleta.uf}
-                                            cep={coleta.cep}
-                                        />
-                                    </Section>
-                                )
-                            })}
-                        </>
-                    )
-                    : <Section marginTop={150} center><Text>Nenhuma coleta encontrada...</Text></Section>}
-                {coletasAprovadas.length <= 0 ? (
-                    <></>
-                ) : (
-                    <View style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        paddingBottom: 30,
-                        width: "100%",
-                        backgroundColor: "#fff"
-                    }}>
-                        <Button
-                            label="Prosseguir!"
-                            marginHorizontal={true}
-                            onPress={handleAceitarColetas}
-                            loading={loadingColetasAprovadas}
-                        />
-                    </View>
+                    barStyle: SHOW_LOADING ? 'dark-content' : 'light-content',
+                    backgroundColor: SHOW_LOADING ? '#fff' : themes.colors.primary,
+                }}
+                align = {SHOW_LOADING ? 'center' : 'flex-start'}
+                onRefresh={async () => !SHOW_LOADING && await getColetas(dispatch)}
+            >
+                {SHOW_LOADING && <Loader />}
+                {!SHOW_LOADING && (
+                    <>
+                        <Header title="Coletas encontradas" goBack={false} />
+                        <ColetasSelect />
+                        <Section>
+                            {coletas.coletas?.map(coleta => (
+                                <ColetasBox
+                                    key={coleta.idLista}
+                                    selected={!!coletasAprovadas.find(c => c.idLista === coleta.idLista)}
+                                    id={coleta.idLista}
+                                    cliente={coleta.nomeCliente}
+                                    coleta={coleta}
+                                    quantidade={coleta.qtdeVolumes}
+                                    logradouro={coleta.logradouro}
+                                    numero={coleta.numero}
+                                    bairro={coleta.bairro}
+                                    cidade={coleta.cidade}
+                                    uf={coleta.uf}
+                                    cep={coleta.cep}
+                                />
+                            ))}
+                        </Section>
+                        {coletasAprovadas.length > 0 && (
+                            <View style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                paddingBottom: 30,
+                                width: "100%",
+                                backgroundColor: "#fff"
+                            }}>
+                                <Button
+                                    label="Prosseguir!"
+                                    marginHorizontal={true}
+                                    onPress={handleAceitarColetas}
+                                    loading={loading}
+                                />
+                            </View>
+                        )}
+                    </>
                 )}
             </Render>
         </>
-    );
-};
 
-export default ColetasList;
+    )
+
+}
+
+export default ColetasList

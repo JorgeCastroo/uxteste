@@ -1,6 +1,5 @@
 import { Coordinates } from "./Coordinates"
 
-// Response
 export interface RoteirizacaoResponse {
     duration:         number
     formatedDuration: string
@@ -16,7 +15,6 @@ export interface OrdenedAdress {
     description: string
 }
 
-// Payload
 export interface RoteirizacaoPayload {
     start:    Coordinates
     end:      Coordinates

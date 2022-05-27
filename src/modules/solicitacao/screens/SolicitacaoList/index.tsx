@@ -27,7 +27,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
     const SHOW_LISTA_DATA = !SHOW_LOADING && !!lista && !SHOW_FILTERED_LISTA_DATA
 
-    const loaderPercent = requestGetLista.data ? 100 : 0
+    const loaderPercent = requestGetLista.data && requestGetRoteirizacao.data ? 100 : requestGetLista.data ? 50 : 0
 
     const handleNavigate = (item: Lista) => {
         dispatch(resetScannedSolicitacoes())
@@ -50,8 +50,20 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                     <>
                         <SolicitacaoListSearchbar />
                         <Section>
-                            {SHOW_LISTA_DATA && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).map(item => <SolicitacaoBox {...item} key = {item.idLista} onPress = {() => handleNavigate(item)} />)}
-                            {SHOW_FILTERED_LISTA_DATA && filteredLista.map(item => <SolicitacaoBox {...item} key = {item.idLista} onPress = {() => handleNavigate(item)} />)}
+                            {SHOW_LISTA_DATA && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).map((item, index) => (
+                                <SolicitacaoBox 
+                                    {...item} 
+                                    key = {index} 
+                                    onPress = {() => handleNavigate(item)} 
+                                />
+                            ))}
+                            {SHOW_FILTERED_LISTA_DATA && filteredLista.map((item, index) => (
+                                <SolicitacaoBox 
+                                    {...item} 
+                                    key = {index} 
+                                    onPress = {() => handleNavigate(item)} 
+                                />
+                            ))}
                         </Section>
                     </>
                 )}

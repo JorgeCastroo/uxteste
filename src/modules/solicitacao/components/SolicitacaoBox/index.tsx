@@ -1,17 +1,19 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { List, Text } from 'react-native-paper'
+import Clipboard from '@react-native-community/clipboard'
 import { SolicitacaoBoxProps } from './types'
 import { Lista } from '../../interfaces/Lista'
 import * as S from './styles'
 import { elevation } from '../../../../styles/layout'
 import themes from '../../../../styles/themes'
 import { idStatusLista } from '../../../../constants/idStatusLista'
+import getFullAddress from '../../scripts/getFullAddress'
 
 const BoxContent: React.FC <Lista> = lista => {
     
     const theme = themes.colors.tertiary
-    const enderecoCompleto = `${lista.logradouro}, ${lista.numero}, ${lista.cep} - ${lista.bairro}`
+    const enderecoCompleto = getFullAddress(lista)
     
     const getStatus = () => {
         if(lista.situacao === 1) return 'Em aberto'
@@ -38,6 +40,7 @@ const BoxContent: React.FC <Lista> = lista => {
                 title = "Endereço"
                 description = {enderecoCompleto}
                 left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
+                onPress = {() => Clipboard.setString(enderecoCompleto)}
             />
             <S.StatusContainer theme = {'#CCE0FF'}>
                 <Text style = {{color: theme, fontSize: 18, fontWeight: 'bold'}}>{getStatus().toUpperCase()}</Text>

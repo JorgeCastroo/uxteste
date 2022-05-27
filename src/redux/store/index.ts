@@ -9,11 +9,19 @@ import coletasReducer from '../../modules/coletas/reducers/coletas/coletas'
 import requestColetasReducer from '../../modules/coletas/reducers/coletas/requestColetasReducer'
 import requestRoteirizacaoReducer from '../../modules/roteirizacao/reducers/requestRoteirizacaoReducer'
 import roteirizacaoReducer from '../../modules/roteirizacao/reducers/roteirizacaoReducer'
+import appReducer from '../../modules/app/reducers/appReducer'
+import mapReducer from '../../modules/map/reducers/mapReducer'
+import syncReducer from '../../modules/sync/reducers/syncReducer'
 
 const store = configureStore({
     reducer: {
+        app: appReducer,
+        sync: syncReducer,
+        
         auth: authReducer,
         requestSendAuthLogin: requestAuthLoginReducer,
+
+        map: mapReducer,
 
         lista: listaReducer,
         requestLista: requestListaReducer,
