@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import acceptColeta from '../../scripts/acceptColeta'
 import { useNavigation } from '@react-navigation/native'
 import { useIsFocused } from '@react-navigation/native'
-import { setloadingColetasAprovadas } from '../../reducers/coletas/coletas'
+import { setloadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
 import { Alert, View } from 'react-native'
 import getColetas from '../../scripts/getColetas'
 import Loader from './components/Loader'
@@ -46,13 +46,13 @@ const ColetasList: React.FC = () => {
         dispatch(setloadingColetasAprovadas(false))
 
         if (!!response) {
-            console.log(response)
             if (!response.flagErro){
                 loadLista(dispatch)
+                dispatch(setResetColetasAprovadas())
                 navigation.navigate("solicitacaoRoutes")
             }else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
-            console.log(response)
+            console.log('coleta',response)
         }
     }
 
