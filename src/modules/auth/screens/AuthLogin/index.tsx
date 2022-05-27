@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { PermissionsAndroid } from 'react-native'
+import { Text } from 'react-native-paper'
 import { PERMISSIONS, request } from 'react-native-permissions'
 import AutoHeightImage from 'react-native-auto-height-image'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import Form from './components/Form'
 import info from '../../../../utils/info'
-import { Text } from 'react-native-paper'
 
 const AuthLogin: React.FC = () => {
 

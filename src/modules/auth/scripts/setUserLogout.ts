@@ -6,9 +6,11 @@ import storage from "../../../utils/storage"
 
 export default async function setUserLogout(dispatch: Function, returnHome: () => void){
     try {
-        await storage.removeItem('userData')
         await closeLista(dispatch)
         await clearAllSyncStacks()
+        
+        await storage.removeItem('userData')
+
         dispatch(setAuthLogout())
         returnHome()
     } catch (error) {
