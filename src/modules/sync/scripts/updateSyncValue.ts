@@ -4,7 +4,7 @@ import storage from "../../../utils/storage"
 
 export default async function updateSyncValue<T>(key: string, localValues: ValueToSync<T>[], changedValue: T){
     try {
-        const newLocalSync = localValues.map(f => {
+        const newLocalSync = localValues.forEach(f => {
             if((f.value as any).toString() === (changedValue as any).toString()){
                 f.sync = true
                 f.dtSync = new Date().toISOString()

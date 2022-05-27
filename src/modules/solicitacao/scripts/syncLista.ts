@@ -14,7 +14,7 @@ export async function syncSaveLista(dispatch: Function){
         const localSyncListaSave = await storage.getItem<ValueToSync<number[]>[]>(storageKey)
 
         if(!!localSyncListaSave && localSyncListaSave.length > 0){
-            localSyncListaSave.filter(f => !f.sync).forEach(async ({ value }) => {
+            localSyncListaSave.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
                 await saveLista(dispatch, () => {}, false, value)
                 await updateSyncValue(storageKey, localSyncListaSave, value)
             })
