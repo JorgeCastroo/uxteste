@@ -11,13 +11,12 @@ const ColetasRoutes: React.FC = () => {
     return(
 
         <Stack.Navigator
-            initialRouteName = "coletasDownload"
+            initialRouteName = "coletasList"
             screenOptions = {{
                 headerShown: false,
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
-            <Stack.Screen name = "coletasDownload" component = {ColetasDownload} />
             <Stack.Screen name = "coletasList" component = {ColetasList} />
         </Stack.Navigator>
 

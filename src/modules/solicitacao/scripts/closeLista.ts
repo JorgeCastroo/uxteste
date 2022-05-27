@@ -1,5 +1,4 @@
 import { resetLista } from "../reducers/lista/listaReducer"
-import { resetSolicitacoes } from "../reducers/solicitacaoReducer"
 import { resetRequestGetLista, resetRequestSaveLista } from "../reducers/lista/requestListaReducer"
 import { resetRequestGetRoteirizacao } from "../../roteirizacao/reducers/requestRoteirizacaoReducer"
 import { resetRoteirizacao } from "../../roteirizacao/reducers/roteirizacaoReducer"
@@ -14,9 +13,6 @@ export default async function closeLista(dispatch: Function){
 
         await storage.removeItem('lista')
         dispatch(resetLista())
-        
-        await storage.removeItem('solicitacoes')
-        dispatch(resetSolicitacoes())
 
         dispatch(resetMap())
         dispatch(resetRequestGetRoteirizacao())

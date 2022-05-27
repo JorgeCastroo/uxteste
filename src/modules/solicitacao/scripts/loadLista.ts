@@ -10,7 +10,10 @@ export default async function loadLista(dispatch: Function){
         dispatch(setLoadingNewLista(true))
 
         const lista = await getLista(dispatch)
-        if(lista) await getRoteirizacao(dispatch, createRoteirizacaoPayload(lista))
+        if(!!lista){
+            const roteirizacaoPayload = await createRoteirizacaoPayload(dispatch, lista)
+            await getRoteirizacao(dispatch, roteirizacaoPayload)
+        }
         await sleep(5000)
 
         dispatch(setLoadingNewLista(false))

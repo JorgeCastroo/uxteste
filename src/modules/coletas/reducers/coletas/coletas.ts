@@ -39,6 +39,9 @@ const coletasSlice = createSlice({
         setloadingColetasAprovadas: (state, action: PayloadAction<any>) => {
             state.loadingColetasAprovadas = action.payload
         },
+        setResetColetasAprovadas: (state) => {
+            state.coletasAprovadas = []
+        },
         setColetasAprovadas: (state, action: PayloadAction<any>) => {
             if (!state.coletasReprovadas.some(item => item.idLista === action.payload.idLista) && !state.coletasAprovadas.some(item => item.idLista === action.payload.idLista)) {
                 state.coletasAprovadas.push(action.payload)
@@ -71,7 +74,7 @@ const coletasSlice = createSlice({
 export const {
     setColetas,
     setloadingColetasAprovadas,
-    setColetasAprovadas,
+    setColetasAprovadas, setResetColetasAprovadas,
     setColetasReprovadas,
     setRemoveAllColetas,
     setAcceptAllColetas } = coletasSlice.actions

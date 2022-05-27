@@ -1,18 +1,18 @@
 import React from 'react'
 import { Formik } from 'formik'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
-import Section from '../../../../../../components/Screen/Section'
 import { loginFormSchema, loginFormValues } from './constants'
+import Section from '../../../../../../components/Screen/Section'
 import FormLabel from '../../../../../../components/Form/Label'
 import FormInput from '../../../../../../components/Form/Input'
 import Button from '../../../../../../components/Button'
 import FormError from '../../../../../../components/Form/Error'
-import send from '../scripts/send'
+import send from '../../scripts/send'
 
 const Form: React.FC = () => {
 
     const dispatch = useAppDispatch()
-    const { requestSendAuthLogin } = useAppSelector(s => s.requestSendAuthLogin)
+    const { requestSendAuthLogin } = useAppSelector(s => s.requestAuthLogin)
 
     return(
 

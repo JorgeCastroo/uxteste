@@ -1,6 +1,7 @@
 import styled from 'styled-components/native'
 
 export const Box = styled.View`
+    position: relative;
     width: 100%;
     margin-bottom: 24px;
     border-radius: 2px;
