@@ -7,7 +7,7 @@ import { setRequestColetasAceitasData, setRequestAcceptColetasLoading } from "..
 
 interface Body {
     idLista: number,
-    idStatusLista: 2 | 4,
+    idStatusLista: number,
     latitude: string,
     longitude: string
 }

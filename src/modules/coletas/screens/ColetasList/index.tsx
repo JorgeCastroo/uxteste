@@ -20,7 +20,6 @@ const ColetasList: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const coletas = useAppSelector(s => s.coletas)
-    const statusColetas = useAppSelector(s => s.coletas.idStatusColetas)
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
     const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
     const { requestColeta } = useAppSelector(s => s.requestColetas)
@@ -37,7 +36,7 @@ const ColetasList: React.FC = () => {
         for (const coleta of coletasAprovadas) {
             response = await acceptColeta(dispatch, {
                 idLista: coleta.idLista,
-                idStatusLista: statusColetas.APROVADO,
+                idStatusLista: 2,
                 latitude: coleta.latitudeDestino,
                 longitude: coleta.latitudeDestino
             })
@@ -75,11 +74,11 @@ const ColetasList: React.FC = () => {
                 {!SHOW_LOADING && (
                     <>
                         <Header title="Coletas encontradas" goBack={false} />
-                        <ColetasSelect />
+                        {coletas.coletas.length > 0 && <ColetasSelect />}
                         <Section>
-                            {coletas.coletas?.map(coleta => (
+                            {coletas.coletas?.map((coleta, index) => (
                                 <ColetasBox
-                                    key={coleta.idLista}
+                                    key={index}
                                     selected={!!coletasAprovadas.find(c => c.idLista === coleta.idLista)}
                                     id={coleta.idLista}
                                     cliente={coleta.nomeCliente}

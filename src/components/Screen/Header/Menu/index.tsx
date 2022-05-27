@@ -6,6 +6,7 @@ import { useAppDispatch } from '../../../../redux/hooks'
 import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
 import loadLista from '../../../../modules/solicitacao/scripts/loadLista'
 import closeLista from '../../../../modules/solicitacao/scripts/closeLista'
+import clearAllSyncStacks from '../../../../modules/sync/scripts/clearAllSyncStacks'
 
 const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
@@ -36,6 +37,11 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                         icon = "cloud-check-outline" 
                         title = "Encerrar lista" 
                         onPress = {() => handleOnPress(() => closeLista(dispatch))} 
+                    />
+                    <Menu.Item
+                        icon = "sync-off"
+                        title = "Limpar Sync"
+                        onPress = {() => clearAllSyncStacks()}
                     />
                 </>
             )}

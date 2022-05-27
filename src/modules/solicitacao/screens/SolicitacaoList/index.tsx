@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { Lista } from '../../interfaces/Lista'
+import { RoteirizacaoResponse } from '../../../../interfaces/Roteirizacao'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
@@ -14,16 +15,21 @@ import SolicitacaoListSearchbar from './components/Searchbar'
 import Loader from './components/Loader'
 import localGetLista from '../../scripts/local/localGetLista'
 import { idStatusLista } from '../../../../constants/idStatusLista'
+import { syncValuesLista } from '../../scripts/sync'
+import closeLista from '../../scripts/closeLista'
+import FormError from '../../../../components/Form/Error'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { lista, filteredLista, loadingNewLista } = useAppSelector(s => s.lista)
+    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
     const { requestGetLista } = useAppSelector(s => s.requestLista)
+    const [allIsSync, setAllIsSync] = useState(true)
 
     const SHOW_LOADING = loadingNewLista
-    const SHOW_LISTA = !SHOW_LOADING && !!lista
+    const SHOW_LISTA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
     const SHOW_LISTA_DATA = !SHOW_LOADING && !!lista && !SHOW_FILTERED_LISTA_DATA
 
@@ -35,6 +41,23 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
         dispatch(setCurrentVolumes(item.listaVolumes))
         navigation.navigate('solicitacaoReceivement')
     }
+
+    const orderLista = (listas: Lista[], roteirizacao: RoteirizacaoResponse) => {
+        return listas.map(item => {
+            const index = roteirizacao.ordenedAdresses.findIndex(i => i.id === item.idLista)
+            return listas[index]
+        })
+    }
+
+    useEffect(() => {
+        (async() => {
+            if(lista && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length === 0){
+                const syncStatus = await syncValuesLista()
+                setAllIsSync(!syncStatus)
+                if(!syncStatus) await closeLista(dispatch)
+            }
+        })()
+    }, [lista])
 
     return (
 
@@ -48,24 +71,33 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 <Header title = "Listas" goBack = {false} screenName = "solicitacaoList" />
                 {SHOW_LISTA && (
                     <>
-                        <SolicitacaoListSearchbar />
+                        {lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length > 0 && <SolicitacaoListSearchbar />}
                         <Section>
-                            {SHOW_LISTA_DATA && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).map((item, index) => (
+                            {SHOW_LISTA_DATA && orderLista(lista, roteirizacao).filter(f => f.situacao !== idStatusLista['FINALIZADO']).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
+                                    position = {index+1}
                                     onPress = {() => handleNavigate(item)} 
                                 />
                             ))}
-                            {SHOW_FILTERED_LISTA_DATA && filteredLista.map((item, index) => (
+                            {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
+                                    position = {index+1}
                                     onPress = {() => handleNavigate(item)} 
                                 />
                             ))}
                         </Section>
                     </>
+                )}
+                {SHOW_LISTA && (
+                    <FormError
+                        visible = {!allIsSync}
+                        marginTop = {20}
+                        message = "Ainda faltam dados para sincronizar!"
+                    />
                 )}
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 <Section />

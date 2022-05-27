@@ -14,9 +14,9 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import Button from '../../../../components/Button'
 import findLista from '../../scripts/findLista'
-import startReceivingLista from '../../scripts/requests/requestStartReceivingLista'
-import { idStatusLista } from '../../../../constants/idStatusLista'
 import send from './scripts/send'
+import start from './scripts/start'
+import { idStatusLista } from '../../../../constants/idStatusLista'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -37,54 +37,59 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         <>
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {40}>
                 <Header title = "Lista" />
-                <Section marginTop = {20}>
-                    <SolicitacaoBox {...currentSolicitacao!} />
-                </Section>
-                <Section type = "row" marginTop = {8} between>
-                    <S.Box style = {elevation.elevation2}>
-                        <Text style = {{color: '#333333', fontSize: 22}}>Recebidos</Text>
-                        <Text style = {{marginTop: 20, color: themes.status.success.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}</Text>
-                    </S.Box>
-                    <View style = {{marginRight: 20}} />
-                    <S.Box style = {elevation.elevation2}>
-                        <Text style = {{color: '#333333', fontSize: 22}}>Pendentes</Text>
-                        <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}</Text>
-                    </S.Box>
-                </Section>
-                <Section marginTop = {40}>
-                    {currentSolicitacao!.situacao === idStatusLista['ENVIADO'] && (
-                        <Button
-                            label = "Iniciar Recebimento"
-                            marginHorizontal
-                            marginBottom = {8}
-                            loading = {requestStartReceivingLista.loading}
-                            disabled = {requestStartReceivingLista.loading}
-                            onPress = {() => startReceivingLista(dispatch, currentSolicitacao!.idLista, {latitude: 0, longitude: 0}, handleNavigate)}
-                        />
-                    )}
-                    {currentSolicitacao!.situacao === idStatusLista['COLETANDO'] && (
-                        <Button
-                            label = "Receber"
-                            marginHorizontal
-                            marginBottom = {8}
-                            onPress = {handleNavigate}
-                        />
-                    )}
-                    <Button
-                        label = "Finalizar Recebimento"
-                        marginHorizontal
-                        loading = {requestStartReceivingLista.loading || syncAddLoading}
-                        disabled = {requestStartReceivingLista.loading || syncAddLoading}
-                        onPress = {async () => 
-                            await send(
-                                dispatch, 
-                                !!network, 
-                                () => navigation.navigate('solicitacaoList'),
-                                findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume })
-                            )
-                        }
-                    />
-                </Section>
+                {!!currentSolicitacao && (
+                    <>
+                        <Section marginTop = {20}>
+                            <SolicitacaoBox {...currentSolicitacao!} position = {0} />
+                        </Section>
+                        <Section type = "row" marginTop = {8} between>
+                            <S.Box style = {elevation.elevation2}>
+                                <Text style = {{color: '#333333', fontSize: 22}}>Recebidos</Text>
+                                <Text style = {{marginTop: 20, color: themes.status.success.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}</Text>
+                            </S.Box>
+                            <View style = {{marginRight: 20}} />
+                            <S.Box style = {elevation.elevation2}>
+                                <Text style = {{color: '#333333', fontSize: 22}}>Pendentes</Text>
+                                <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}</Text>
+                            </S.Box>
+                        </Section>
+                        <Section marginTop = {40}>
+                            {currentSolicitacao.situacao === idStatusLista['APROVADO'] && (
+                                <Button
+                                    label = "Iniciar Recebimento"
+                                    marginHorizontal
+                                    marginBottom = {8}
+                                    loading = {requestStartReceivingLista.loading}
+                                    disabled = {requestStartReceivingLista.loading}
+                                    onPress = {async () => await start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, {latitude: 0, longitude: 0})}
+                                />
+                            )}
+                            {currentSolicitacao.situacao === idStatusLista['COLETANDO'] && (
+                                <Button
+                                    label = "Receber"
+                                    marginHorizontal
+                                    marginBottom = {8}
+                                    onPress = {handleNavigate}
+                                />
+                            )}
+                            <Button
+                                label = "Finalizar Recebimento"
+                                marginHorizontal
+                                loading = {requestStartReceivingLista.loading || syncAddLoading}
+                                disabled = {requestStartReceivingLista.loading || syncAddLoading}
+                                onPress = {async () => 
+                                    await send(
+                                        dispatch, 
+                                        !!network, 
+                                        () => navigation.navigate('solicitacaoList'),
+                                        currentSolicitacao!.idLista,
+                                        findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
+                                    )
+                                }
+                            />
+                        </Section>
+                    </>
+                )}
             </Render>
         </>
 

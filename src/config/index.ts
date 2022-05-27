@@ -1,6 +1,6 @@
 export const SHOW_LOG = {
     REQUEST: false,
     HEADER: false,
-    BODY: false,
+    BODY: true,
     RESPONSE: true,
 }

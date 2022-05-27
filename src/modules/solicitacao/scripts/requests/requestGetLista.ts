@@ -6,6 +6,7 @@ import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 import localSetLista from "../local/localSetLista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
+import MOCK_USERDATA from "../../../../mock/userData"
 
 export default async function getLista(dispatch: Function){
     try {
@@ -15,7 +16,7 @@ export default async function getLista(dispatch: Function){
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: 9453,
+            idMotorista: MOCK_USERDATA.idUser,
             idStatusLista: idStatusLista['APROVADO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
@@ -23,8 +24,8 @@ export default async function getLista(dispatch: Function){
         if(response){
             dispatch(R.setRequestGetListaData(response))
             if(!response.flagErro){
-                localSetLista(dispatch, response.listaResultado)
-                return response.listaResultado
+                localSetLista(dispatch, response.listaResultados)
+                return response.listaResultados
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {

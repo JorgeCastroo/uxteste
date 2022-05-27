@@ -3,5 +3,5 @@ export interface UserData {
     nome: string
     placa?: string
     telefone?: string
-    veiculos?: string
+    veiculo?: string
 }

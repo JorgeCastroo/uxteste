@@ -47,9 +47,9 @@ const listaSlice = createSlice({
             state.currentVolumes = action.payload
         },
 
-        updateSituacao: (state, action: PayloadAction<keyof typeof idStatusLista>) => {
-            state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload]
-            state.currentSolicitacao!.situacao = idStatusLista[action.payload]
+        updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
+            state.lista!.find(f => f.idLista === action.payload.idLista ?? state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload.status]
+            if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
             
             state.lista = [...state.lista!]
         },

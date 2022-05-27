@@ -5,7 +5,7 @@ import { updateSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, listaVolumes: number[]){
+export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, idLista: number, listaVolumes: number[]){
     try {
         dispatch(R.setRequestSaveListaLoading())
 
@@ -22,14 +22,16 @@ export default async function saveLista(dispatch: Function, redirect: () => void
             dispatch(R.setRequestSaveListaData(response))
             if(!response.flagErro){
                 if(!sync){
-                    dispatch(updateSituacao('FINALIZADO'))
+                    dispatch(updateSituacao({status: 'FINALIZADO', idLista}))
                     redirect()
                 }
+                return true
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {
         info.error('saveLista',error)
         dispatch(R.setRequestSaveListaMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestSaveListaError())
+        return false
     }
 }

@@ -26,7 +26,7 @@ const ColetasBox: React.FC <ColetaBoxProps> = ({ selected, id, coleta, cliente, 
 
         <S.Box style={elevation.elevation4}>
             <List.Item
-                title={`Empresa: ${cliente}`}
+                title={cliente}
                 description={`Quantidade: ${quantidade}`}
                 left={props => <List.Icon {...props} icon="office-building" color={theme} />}
                 right={props => <List.Icon {...props} icon={selected ? "radiobox-marked" : "radiobox-blank"} color = {selected ? status.info.primary : '#C4C4C4'} />}

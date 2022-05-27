@@ -22,13 +22,6 @@ const Routes: React.FC = () => {
     const netInfo = useNetInfo()
 
     useEffect(() => {
-        if(netInfo.isInternetReachable !== null){
-            dispatch(setAppNetwork(netInfo.isInternetReachable))
-            if(netInfo.isInternetReachable === true) syncAll(dispatch)
-        }
-    }, [netInfo.isInternetReachable])
-
-    useEffect(() => {
         (async() => {
             await getUserData(dispatch)
             await localGetLista(dispatch)
@@ -42,6 +35,13 @@ const Routes: React.FC = () => {
     useEffect(() => {
         if(!!lista && JSON.stringify(lista) !== JSON.stringify(oldLista ?? [])) localSetLista(dispatch, lista)
     }, [dispatch, lista])
+
+    useEffect(() => {
+        if(netInfo.isInternetReachable !== null){
+            dispatch(setAppNetwork(netInfo.isInternetReachable))
+            if(netInfo.isInternetReachable === true) syncAll(dispatch)
+        }
+    }, [netInfo.isInternetReachable])
 
     if(authLoading) return <ActivityIndicator color = {themes.colors.primary} />
     else return isLogged ? <AppRoutes /> : <AuthRoutes />

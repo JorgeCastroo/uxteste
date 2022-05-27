@@ -4,12 +4,12 @@ import createValueToSync from "../../../../sync/scripts/createValueToSync"
 import saveLista from "../../../scripts/requests/requestSaveLista"
 import info from "../../../../../utils/info"
 
-export default async function send(dispatch: Function, network: boolean, redirect: () => void, volumes: number[]){
+export default async function send(dispatch: Function, network: boolean, redirect: () => void, idLista: number, volumes: number[]){
     try {
-        if(network) await saveLista(dispatch, redirect, true, volumes)
+        if(network) await saveLista(dispatch, redirect, false, idLista, volumes)
         else{
-            await addToSyncStack('syncListaSave', createValueToSync(volumes))
-            dispatch(updateSituacao('FINALIZADO'))
+            await addToSyncStack('syncListaSave', createValueToSync({idLista, volumes}))
+            dispatch(updateSituacao({status: 'FINALIZADO', idLista}))
             redirect()
         }
     } catch (error) {

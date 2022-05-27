@@ -1,10 +1,11 @@
+import { TRUX_HML_ENDPOINT } from "@env"
 import { setColetas } from "../reducers/coletas/coletas"
+import { Lista } from "../../solicitacao/interfaces/Lista"
 import { setRequestColetasData, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
-import { TRUX_HML_ENDPOINT } from "@env"
-import { Lista } from "../../solicitacao/interfaces/Lista"
+import MOCK_USERDATA from "../../../mock/userData"
 
 export default async function getColetas(dispatch: Function) {
     try {
@@ -14,16 +15,15 @@ export default async function getColetas(dispatch: Function) {
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: 9453,
-            idStatusLista: 2
+            idMotorista: MOCK_USERDATA.idUser,
+            idStatusLista: 1,
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
 
         if (response) {
             dispatch(setRequestColetasData(response))
-            if (!response.flagErro) {
-                dispatch(setColetas((response as any).listaResultado))
-            } else throw new Error(response.listaMensagens[0])
+            if (!response.flagErro) dispatch(setColetas(response.listaResultados))
+            else throw new Error(response.listaMensagens[0])
         } else throw new Error('Erro na requisição')
     } catch (error: any) {
         info.error('getColetas', error)
