@@ -14,6 +14,7 @@ import { setloadingColetasAprovadas } from '../../reducers/coletas/coletas'
 import { Alert, View } from 'react-native'
 import getColetas from '../../scripts/getColetas'
 import Loader from './components/Loader'
+import loadLista from '../../../solicitacao/scripts/loadLista'
 
 const ColetasList: React.FC = () => {
 
@@ -46,8 +47,10 @@ const ColetasList: React.FC = () => {
 
         if (!!response) {
             console.log(response)
-            if (!response.flagErro) navigation.navigate("solicitacaoRoutes")
-            else Alert.alert("Erro ao prosseguir com as coletas!")
+            if (!response.flagErro){
+                loadLista(dispatch)
+                navigation.navigate("solicitacaoRoutes")
+            }else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
             console.log(response)
         }
