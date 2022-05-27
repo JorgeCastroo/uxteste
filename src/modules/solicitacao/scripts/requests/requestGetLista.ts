@@ -15,16 +15,16 @@ export default async function getLista(dispatch: Function){
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: 2640,
-            idStatusLista: idStatusLista['ENVIADO'],
+            idMotorista: 9453,
+            idStatusLista: idStatusLista['APROVADO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
 
         if(response){
             dispatch(R.setRequestGetListaData(response))
             if(!response.flagErro){
-                localSetLista(dispatch, response.listaResultados)
-                return response.listaResultados
+                localSetLista(dispatch, response.listaResultado)
+                return response.listaResultado
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {

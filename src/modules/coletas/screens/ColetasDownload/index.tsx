@@ -12,7 +12,7 @@ const ColetasDownload: React.FC = () => {
     const { loading, data } = useAppSelector(s => s.requestColetas.requestColeta)
     const navigation = useNavigation<any>()
     const isFocused = useIsFocused()
-
+    /*
     useEffect(() => {
         if (!data) {
             getColetas(dispatch)
@@ -22,7 +22,7 @@ const ColetasDownload: React.FC = () => {
             navigation.navigate("home")
         }
     }, [isFocused, loading])
-
+    */
     return (
 
         <>
