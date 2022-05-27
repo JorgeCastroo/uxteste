@@ -73,8 +73,8 @@ const ColetasList: React.FC = () => {
                 {!SHOW_LOADING && (
                     <>
                         <Header title="Coletas encontradas" goBack={false} />
-                        <ColetasSelect />
                         <Section>
+                            {coletas.coletas.length > 0 && <ColetasSelect />}
                             {coletas.coletas?.map(coleta => (
                                 <ColetasBox
                                     key={coleta.idLista}
