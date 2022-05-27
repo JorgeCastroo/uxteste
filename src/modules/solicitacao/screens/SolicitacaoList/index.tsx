@@ -5,7 +5,7 @@ import { Lista } from '../../interfaces/Lista'
 import { RoteirizacaoResponse } from '../../../../interfaces/Roteirizacao'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
+import { setCurrentPosition, setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
@@ -18,6 +18,7 @@ import { idStatusLista } from '../../../../constants/idStatusLista'
 import { syncValuesLista } from '../../scripts/sync'
 import closeLista from '../../scripts/closeLista'
 import FormError from '../../../../components/Form/Error'
+import orderLista from '../../scripts/orderLista'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -35,18 +36,12 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
 
     const loaderPercent = requestGetLista.data && requestGetRoteirizacao.data ? 100 : requestGetLista.data ? 50 : 0
 
-    const handleNavigate = (item: Lista) => {
+    const handleNavigate = (item: Lista, position: number) => {
         dispatch(resetScannedSolicitacoes())
         dispatch(setCurrentSolicitacao(item))
         dispatch(setCurrentVolumes(item.listaVolumes))
+        dispatch(setCurrentPosition(position))
         navigation.navigate('solicitacaoReceivement')
-    }
-
-    const orderLista = (listas: Lista[], roteirizacao: RoteirizacaoResponse) => {
-        return listas.map(item => {
-            const index = roteirizacao.ordenedAdresses.findIndex(i => i.id === item.idLista)
-            return listas[index]
-        })
     }
 
     useEffect(() => {
@@ -78,7 +73,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                                     {...item} 
                                     key = {index} 
                                     position = {index+1}
-                                    onPress = {() => handleNavigate(item)} 
+                                    onPress = {() => handleNavigate(item, index+1)} 
                                 />
                             ))}
                             {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (
@@ -86,7 +81,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                                     {...item} 
                                     key = {index} 
                                     position = {index+1}
-                                    onPress = {() => handleNavigate(item)} 
+                                    onPress = {() => handleNavigate(item, index+1)} 
                                 />
                             ))}
                         </Section>

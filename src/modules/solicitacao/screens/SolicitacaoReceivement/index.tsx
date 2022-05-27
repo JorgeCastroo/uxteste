@@ -23,7 +23,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const dispatch = useAppDispatch()
     const { network, location } = useAppSelector(s => s.app)
     const { syncAddLoading } = useAppSelector(s => s.sync)
-    const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
+    const { currentSolicitacao, lista, currentPosition } = useAppSelector(s => s.lista)
     const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
 
     const handleNavigate = () => {
@@ -40,7 +40,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 {!!currentSolicitacao && (
                     <>
                         <Section marginTop = {20}>
-                            <SolicitacaoBox {...currentSolicitacao!} position = {0} />
+                            <SolicitacaoBox {...currentSolicitacao!} position = {currentPosition ?? 1} />
                         </Section>
                         <Section type = "row" marginTop = {8} between>
                             <S.Box style = {elevation.elevation2}>

@@ -19,6 +19,7 @@ import loadLista from '../../../solicitacao/scripts/loadLista'
 const ColetasList: React.FC = () => {
 
     const dispatch = useAppDispatch()
+    const { location } = useAppSelector(s => s.app)
     const coletas = useAppSelector(s => s.coletas)
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
     const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
@@ -46,7 +47,7 @@ const ColetasList: React.FC = () => {
 
         if (!!response) {
             if (!response.flagErro){
-                loadLista(dispatch)
+                loadLista(dispatch, { latitude: location![0], longitude: location![1] })
                 dispatch(setResetColetasAprovadas())
                 navigation.navigate("solicitacaoRoutes")
             }else Alert.alert("Erro ao prosseguir com as coletas!")

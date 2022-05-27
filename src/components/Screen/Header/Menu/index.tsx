@@ -2,7 +2,7 @@ import React from 'react'
 import { Appbar, Menu } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { HeaderMenuProps } from './types'
-import { useAppDispatch } from '../../../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
 import loadLista from '../../../../modules/solicitacao/scripts/loadLista'
 import closeLista from '../../../../modules/solicitacao/scripts/closeLista'
@@ -11,6 +11,7 @@ import clearAllSyncStacks from '../../../../modules/sync/scripts/clearAllSyncSta
 const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
     const dispatch = useAppDispatch()
+    const { location } = useAppSelector(s => s.app)
     const [menuVisible, setMenuVisible] = React.useState(false)
     const navigation = useNavigation<any>()
 
@@ -31,7 +32,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                     <Menu.Item 
                         icon = "cloud-download-outline" 
                         title = "Baixar lista" 
-                        onPress = {() => handleOnPress(() => loadLista(dispatch))} 
+                        onPress = {() => handleOnPress(() => loadLista(dispatch, { latitude: location![0], longitude: location![1] }))}
                     />
                     <Menu.Item 
                         icon = "cloud-check-outline" 
