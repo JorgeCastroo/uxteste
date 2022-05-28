@@ -6,11 +6,11 @@ import info from "../../../utils/info"
 import sleep from "../../../utils/sleep"
 import { Coordinates } from "../../../interfaces/Coordinates"
 
-export default async function loadLista(dispatch: Function, coords: Coordinates){
+export default async function loadLista(dispatch: Function, idMotorista: number, coords: Coordinates){
     try {
         dispatch(setLoadingNewLista(true))
 
-        const lista = await getLista(dispatch)
+        const lista = await getLista(dispatch, idMotorista)
         if(!!lista){
             const roteirizacaoPayload = await createRoteirizacaoPayload(dispatch, lista, coords)
             await getRoteirizacao(dispatch, roteirizacaoPayload)

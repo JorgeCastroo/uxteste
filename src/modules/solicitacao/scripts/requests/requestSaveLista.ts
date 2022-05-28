@@ -5,7 +5,7 @@ import { updateSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, idLista: number, listaVolumes: number[]){
+export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, listaVolumes: number[]){
     try {
         dispatch(R.setRequestSaveListaLoading())
 
@@ -13,7 +13,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: 2640,
+            idMotorista,
             listaVolumes,
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })

@@ -12,6 +12,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
     const dispatch = useAppDispatch()
     const { location } = useAppSelector(s => s.app)
+    const { userData } = useAppSelector(s => s.auth)
     const [menuVisible, setMenuVisible] = React.useState(false)
     const navigation = useNavigation<any>()
 
@@ -32,7 +33,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                     <Menu.Item 
                         icon = "cloud-download-outline" 
                         title = "Baixar lista" 
-                        onPress = {() => handleOnPress(() => loadLista(dispatch, { latitude: location![0], longitude: location![1] }))}
+                        onPress = {() => handleOnPress(() => loadLista(dispatch, userData!.idUser, { latitude: location![0], longitude: location![1] }))}
                     />
                     <Menu.Item 
                         icon = "cloud-check-outline" 

@@ -7,7 +7,7 @@ import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
 import MOCK_USERDATA from "../../../mock/userData"
 
-export default async function getColetas(dispatch: Function) {
+export default async function getColetas(dispatch: Function, idMotorista: number) {
     try {
         dispatch(setRequestColetasLoading())
 
@@ -15,7 +15,7 @@ export default async function getColetas(dispatch: Function) {
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: MOCK_USERDATA.idUser,
+            idMotorista,
             idStatusLista: 1,
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })

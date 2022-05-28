@@ -6,9 +6,8 @@ import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 import localSetLista from "../local/localSetLista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
-import MOCK_USERDATA from "../../../../mock/userData"
 
-export default async function getLista(dispatch: Function){
+export default async function getLista(dispatch: Function, idMotorista: number){
     try {
         dispatch(R.setRequestGetListaLoading())
 
@@ -16,7 +15,7 @@ export default async function getLista(dispatch: Function){
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            idMotorista: MOCK_USERDATA.idUser,
+            idMotorista,
             idStatusLista: idStatusLista['APROVADO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })

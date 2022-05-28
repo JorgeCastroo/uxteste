@@ -20,6 +20,7 @@ const ColetasList: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { location } = useAppSelector(s => s.app)
+    const { userData } = useAppSelector(s => s.auth)
     const coletas = useAppSelector(s => s.coletas)
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
     const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
@@ -47,7 +48,7 @@ const ColetasList: React.FC = () => {
 
         if (!!response) {
             if (!response.flagErro){
-                loadLista(dispatch, { latitude: location![0], longitude: location![1] })
+                loadLista(dispatch, userData!.idUser, { latitude: location![0], longitude: location![1] })
                 dispatch(setResetColetasAprovadas())
                 navigation.navigate("solicitacaoRoutes")
             }else Alert.alert("Erro ao prosseguir com as coletas!")
@@ -57,7 +58,7 @@ const ColetasList: React.FC = () => {
     }
 
     useEffect(() => {
-        if(isFocused) getColetas(dispatch)
+        if(isFocused) getColetas(dispatch, userData!.idUser)
     }, [isFocused, dispatch])
 
     return (
@@ -69,7 +70,7 @@ const ColetasList: React.FC = () => {
                     backgroundColor: SHOW_LOADING ? '#fff' : themes.colors.primary,
                 }}
                 align = {SHOW_LOADING ? 'center' : 'flex-start'}
-                onRefresh={async () => !SHOW_LOADING && await getColetas(dispatch)}
+                onRefresh={async () => !SHOW_LOADING && await getColetas(dispatch, userData!.idUser)}
             >
                 {SHOW_LOADING && <Loader />}
                 {!SHOW_LOADING && (

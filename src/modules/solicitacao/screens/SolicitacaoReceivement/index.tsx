@@ -24,7 +24,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const dispatch = useAppDispatch()
     const { network, location } = useAppSelector(s => s.app)
     const { syncAddLoading } = useAppSelector(s => s.sync)
-    const { currentSolicitacao, lista, currentPosition } = useAppSelector(s => s.lista)
+    const { userData } = useAppSelector(s => s.auth)
+    const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
 
@@ -84,6 +85,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         dispatch, 
                                         !!network, 
                                         () => navigation.navigate('solicitacaoList'),
+                                        userData!.idUser,
                                         currentSolicitacao!.idLista,
                                         findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
                                     )

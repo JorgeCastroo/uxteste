@@ -9,7 +9,8 @@ import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { setRequestColetasLoading } from '../../reducers/coletas/requestColetasReducer'
 
 const ColetasDownload: React.FC = () => {
-    const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch()
+    const { userData } = useAppSelector(s => s.auth)
     const loading = useAppSelector(s => s.requestColetas.requestColeta.loading)
     const navigation = useNavigation<any>()
     const isFocused = useIsFocused()
