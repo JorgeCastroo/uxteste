@@ -62,7 +62,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 align = {SHOW_LOADING ? 'space-between' : undefined}
                 onRefresh = {async () => await localGetLista(dispatch)}
             >
-                <Header title = "Listas" goBack = {false} screenName = "solicitacaoList" />
+                <Header title = "Listas" goBack = {false} />
                 {SHOW_LISTA && (
                     <>
                         {lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length > 0 && <SolicitacaoListSearchbar />}

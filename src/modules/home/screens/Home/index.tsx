@@ -11,6 +11,7 @@ import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import dayMoment from '../../../../utils/dayMoment'
 import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
+import AppVersion from '../../../app/components/AppVersion'
 
 const Home: React.FC = () => {
 
@@ -42,6 +43,7 @@ const Home: React.FC = () => {
                         <GroupStatus />
                     </>
                 )}
+                <AppVersion />
             </Render>
         </>
 

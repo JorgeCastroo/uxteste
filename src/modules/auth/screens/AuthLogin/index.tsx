@@ -7,6 +7,7 @@ import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import Form from './components/Form'
 import info from '../../../../utils/info'
+import AppVersion from '../../../app/components/AppVersion'
 
 const AuthLogin: React.FC = () => {
 
@@ -68,6 +69,7 @@ const AuthLogin: React.FC = () => {
                     </Section>
                 )}
                 {!blocked && <Form />}
+                <AppVersion />
             </Render>
         </>
 
