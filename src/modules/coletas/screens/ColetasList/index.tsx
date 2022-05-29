@@ -75,7 +75,7 @@ const ColetasList: React.FC = () => {
                 {SHOW_LOADING && <Loader />}
                 {!SHOW_LOADING && (
                     <>
-                        <Header title="Coletas encontradas" goBack={false} />
+                        <Header title="Novas coletas" />
                         {coletas.coletas.length > 0 && <ColetasSelect />}
                         <Section>
                             {coletas.coletas?.map((coleta, index) => (
