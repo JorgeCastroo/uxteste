@@ -1,8 +1,8 @@
 const SHOW = {
-    LOG: true,
-    DATA: true,
-    ERROR: true,
-    WARN: true,
+    LOG: false,
+    DATA: false,
+    ERROR: false,
+    WARN: false,
 }
 
 function log(initiator: string, message: any){

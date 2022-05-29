@@ -6,18 +6,22 @@ import info from "../../../../../utils/info"
 import request from "../../../../../utils/request"
 import setUserData from "../../../scripts/setUserData"
 import { loginFormValues } from "../components/Form/constants"
+import { crypto } from "./crypt"
 
 export default async function send(dispatch: Function, values: typeof loginFormValues) {
     try {
         dispatch(R.setRequestSendAuthLoginLoading())
 
         const endpoint = `${TRUX_ENDPOINT}/Motoristas/MotoristaLogin`
-        const body = values
+        const body = {
+            login: values.login,
+            senha: crypto(values.senha),
+        }
         const response = await request.post<UserData>({ endpoint, body })
 
         if (response) {
             dispatch(R.setRequestSendAuthLoginData(response))
-            if (!response.idUser) setUserData(dispatch, response, true)
+            if(response.idUser) setUserData(dispatch, response, true)
             else throw new Error("Usuário não encontrado")
         } else throw new Error('Erro na requisição')
     } catch (error: any) {

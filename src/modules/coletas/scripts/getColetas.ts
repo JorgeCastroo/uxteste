@@ -15,7 +15,7 @@ export default async function getColetas(dispatch: Function, idMotorista: number
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            //idMotorista: MOCK_USERDATA.idUser,
+            // idMotorista: MOCK_USERDATA.idUser,
             idMotorista,
             idStatusLista: 1,
         }
