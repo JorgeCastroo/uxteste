@@ -17,7 +17,7 @@ import syncAll from '../modules/sync/scripts/syncAll'
 const Routes: React.FC = () => {
 
     const dispatch = useAppDispatch()
-    const { isLogged, authLoading } = useAppSelector(s => s.auth)
+    const { isLogged, authLoading, userData } = useAppSelector(s => s.auth)
     const { lista, oldLista } = useAppSelector(s => s.lista)
     const netInfo = useNetInfo()
 
@@ -37,11 +37,11 @@ const Routes: React.FC = () => {
     }, [dispatch, lista])
 
     useEffect(() => {
-        if(netInfo.isInternetReachable !== null){
+        if(netInfo.isInternetReachable !== null && !!userData){
             dispatch(setAppNetwork(netInfo.isInternetReachable))
-            if(netInfo.isInternetReachable === true) syncAll(dispatch)
+            if(netInfo.isInternetReachable === true) syncAll(dispatch, userData.idUser)
         }
-    }, [netInfo.isInternetReachable])
+    }, [netInfo.isInternetReachable, userData])
 
     if(authLoading) return <ActivityIndicator color = {themes.colors.primary} />
     else return isLogged ? <AppRoutes /> : <AuthRoutes />

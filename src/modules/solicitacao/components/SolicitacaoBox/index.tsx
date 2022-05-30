@@ -6,44 +6,38 @@ import { BoxContentProps, SolicitacaoBoxProps } from './types'
 import { Lista } from '../../interfaces/Lista'
 import * as S from './styles'
 import { elevation } from '../../../../styles/layout'
-import themes from '../../../../styles/themes'
-import { idStatusLista } from '../../../../constants/idStatusLista'
 import getFullAddress from '../../scripts/getFullAddress'
+import getStatus from '../../scripts/getStatus'
 
 const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
-    
-    const theme = themes.colors.tertiary
+
     const enderecoCompleto = getFullAddress(lista)
-    
-    const getStatus = () => {
-        if([1, 2, 4].includes(lista.situacao)) return 'Em aberto'
-        else return Object.keys(idStatusLista).find(f => (idStatusLista as any)[f] === lista.situacao)!
-    }
+    const status = getStatus(lista.situacao)
 
     return (
 
         <>
-            <S.PositionIndicator theme={'#CCE0FF'}>
-                <Text style={{ color: theme, fontSize: 16, fontWeight: 'bold' }}>{lista.position}</Text>
+            <S.PositionIndicator theme = {status.theme.tertiary}>
+                <Text style={{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{lista.position}</Text>
             </S.PositionIndicator>
             <List.Item
                 title = {lista.nomeCliente}
                 description = {`Quantidade ${lista.qtdeVolumes}`}
-                left = {props => <List.Icon {...props} icon = "office-building" color = {theme} />}
+                left = {props => <List.Icon {...props} icon = "office-building" color = {status.theme.primary} />}
             />
             <List.Item
                 title = "Responsável"
                 description = {lista.nomeResponsavel}
-                left = {props => <List.Icon {...props} icon = "truck" color = {theme} />}
+                left = {props => <List.Icon {...props} icon = "truck" color = {status.theme.primary} />}
             />
             <List.Item
                 title = "Endereço"
                 description = {enderecoCompleto}
-                left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
+                left = {props => <List.Icon {...props} icon = "map-marker" color = {status.theme.primary} />}
                 onPress = {() => Clipboard.setString(enderecoCompleto)}
             />
-            <S.StatusContainer theme = {'#CCE0FF'}>
-                <Text style = {{color: theme, fontSize: 18, fontWeight: 'bold'}}>{getStatus().toUpperCase()}</Text>
+            <S.StatusContainer theme = {status.theme.tertiary}>
+                <Text style = {{color: status.theme.primary, fontSize: 18, fontWeight: 'bold'}}>{status.label.toUpperCase()}</Text>
             </S.StatusContainer>
         </>
 

@@ -19,6 +19,7 @@ import closeLista from '../../scripts/closeLista'
 import FormError from '../../../../components/Form/Error'
 import orderLista from '../../scripts/orderLista'
 import findListaPosition from '../../scripts/findListaPosition'
+import NoData from '../../../../components/NoData'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -31,8 +32,12 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
 
     const SHOW_LOADING = loadingNewLista
     const SHOW_LISTA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
+
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
-    const SHOW_LISTA_DATA = !SHOW_LOADING && !!lista && !SHOW_FILTERED_LISTA_DATA
+    const SHOW_FILTERED_LISTA_NO_DATA = !SHOW_LOADING && !!filteredLista && filteredLista.length === 0
+
+    const SHOW_LISTA_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista
+    const SHOW_LISTA_NO_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista && (lista.length === 0 || lista.every(f => f.situacao === idStatusLista['FINALIZADO']))
 
     const loaderPercent = requestGetLista.data && requestGetRoteirizacao.data ? 100 : requestGetLista.data ? 50 : 0
 
@@ -63,19 +68,23 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 onRefresh = {async () => await localGetLista(dispatch)}
             >
                 <Header title = "Listas" goBack = {false} />
+                {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 {SHOW_LISTA && (
                     <>
                         {lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length > 0 && <SolicitacaoListSearchbar />}
                         <Section>
-                            {SHOW_LISTA_DATA && orderLista(lista, roteirizacao).filter(f => f.situacao !== idStatusLista['FINALIZADO']).map((item, index) => (
+                            {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum item encontrado!']} />}
+                            {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
                                     position = {findListaPosition(item, roteirizacao)}
                                     onPress = {() => handleNavigate(item)} 
                                 />
-                            ))}
-                            {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (
+                            ))} 
+
+                            {SHOW_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhuma lista aberta!']} />}
+                            {SHOW_LISTA_DATA && orderLista(lista, roteirizacao).filter(f => [1, 2, 3].includes(f.situacao)).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
@@ -84,16 +93,13 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                                 />
                             ))}
                         </Section>
+                        <FormError
+                            visible = {!allIsSync}
+                            marginTop = {20}
+                            message = "Ainda faltam dados para sincronizar!"
+                        />
                     </>
                 )}
-                {SHOW_LISTA && (
-                    <FormError
-                        visible = {!allIsSync}
-                        marginTop = {20}
-                        message = "Ainda faltam dados para sincronizar!"
-                    />
-                )}
-                {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 <Section />
             </Render>
         </>

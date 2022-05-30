@@ -13,7 +13,6 @@ export const buttonStyles = StyleSheet.create({
     },
     label: {
         paddingVertical: 14,
-        paddingHorizontal: 24,
         color: '#ffffff',
         fontSize: 20,
         fontWeight: 'bold',

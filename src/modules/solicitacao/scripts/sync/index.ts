@@ -8,12 +8,14 @@ import storage from "../../../../utils/storage"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
 import getSyncStack from "../../../sync/scripts/getSyncStack"
 import startReceivingLista from "../requests/requestStartReceivingLista"
+import cancelLista from "../requests/requestCancelLista"
 
 export async function syncValuesLista(){
     const synchronizedStartLista = await getSyncStack('syncStartLista')
     const synchronizedSaveLista = await getSyncStack('syncSaveLista')
+    const synchronizedCancelLista = await getSyncStack('syncCancelLista')
 
-    return synchronizedStartLista && synchronizedSaveLista
+    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista
 }
 
 export async function syncStartLista(dispatch: Function){
@@ -37,7 +39,7 @@ export async function syncStartLista(dispatch: Function){
     }
 }
 
-export async function syncSaveLista(dispatch: Function){
+export async function syncSaveLista(dispatch: Function, idMotorista: number){
     try {
         dispatch(setSyncLoading(true))
 
@@ -47,7 +49,7 @@ export async function syncSaveLista(dispatch: Function){
         if(!!localSyncListaSave && localSyncListaSave.length > 0){
             info.data("localSyncListaSave", localSyncListaSave)
             localSyncListaSave.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
-                const response = await saveLista(dispatch, () => {}, false, value.idLista, value.volumes)
+                const response = await saveLista(dispatch, () => {}, false, idMotorista, value.idLista, value.volumes)
                 if(response) await updateSyncValue(storageKey, localSyncListaSave, value)
             })
         }else await storage.removeItem(storageKey)
@@ -55,5 +57,26 @@ export async function syncSaveLista(dispatch: Function){
         dispatch(setSyncLoading(false))
     } catch (error) {
         info.error('syncSaveLista',error)
+    }
+}
+
+export async function syncCancelLista(dispatch: Function, idMotorista: number){
+    try {
+        dispatch(setSyncLoading(true))
+
+        const storageKey = 'syncListaCancel'
+        const localSyncListaCancel = await storage.getItem<ValueToSync<{idLista: number}>[]>(storageKey)
+
+        if(!!localSyncListaCancel && localSyncListaCancel.length > 0){
+            info.data("localSyncListaCancel", localSyncListaCancel)
+            localSyncListaCancel.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
+                const response = await cancelLista(dispatch, () => {}, false, idMotorista, value.idLista)
+                if(response) await updateSyncValue(storageKey, localSyncListaCancel, value)
+            })
+        }else await storage.removeItem(storageKey)
+
+        dispatch(setSyncLoading(false))
+    } catch (error) {
+        info.error('syncCancelLista',error)
     }
 }

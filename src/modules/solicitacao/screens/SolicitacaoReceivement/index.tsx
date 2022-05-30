@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
@@ -18,6 +18,7 @@ import send from './scripts/send'
 import start from './scripts/start'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import findListaPosition from '../../scripts/findListaPosition'
+import cancel from './scripts/cancel'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -27,12 +28,31 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { userData } = useAppSelector(s => s.auth)
     const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const { requestStartReceivingLista } = useAppSelector(s => s.requestLista)
+    const { requestStartReceivingLista, requestSaveLista, requestCancelLista } = useAppSelector(s => s.requestLista)
 
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
         if(scannedVolumes.length > 0) scannedVolumes.map(item => item.etiqueta).map(item => dispatch(addScannedSolicitacao(item)))
         navigation.navigate('solicitacaoScan')
+    }
+
+    const handleSend = () => {
+        send(
+            dispatch, 
+            !!network, 
+            () => navigation.navigate('solicitacaoList'),
+            userData!.idUser,
+            currentSolicitacao!.idLista,
+            findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
+        )
+    }
+
+    const handleCancel = () => {
+        cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!.idUser, currentSolicitacao!.idLista)
+    }
+
+    const handleStart = () => {
+        start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, {latitude: location![0], longitude: location![1]})
     }
 
     return(
@@ -64,7 +84,12 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     marginBottom = {8}
                                     loading = {requestStartReceivingLista.loading}
                                     disabled = {requestStartReceivingLista.loading}
-                                    onPress = {async () => await start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, {latitude: location![0], longitude: location![1]})}
+                                    onPress = {() => {
+                                        Alert.alert('Atenção', 'Deseja iniciar o recebimento da lista?', [
+                                            { text: 'Cancelar', style: 'cancel' },
+                                            { text: 'Sim', onPress: () => handleStart() }	
+                                        ])
+                                    }}
                                 />
                             )}
                             {currentSolicitacao.situacao === idStatusLista['COLETANDO'] && (
@@ -75,22 +100,37 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     onPress = {handleNavigate}
                                 />
                             )}
-                            <Button
-                                label = "Finalizar Recebimento"
-                                marginHorizontal
-                                loading = {requestStartReceivingLista.loading || syncAddLoading}
-                                disabled = {requestStartReceivingLista.loading || syncAddLoading}
-                                onPress = {async () => 
-                                    await send(
-                                        dispatch, 
-                                        !!network, 
-                                        () => navigation.navigate('solicitacaoList'),
-                                        userData!.idUser,
-                                        currentSolicitacao!.idLista,
-                                        findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
-                                    )
-                                }
-                            />
+                            {currentSolicitacao.situacao !== idStatusLista['CANCELADO'] && (
+                                <>
+                                    <Button
+                                        label = "Cancelar Recebimento"
+                                        color = {[themes.status.error.primary, themes.status.error.secondary]}
+                                        marginHorizontal
+                                        marginBottom = {8}
+                                        loading = {requestCancelLista.loading}
+                                        disabled = {requestCancelLista.loading}
+                                        onPress = {() => {
+                                            Alert.alert('Atenção', 'Deseja cancelar o recebimento da lista?', [
+                                                { text: 'Cancelar', style: 'cancel' },
+                                                { text: 'Sim', onPress: () => handleCancel() }
+                                            ])
+                                        }}
+                                    />
+                                    <Button
+                                        label = "Finalizar Recebimento"
+                                        color = {[themes.status.success.primary, themes.status.success.secondary]}
+                                        marginHorizontal
+                                        loading = {requestSaveLista.loading || syncAddLoading}
+                                        disabled = {requestSaveLista.loading || syncAddLoading}
+                                        onPress = {() => {
+                                            const current = findLista(lista!, currentSolicitacao!.idLista)
+                                            if(current.listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length !== current.qtdeVolumes){
+                                                Alert.alert('Atenção', 'Não é possível finalizar o recebimento da lista sem escanear todos os volumes!', [{ text: 'Ok' }])
+                                            }else handleSend()
+                                        }}
+                                    />
+                                </>
+                            )}
                         </Section>
                     </>
                 )}

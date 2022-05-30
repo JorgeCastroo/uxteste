@@ -15,13 +15,14 @@ import { Alert, View } from 'react-native'
 import getColetas from '../../scripts/getColetas'
 import Loader from './components/Loader'
 import loadLista from '../../../solicitacao/scripts/loadLista'
+import NoData from '../../../../components/NoData'
 
 const ColetasList: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { location } = useAppSelector(s => s.app)
     const { userData } = useAppSelector(s => s.auth)
-    const coletas = useAppSelector(s => s.coletas)
+    const { coletas } = useAppSelector(s => s.coletas)
     const coletasAprovadas = useAppSelector(s => s.coletas.coletasAprovadas)
     const loading = useAppSelector(s => s.coletas.loadingColetasAprovadas)
     const { requestColeta } = useAppSelector(s => s.requestColetas)
@@ -29,6 +30,9 @@ const ColetasList: React.FC = () => {
     const isFocused = useIsFocused()
 
     const SHOW_LOADING = requestColeta.loading
+    const SHOW_DATA = !SHOW_LOADING && !!coletas
+    const SHOW_COLETAS = SHOW_DATA && coletas.length > 0
+    const SHOW_NO_COLETAS = SHOW_DATA && coletas.length === 0
 
     const handleAceitarColetas = async () => {
         dispatch(setloadingColetasAprovadas(true))
@@ -67,34 +71,39 @@ const ColetasList: React.FC = () => {
             <Render
                 statusBarOptions={{
                     barStyle: SHOW_LOADING ? 'dark-content' : 'light-content',
-                    backgroundColor: SHOW_LOADING ? '#fff' : themes.colors.primary,
+                    backgroundColor: SHOW_LOADING ? '#F5F5F5' : themes.colors.primary,
                 }}
                 align = {SHOW_LOADING ? 'center' : 'flex-start'}
                 onRefresh={async () => !SHOW_LOADING && await getColetas(dispatch, userData!.idUser)}
             >
                 {SHOW_LOADING && <Loader />}
-                {!SHOW_LOADING && (
+                {SHOW_DATA && (
                     <>
                         <Header title="Novas coletas" />
-                        {coletas.coletas.length > 0 && <ColetasSelect />}
-                        <Section>
-                            {coletas.coletas?.map((coleta, index) => (
-                                <ColetasBox
-                                    key={index}
-                                    selected={!!coletasAprovadas.find(c => c.idLista === coleta.idLista)}
-                                    id={coleta.idLista}
-                                    cliente={coleta.nomeCliente}
-                                    coleta={coleta}
-                                    quantidade={coleta.qtdeVolumes}
-                                    logradouro={coleta.logradouro}
-                                    numero={coleta.numero}
-                                    bairro={coleta.bairro}
-                                    cidade={coleta.cidade}
-                                    uf={coleta.uf}
-                                    cep={coleta.cep}
-                                />
-                            ))}
-                        </Section>
+                        {SHOW_COLETAS && (
+                            <>
+                                <ColetasSelect />
+                                <Section>
+                                    {coletas.map((coleta, index) => (
+                                        <ColetasBox
+                                            key={index}
+                                            selected={!!coletasAprovadas.find(c => c.idLista === coleta.idLista)}
+                                            id={coleta.idLista}
+                                            cliente={coleta.nomeCliente}
+                                            coleta={coleta}
+                                            quantidade={coleta.qtdeVolumes}
+                                            logradouro={coleta.logradouro}
+                                            numero={coleta.numero}
+                                            bairro={coleta.bairro}
+                                            cidade={coleta.cidade}
+                                            uf={coleta.uf}
+                                            cep={coleta.cep}
+                                        />
+                                    ))}
+                                </Section>
+                            </>
+                        )}
+                        {SHOW_NO_COLETAS && <NoData emoji = "confused" message = {['Nenhuma coleta encontrada!']} />}
                         {coletasAprovadas.length > 0 && (
                             <View style={{
                                 position: 'absolute',
