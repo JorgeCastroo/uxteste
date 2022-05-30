@@ -4270,7 +4270,7 @@ internal-slot@^1.0.3:
     has "^1.0.3"
     side-channel "^1.0.4"
 
-invariant@*, invariant@^2.2.4:
+invariant@*, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -6559,6 +6559,13 @@ react-native-mask-input@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-mask-input/-/react-native-mask-input-1.2.0.tgz#08da62742b34697d1e42d086fb4640951caea5a2"
   integrity sha512-0bLJ9Szlly4tt59RrbLBS5TSJAGVoH22Hpka85HQ3q4qy10AH+UkcDkozXEonSY5oJK6sobnmzKQ4px5+mkCWg==
+
+react-native-onesignal@^4.3.10:
+  version "4.3.10"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-4.3.10.tgz#3db2dbcd0862f885717e65726e90d4c6bbbc6145"
+  integrity sha512-rAwRO3kyADAJ3rZo6cSG3dyF8FMLP8rxDJTquaMMo5SBJ1D9O0O/UMou86BH1+bqoLsPTVr2fnAqFv+NiMXILA==
+  dependencies:
+    invariant "^2.2.2"
 
 react-native-paper@^4.12.1:
   version "4.12.1"

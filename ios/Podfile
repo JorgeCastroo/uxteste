@@ -19,6 +19,8 @@ target 'UxFirstMile' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
   target 'UxFirstMileTests' do
     inherit! :complete
     # Pods for testing
