@@ -8,11 +8,14 @@ import themes from '../../../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
 import Container from '../../../../../../components/Container'
 import Section from '../../../../../../components/Screen/Section'
+import FormError from '../../../../../../components/Form/Error'
 
 const Loader: React.FC <LoaderProps> = ({ percent }) => {
 
     const dispatch = useAppDispatch()
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
+    const { requestGetLista } = useAppSelector(s => s.requestLista)
     const [animationValue] = useState(new Animated.Value(0))
     const animationDuration = 3000
 
@@ -46,6 +49,16 @@ const Loader: React.FC <LoaderProps> = ({ percent }) => {
                     </Animated.View>
                 </S.LoadingBarContainer> 
             </Container>
+            <FormError
+                visible = {requestGetLista.error}
+                message = {requestGetLista.message}
+                marginBottom = {20}
+            />
+            <FormError
+                visible = {requestGetRoteirizacao.error}
+                message = {requestGetRoteirizacao.message}
+                marginBottom = {20}
+            />
             {!!roteirizacao && (
                 <>
                     <Container type = "row" padding = {false} center>

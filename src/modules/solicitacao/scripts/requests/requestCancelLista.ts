@@ -14,6 +14,7 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
         const body = {
             idTransportadora: 18,
             idMotorista,
+            idLista,
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 

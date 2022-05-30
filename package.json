@@ -21,6 +21,7 @@
     "@react-navigation/stack": "^6.2.1",
     "@reduxjs/toolkit": "^1.8.1",
     "@types/crypto-js": "^4.1.1",
+    "add": "^2.0.6",
     "beautiful-react-hooks": "^1.2.0",
     "crypto-js": "^4.1.1",
     "formik": "^2.2.9",
@@ -45,6 +46,7 @@
     "react-native-reanimated": "^2.8.0",
     "react-native-safe-area-context": "^4.2.5",
     "react-native-screens": "^3.13.1",
+    "react-native-snackbar": "^2.4.0",
     "react-native-sound": "^0.11.2",
     "react-native-svg": "^12.3.0",
     "react-native-svg-transformer": "^1.0.0",
@@ -57,6 +59,7 @@
     "socket.io-client": "^4.5.1",
     "styled-components": "^5.3.5",
     "typeorm": "^0.3.6",
+    "yarn": "^1.22.18",
     "yup": "^0.32.11"
   },
   "devDependencies": {

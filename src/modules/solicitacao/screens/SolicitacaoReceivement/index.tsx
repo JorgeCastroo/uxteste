@@ -77,7 +77,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             </S.Box>
                         </Section>
                         <Section marginTop = {40}>
-                            {currentSolicitacao.situacao === idStatusLista['APROVADO'] && (
+                            {[2, 6].includes(currentSolicitacao.situacao) && (
                                 <Button
                                     label = "Iniciar Recebimento"
                                     marginHorizontal

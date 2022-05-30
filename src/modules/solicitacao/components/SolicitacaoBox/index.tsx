@@ -1,6 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { List, Text } from 'react-native-paper'
+import Snackbar from 'react-native-snackbar'
 import Clipboard from '@react-native-community/clipboard'
 import { BoxContentProps, SolicitacaoBoxProps } from './types'
 import { Lista } from '../../interfaces/Lista'
@@ -13,6 +14,19 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
 
     const enderecoCompleto = getFullAddress(lista)
     const status = getStatus(lista.situacao)
+
+    const handleCopyAddress = () => {
+        Clipboard.setString(enderecoCompleto)
+        Snackbar.show({
+            text: 'Endereço copiado',
+            duration: Snackbar.LENGTH_SHORT,
+            fontFamily: 'Roboto-Regular',
+            action: {
+                text: 'Ok',
+                onPress: () => {},
+            },
+        })
+    }
 
     return (
 
@@ -34,7 +48,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
                 title = "Endereço"
                 description = {enderecoCompleto}
                 left = {props => <List.Icon {...props} icon = "map-marker" color = {status.theme.primary} />}
-                onPress = {() => Clipboard.setString(enderecoCompleto)}
+                onPress = {handleCopyAddress}
             />
             <S.StatusContainer theme = {status.theme.tertiary}>
                 <Text style = {{color: status.theme.primary, fontSize: 18, fontWeight: 'bold'}}>{status.label.toUpperCase()}</Text>

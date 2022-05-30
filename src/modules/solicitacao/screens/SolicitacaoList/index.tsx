@@ -84,7 +84,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                             ))} 
 
                             {SHOW_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhuma lista aberta!']} />}
-                            {SHOW_LISTA_DATA && orderLista(lista, roteirizacao).filter(f => [1, 2, 3].includes(f.situacao)).map((item, index) => (
+                            {SHOW_LISTA_DATA && orderLista(lista, roteirizacao).filter(f => [1, 2, 3, 6].includes(f.situacao)).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
