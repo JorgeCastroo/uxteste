@@ -52,16 +52,16 @@ const listaSlice = createSlice({
             state.currentPosition = action.payload
         },
 
-        updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
-            state.lista!.find(f => f.idLista === action.payload.idLista ?? state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload.status]
+        updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idRemetente?: number}>) => {
+            state.lista!.find(f => f.idRemetente === action.payload.idRemetente ?? state.currentSolicitacao!.idRemetente)!.situacao = idStatusLista[action.payload.status]
             if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
             
             state.lista = [...state.lista!]
         },
         updateVolume: (state, action: PayloadAction<string>) => {
-            const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
+            const volumeIndex = state.lista?.find(lista => lista.idRemetente === state.currentSolicitacao!.idRemetente)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
             
-            state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
+            state.lista!.find(f => f.idRemetente === state.currentSolicitacao!.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
             state.lista = [...state.lista!]
         },
 

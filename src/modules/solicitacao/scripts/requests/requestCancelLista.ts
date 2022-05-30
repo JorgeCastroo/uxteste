@@ -5,7 +5,7 @@ import { updateSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function cancelLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, motivoCancelamento: string){
+export default async function cancelLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, idRemetente: number, motivoCancelamento: string){
     try {
         dispatch(R.setRequestCancelListaLoading())
 
@@ -23,7 +23,7 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
             dispatch(R.setRequestCancelListaData(response))
             if(!response.flagErro){
                 if(!sync){
-                    dispatch(updateSituacao({status: 'FINALIZADO', idLista}))
+                    dispatch(updateSituacao({status: 'FINALIZADO', idRemetente}))
                     redirect()
                 }
                 return true

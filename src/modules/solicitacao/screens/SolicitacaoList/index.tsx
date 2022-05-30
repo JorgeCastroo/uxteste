@@ -65,7 +65,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} 
                 paddingBottom = {20} 
                 align = {SHOW_LOADING ? 'space-between' : undefined}
-                onRefresh = {async () => await localGetLista(dispatch)}
+                onRefresh = {() => localGetLista(dispatch)}
             >
                 <Header title = "Listas" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}

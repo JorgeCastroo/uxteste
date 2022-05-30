@@ -5,7 +5,7 @@ import { updateSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, listaVolumes: number[]){
+export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, idRemetente: number, listaVolumes: number[]){
     try {
         dispatch(R.setRequestSaveListaLoading())
 
@@ -22,7 +22,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
             dispatch(R.setRequestSaveListaData(response))
             if(!response.flagErro){
                 if(!sync){
-                    dispatch(updateSituacao({status: 'FINALIZADO', idLista}))
+                    dispatch(updateSituacao({status: 'FINALIZADO', idRemetente}))
                     redirect()
                 }
                 return true

@@ -2,12 +2,12 @@
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { ValueToSync } from "../../../sync/interfaces/ValueToSync"
 import { setSyncLoading } from "../../../sync/reducers/syncReducer"
-import saveLista from "../requests/requestSaveLista"
-import info from "../../../../utils/info"
-import storage from "../../../../utils/storage"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
 import getSyncStack from "../../../sync/scripts/getSyncStack"
+import info from "../../../../utils/info"
+import storage from "../../../../utils/storage"
 import startReceivingLista from "../requests/requestStartReceivingLista"
+import saveLista from "../requests/requestSaveLista"
 import cancelLista from "../requests/requestCancelLista"
 
 export async function syncValuesLista(){
@@ -23,12 +23,11 @@ export async function syncStartLista(dispatch: Function){
         dispatch(setSyncLoading(true))
 
         const storageKey = 'syncListaStart'
-        const localSyncListaStart = await storage.getItem<ValueToSync<{idLista: number, coords: Coordinates}>[]>(storageKey)
+        const localSyncListaStart = await storage.getItem<ValueToSync<{idLista: number, idRemetente: number, coords: Coordinates}>[]>(storageKey)
         
         if(!!localSyncListaStart && localSyncListaStart.length > 0){
-            info.data("localSyncListaStart", localSyncListaStart)
             localSyncListaStart.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
-                const response = await startReceivingLista(dispatch, () => {}, false, value.idLista, value.coords)
+                const response = await startReceivingLista(dispatch, () => {}, false, value.idLista, value.idRemetente, value.coords)
                 if(response) await updateSyncValue(storageKey, localSyncListaStart, value)
             })
         }else await storage.removeItem(storageKey)
@@ -44,12 +43,11 @@ export async function syncSaveLista(dispatch: Function, idMotorista: number){
         dispatch(setSyncLoading(true))
 
         const storageKey = 'syncListaSave'
-        const localSyncListaSave = await storage.getItem<ValueToSync<{idLista: number, volumes: number[]}>[]>(storageKey)
+        const localSyncListaSave = await storage.getItem<ValueToSync<{idLista: number, idRemetente: number, volumes: number[]}>[]>(storageKey)
 
         if(!!localSyncListaSave && localSyncListaSave.length > 0){
-            info.data("localSyncListaSave", localSyncListaSave)
             localSyncListaSave.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
-                const response = await saveLista(dispatch, () => {}, false, idMotorista, value.idLista, value.volumes)
+                const response = await saveLista(dispatch, () => {}, false, idMotorista, value.idLista, value.idRemetente, value.volumes)
                 if(response) await updateSyncValue(storageKey, localSyncListaSave, value)
             })
         }else await storage.removeItem(storageKey)
@@ -65,12 +63,11 @@ export async function syncCancelLista(dispatch: Function, idMotorista: number){
         dispatch(setSyncLoading(true))
 
         const storageKey = 'syncListaCancel'
-        const localSyncListaCancel = await storage.getItem<ValueToSync<{idLista: number, motivoCancelamento: string}>[]>(storageKey)
+        const localSyncListaCancel = await storage.getItem<ValueToSync<{idLista: number, idRemetente: number, motivoCancelamento: string}>[]>(storageKey)
 
         if(!!localSyncListaCancel && localSyncListaCancel.length > 0){
-            info.data("localSyncListaCancel", localSyncListaCancel)
             localSyncListaCancel.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
-                const response = await cancelLista(dispatch, () => {}, false, idMotorista, value.idLista, value.motivoCancelamento)
+                const response = await cancelLista(dispatch, () => {}, false, idMotorista, value.idLista, value.idRemetente, value.motivoCancelamento)
                 if(response) await updateSyncValue(storageKey, localSyncListaCancel, value)
             })
         }else await storage.removeItem(storageKey)

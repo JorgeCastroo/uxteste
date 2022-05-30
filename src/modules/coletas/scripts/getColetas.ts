@@ -5,7 +5,6 @@ import { setRequestColetasData, setRequestColetasLoading } from "../reducers/col
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
-import MOCK_USERDATA from "../../../mock/userData"
 
 export default async function getColetas(dispatch: Function, idMotorista: number) {
     try {
@@ -15,7 +14,6 @@ export default async function getColetas(dispatch: Function, idMotorista: number
         const authorization = 'basic uxAks0947sj@hj'
         const body = {
             idTransportadora: 18,
-            // idMotorista: MOCK_USERDATA.idUser,
             idMotorista,
             idStatusLista: 1,
         }

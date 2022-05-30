@@ -47,16 +47,32 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             () => navigation.navigate('solicitacaoList'),
             userData!.idUser,
             currentSolicitacao!.idLista,
-            findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
+            currentSolicitacao!.idRemetente,
+            findLista(lista!, currentSolicitacao!.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
         )
     }
 
     const handleCancel = () => {
-        cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!.idUser, currentSolicitacao!.idLista, motivoCancelamento)
+        cancel(
+            dispatch, 
+            !!network, 
+            () => navigation.navigate('solicitacaoList'), 
+            userData!.idUser, 
+            currentSolicitacao!.idLista, 
+            currentSolicitacao!.idRemetente, 
+            motivoCancelamento
+        )
     }
 
     const handleStart = () => {
-        start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, {latitude: location![0], longitude: location![1]})
+        start(
+            dispatch, 
+            !!network, 
+            handleNavigate, 
+            currentSolicitacao!.idLista, 
+            currentSolicitacao!.idRemetente,
+            {latitude: location![0], longitude: location![1]}
+        )
     }
 
     return(
@@ -72,12 +88,12 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                         <Section type = "row" marginTop = {8} between>
                             <S.Box style = {elevation.elevation2}>
                                 <Text style = {{color: '#333333', fontSize: 22}}>Recebidos</Text>
-                                <Text style = {{marginTop: 20, color: themes.status.success.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}</Text>
+                                <Text style = {{marginTop: 20, color: themes.status.success.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}</Text>
                             </S.Box>
                             <View style = {{marginRight: 20}} />
                             <S.Box style = {elevation.elevation2}>
                                 <Text style = {{color: '#333333', fontSize: 22}}>Pendentes</Text>
-                                <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}</Text>
+                                <Text style = {{marginTop: 20, color: themes.status.error.primary, fontSize: 32, fontWeight: 'bold'}}>{findLista(lista!, currentSolicitacao!.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}</Text>
                             </S.Box>
                         </Section>
                         <Section marginTop = {40}>
@@ -127,7 +143,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         loading = {requestSaveLista.loading || syncAddLoading}
                                         disabled = {requestSaveLista.loading || syncAddLoading}
                                         onPress = {() => {
-                                            const current = findLista(lista!, currentSolicitacao!.idLista)
+                                            const current = findLista(lista!, currentSolicitacao!.idRemetente)
                                             if(current.listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length !== current.qtdeVolumes){
                                                 Alert.alert('Atenção', 'Não é possível finalizar o recebimento da lista sem escanear todos os volumes!', [{ text: 'Ok' }])
                                             }else handleSend()

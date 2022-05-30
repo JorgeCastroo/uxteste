@@ -1,4 +1,5 @@
 export interface Lista {
+    idRemetente:          number;
     idLista:              number;
     idUsuario:            number;
     nomeCliente:          string;

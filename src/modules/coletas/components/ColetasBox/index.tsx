@@ -9,7 +9,7 @@ import { setColetasAprovadas, setColetasReprovadas } from '../../reducers/coleta
 import Container from '../../../../components/Container'
 import ColetaBoxSelect from './Select'
 
-const ColetasBox: React.FC <ColetaBoxProps> = ({ selected, id, coleta, cliente, quantidade, logradouro, numero, bairro, cidade, uf, cep }) => {
+const ColetasBox: React.FC <ColetaBoxProps> = ({ selected, coleta, cliente, quantidade, logradouro, numero, bairro, cidade, uf, cep }) => {
 
     const theme = themes.colors.tertiary
     const dispatch = useAppDispatch()
