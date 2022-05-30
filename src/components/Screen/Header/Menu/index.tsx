@@ -47,6 +47,11 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                     />
                 </>
             )}
+            <Menu.Item
+                icon = "information-outline"
+                title = "Sobre"
+                onPress = {() => handleOnPress(() => navigation.navigate('about'))}
+            />
             <Menu.Item 
                 icon = "logout" 
                 title = "Sair" 

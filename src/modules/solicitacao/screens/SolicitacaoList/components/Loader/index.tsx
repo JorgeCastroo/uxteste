@@ -14,7 +14,7 @@ const Loader: React.FC <LoaderProps> = ({ percent }) => {
     const dispatch = useAppDispatch()
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const [animationValue] = useState(new Animated.Value(0))
-    const animationDuration = 2000
+    const animationDuration = 3000
 
     const animatedStyle = {
         width: animationValue.interpolate({
