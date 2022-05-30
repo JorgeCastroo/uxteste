@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native-paper'
 import themes from '../../../../styles/themes'
 import { useAppSelector } from '../../../../redux/hooks'
@@ -10,14 +10,20 @@ import GroupInfo from '../../components/Group/Info'
 import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import dayMoment from '../../../../utils/dayMoment'
+import { initPushNotification } from '../../../pushNotification'
 
 const Home: React.FC = () => {
 
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    const idUser = useAppSelector(s => s.auth.userData!.idUser)
 
     const userName = userData?.nome ?? 'Usuário'
+    
+    useEffect(() => {
+        initPushNotification(idUser)
+    }, [])
 
     return(
 
