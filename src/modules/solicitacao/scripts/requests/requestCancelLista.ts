@@ -5,7 +5,7 @@ import { updateSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function cancelLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number){
+export default async function cancelLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, motivoCancelamento: string){
     try {
         dispatch(R.setRequestCancelListaLoading())
 
@@ -15,6 +15,7 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
             idTransportadora: 18,
             idMotorista,
             idLista,
+            motivoCancelamento,
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 

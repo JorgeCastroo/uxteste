@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Alert, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -19,6 +19,7 @@ import start from './scripts/start'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import findListaPosition from '../../scripts/findListaPosition'
 import cancel from './scripts/cancel'
+import Form from './components/Form'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -29,6 +30,9 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestStartReceivingLista, requestSaveLista, requestCancelLista } = useAppSelector(s => s.requestLista)
+
+    const [openForm, setOpenForm] = useState(false)
+    const [motivoCancelamento, setMotivoCancelamento] = useState('')
 
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
@@ -48,7 +52,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     }
 
     const handleCancel = () => {
-        cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!.idUser, currentSolicitacao!.idLista)
+        cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!.idUser, currentSolicitacao!.idLista, motivoCancelamento)
     }
 
     const handleStart = () => {
@@ -77,7 +81,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             </S.Box>
                         </Section>
                         <Section marginTop = {40}>
-                            {[2, 6].includes(currentSolicitacao.situacao) && (
+                            {[2].includes(currentSolicitacao.situacao) && (
                                 <Button
                                     label = "Iniciar Recebimento"
                                     marginHorizontal
@@ -92,7 +96,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     }}
                                 />
                             )}
-                            {currentSolicitacao.situacao === idStatusLista['COLETANDO'] && (
+                            {[3].includes(currentSolicitacao.situacao) && (
                                 <Button
                                     label = "Receber"
                                     marginHorizontal
@@ -112,7 +116,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         onPress = {() => {
                                             Alert.alert('Atenção', 'Deseja cancelar o recebimento da lista?', [
                                                 { text: 'Cancelar', style: 'cancel' },
-                                                { text: 'Sim', onPress: () => handleCancel() }
+                                                { text: 'Sim', onPress: () => setOpenForm(true) }
                                             ])
                                         }}
                                     />
@@ -135,6 +139,13 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                     </>
                 )}
             </Render>
+            <Form 
+                open = {openForm} 
+                setOpen = {setOpenForm} 
+                motivo = {motivoCancelamento} 
+                setMotivo = {setMotivoCancelamento} 
+                onSubmit = {handleCancel}
+            />
         </>
 
     )
