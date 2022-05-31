@@ -2,6 +2,7 @@ import styled from 'styled-components/native'
 
 export const PopupContainer = styled.View`
     width: 100%;
+    padding: ${props => props.pad ? props.pad : '0px'};
     border-radius: 20px;
     background-color: #FFF;
 `

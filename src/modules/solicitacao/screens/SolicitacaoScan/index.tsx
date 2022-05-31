@@ -14,6 +14,7 @@ import Header from './components/Header'
 import Control from './components/Control'
 import info from '../../../../utils/info'
 import sleep from '../../../../utils/sleep'
+import { updateVolume } from '../../reducers/lista/listaReducer'
 //@ts-ignore
 import BeepSuccessAudio from '../../../../assets/audio/beep_success.mp3'
 //@ts-ignore
@@ -39,14 +40,15 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
-    const { currentVolumes } = useAppSelector(s => s.lista)
+    const { currentVolumes, currentSolicitacao } = useAppSelector(s => s.lista)
     const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoScan)
 
-    const handleScan = useCallback(async (code: string, scanned: string[]) => {
+    const handleScan = useCallback(async (code: string, scanList: string[]) => {
         dispatch(setScanning(true))
         if(currentVolumes!.map(item => item.etiqueta).includes(code)){
-            if(!scanned.includes(code)){
+            if(!scanList.includes(code)){
                 dispatch(addScannedSolicitacao(code))
+                 dispatch(updateVolume(code))
                 beepSuccess.play()
                 showMessage({
                     message: 'Código lido com sucesso!',

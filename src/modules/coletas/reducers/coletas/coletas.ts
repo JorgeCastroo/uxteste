@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Lista } from "../../../solicitacao/interfaces/Lista";
-import { Coletas } from "../../types/coletas";
 interface State {
     coletas: Lista[],
     loadingColetasAprovadas: boolean,
@@ -33,7 +32,7 @@ const coletasSlice = createSlice({
     name: "coletas",
     initialState,
     reducers: {
-        setColetas: (state, action: PayloadAction<any>) => {
+        setColetas: (state, action: PayloadAction<Lista[]>) => {
             state.coletas = action.payload
         },
         setloadingColetasAprovadas: (state, action: PayloadAction<any>) => {
@@ -42,29 +41,25 @@ const coletasSlice = createSlice({
         setResetColetasAprovadas: (state) => {
             state.coletasAprovadas = []
         },
-        setColetasAprovadas: (state, action: PayloadAction<any>) => {
-            if (!state.coletasReprovadas.some(item => item.idRemetente === action.payload.idRemetente) && !state.coletasAprovadas.some(item => item.idRemetente === action.payload.idRemetente)) {
-                state.coletasAprovadas.push(action.payload)
-            } else if (state.coletasReprovadas.some(item => item.idRemetente === action.payload.idRemetente)) {
-                const index = state.coletasReprovadas.findIndex(id => id.idRemetente === action.payload.idRemetente)
-                state.coletasReprovadas.splice(index, 1)
+
+        setColetasAprovadas: (state, action: PayloadAction<Lista>) => {
+            if(!state.coletasAprovadas.some(item => item.idRemetente === action.payload.idRemetente)){
+                if(state.coletasReprovadas.some(item => item.idRemetente === action.payload.idRemetente)) state.coletasReprovadas.splice(state.coletasReprovadas.findIndex(id => id.idRemetente === action.payload.idRemetente), 1)
                 state.coletasAprovadas.push(action.payload)
             }
         },
-        setColetasReprovadas: (state, action: PayloadAction<any>) => {
-            if (!state.coletasAprovadas.some(item => item.idRemetente === action.payload.idRemetente) && !state.coletasReprovadas.some(item => item.idRemetente === action.payload.idRemetente)) {
-                state.coletasReprovadas.push(action.payload)
-            } else if (state.coletasAprovadas.some(item => item.idRemetente === action.payload.idRemetente)) {
-                const index = state.coletasAprovadas.findIndex(id => id.idRemetente === action.payload.idRemetente)
-                state.coletasAprovadas.splice(index, 1)
+        setColetasReprovadas: (state, action: PayloadAction<Lista>) => {
+            if(!state.coletasReprovadas.some(item => item.idRemetente === action.payload.idRemetente)){
+                if(state.coletasAprovadas.some(item => item.idRemetente === action.payload.idRemetente)) state.coletasAprovadas.splice(state.coletasAprovadas.findIndex(id => id.idRemetente === action.payload.idRemetente), 1)
                 state.coletasReprovadas.push(action.payload)
             }
         },
-        setAcceptAllColetas: (state, action: PayloadAction<any>) => {
+
+        setAcceptAllColetas: (state, action: PayloadAction<Lista[]>) => {
             state.coletasAprovadas = action.payload
             state.coletasReprovadas = []
         },
-        setRemoveAllColetas: (state, action: PayloadAction<any>) => {
+        setRemoveAllColetas: (state, action: PayloadAction<Lista[]>) => {
             state.coletasReprovadas = action.payload
             state.coletasAprovadas = []
         },

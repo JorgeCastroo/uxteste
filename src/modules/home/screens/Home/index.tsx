@@ -9,6 +9,7 @@ import TopBox from '../../components/TopBox'
 import GroupInfo from '../../components/Group/Info'
 import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
+import Container from '../../../../components/Container'
 import dayMoment from '../../../../utils/dayMoment'
 import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
@@ -35,20 +36,22 @@ const Home: React.FC = () => {
     return(
 
         <>
-            <Render statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }} paddingBottom = {20}>
-                <HomeHeader />
-                <TopBox />
-                <Section marginTop = {30} marginBottom = {20}>
-                    <Text style = {{color: '#333333', fontSize: 18}}>{dayMoment()}</Text>
-                    <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userName}</Text>
-                </Section>
-                <HomeMessage />
-                {SHOW_DATA && (
-                    <>
-                        <GroupInfo />
-                        <GroupStatus />
-                    </>
-                )}
+            <Render statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }} align = "space-between" paddingBottom = {24}>
+                <Container padding = {false}>
+                    <HomeHeader />
+                    <TopBox />
+                    <Section marginTop = {30} marginBottom = {20}>
+                        <Text style = {{color: '#333333', fontSize: 18}}>{dayMoment()}</Text>
+                        <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userName}</Text>
+                    </Section>
+                    <HomeMessage />
+                    {SHOW_DATA && (
+                        <>
+                            <GroupInfo />
+                            <GroupStatus />
+                        </>
+                    )}
+                </Container>
                 <AppVersion />
             </Render>
         </>

@@ -1,7 +1,6 @@
 
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { ValueToSync } from "../../../sync/interfaces/ValueToSync"
-import { setSyncLoading } from "../../../sync/reducers/syncReducer"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
 import getSyncStack from "../../../sync/scripts/getSyncStack"
 import info from "../../../../utils/info"
@@ -20,8 +19,6 @@ export async function syncValuesLista(){
 
 export async function syncStartLista(dispatch: Function){
     try {
-        dispatch(setSyncLoading(true))
-
         const storageKey = 'syncListaStart'
         const localSyncListaStart = await storage.getItem<ValueToSync<{idLista: number, idRemetente: number, coords: Coordinates}>[]>(storageKey)
         
@@ -31,8 +28,6 @@ export async function syncStartLista(dispatch: Function){
                 if(response) await updateSyncValue(storageKey, localSyncListaStart, value)
             })
         }else await storage.removeItem(storageKey)
-        
-        dispatch(setSyncLoading(false))
     } catch (error) {
         info.error('syncStartLista',error)
     }
@@ -40,8 +35,6 @@ export async function syncStartLista(dispatch: Function){
 
 export async function syncSaveLista(dispatch: Function, idMotorista: number){
     try {
-        dispatch(setSyncLoading(true))
-
         const storageKey = 'syncListaSave'
         const localSyncListaSave = await storage.getItem<ValueToSync<{idLista: number, idRemetente: number, volumes: number[]}>[]>(storageKey)
 
@@ -51,8 +44,6 @@ export async function syncSaveLista(dispatch: Function, idMotorista: number){
                 if(response) await updateSyncValue(storageKey, localSyncListaSave, value)
             })
         }else await storage.removeItem(storageKey)
-
-        dispatch(setSyncLoading(false))
     } catch (error) {
         info.error('syncSaveLista',error)
     }
@@ -60,8 +51,6 @@ export async function syncSaveLista(dispatch: Function, idMotorista: number){
 
 export async function syncCancelLista(dispatch: Function, idMotorista: number){
     try {
-        dispatch(setSyncLoading(true))
-
         const storageKey = 'syncListaCancel'
         const localSyncListaCancel = await storage.getItem<ValueToSync<{idLista: number, idRemetente: number, motivoCancelamento: string}>[]>(storageKey)
 
@@ -71,8 +60,6 @@ export async function syncCancelLista(dispatch: Function, idMotorista: number){
                 if(response) await updateSyncValue(storageKey, localSyncListaCancel, value)
             })
         }else await storage.removeItem(storageKey)
-
-        dispatch(setSyncLoading(false))
     } catch (error) {
         info.error('syncCancelLista',error)
     }

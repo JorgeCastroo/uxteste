@@ -8,19 +8,17 @@ import { setAcceptAllColetas, setRemoveAllColetas } from '../../reducers/coletas
 
 const ColetasSelect: React.FC = () => {
 
-    const [selectAll, setSelectAll] = React.useState('0')
+    const [selectAll, setSelectAll] = React.useState('2')
     const coletas = useAppSelector(s => s.coletas.coletas)
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (selectAll === '0') {
-            dispatch(setRemoveAllColetas(coletas))
-        } else {
-            dispatch(setAcceptAllColetas(coletas))
+        if(selectAll !== '2'){
+            if (selectAll === '0') dispatch(setRemoveAllColetas(coletas))
+            else dispatch(setAcceptAllColetas(coletas))
         }
     }, [selectAll])
-
 
     return (
 

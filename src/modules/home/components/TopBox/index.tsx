@@ -14,7 +14,7 @@ const TopBox: React.FC = () => {
     const { lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
 
-    const MESSAGE = (!!lista && !!roteirizacao) ? orderLista(lista, roteirizacao).find(f => f.situacao !== idStatusLista['FINALIZADO'])?.logradouro ?? 'Sem destinatário' : 'Sem rota'
+    const MESSAGE = !!lista && !!roteirizacao ? orderLista(lista, roteirizacao).find(f => f.situacao !== idStatusLista['FINALIZADO'])?.logradouro ?? 'Sem destinatário' : 'Sem rota'
 
     return(
 

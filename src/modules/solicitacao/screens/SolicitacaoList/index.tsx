@@ -32,6 +32,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
 
     const SHOW_LOADING = loadingNewLista
     const SHOW_LISTA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
+    const SHOW_NO_LISTA = !lista && !roteirizacao
 
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
     const SHOW_FILTERED_LISTA_NO_DATA = !SHOW_LOADING && !!filteredLista && filteredLista.length === 0
@@ -53,7 +54,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
             if(lista && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length === 0){
                 const syncStatus = await syncValuesLista()
                 setAllIsSync(!syncStatus)
-                if(!syncStatus) await closeLista(dispatch)
+                if(!syncStatus) closeLista(dispatch)
             }
         })()
     }, [lista])
@@ -69,6 +70,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
             >
                 <Header title = "Listas" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
+                {SHOW_NO_LISTA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
                 {SHOW_LISTA && (
                     <>
                         {lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length > 0 && <SolicitacaoListSearchbar />}

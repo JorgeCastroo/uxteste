@@ -87,7 +87,7 @@ const ColetasList: React.FC = () => {
                                     {coletas.map((coleta, index) => (
                                         <ColetasBox
                                             key={index}
-                                            selected={!!coletasAprovadas.find(c => c.idLista === coleta.idLista)}
+                                            selected={!!coletasAprovadas.find(f => f.idRemetente === coleta.idRemetente)}
                                             id={coleta.idLista}
                                             cliente={coleta.nomeCliente}
                                             coleta={coleta}

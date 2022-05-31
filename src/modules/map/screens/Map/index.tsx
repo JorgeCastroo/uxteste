@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { FAB, Text } from 'react-native-paper'
 import { useIsFocused } from '@react-navigation/native'
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 //@ts-ignore
 import Geojson from 'react-native-geojson'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -20,6 +21,8 @@ import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
 import getStatus from '../../../solicitacao/scripts/getStatus'
 import { setCurrentSolicitacao, setCurrentVolumes } from '../../../solicitacao/reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../../solicitacao/reducers/solicitacaoScan/solicitacaoScanReducer'
+import { elevation } from '../../../../styles/layout'
+import MapPopup from '../../components/Popup'
 
 const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }) => {
 
@@ -48,7 +51,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
     return(
 
         <>
-            <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {0}>
+            <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {56}>
                 <Header title = "Destinatários" goBack = {false} />
                 <MapView
                     ref = {mapRef}
@@ -65,16 +68,21 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                     {SHOW_DATA && (
                         <>
                             <Geojson geojson = {route} strokeColor = {themes.colors.primary} strokeWidth = {3} />
-                            <Marker pinColor = "orange" coordinate = {startCoords!}>
-                                <Callout>
-                                    <Text>Início</Text>
-                                </Callout>
+
+                            <Marker pinColor = {themes.colors.primary} coordinate = {startCoords!}>
+                                <MapMarker theme = {{ primary: 'green', secondary: '', tertiary: '#fff' }}>
+                                    <MaterialCommunityIcons name = "crosshairs-gps" size = {14} color = 'green' />
+                                </MapMarker>
+                                <MapPopup text = "Início do trajeto" />
                             </Marker>
-                            <Marker pinColor = "orange" coordinate = {endCoords!}>
-                                <Callout>
-                                    <Text>Fim</Text>
-                                </Callout>
+
+                            <Marker pinColor = {themes.colors.primary} coordinate = {endCoords!}>
+                                <MapMarker theme = {{ primary: '#000', secondary: '', tertiary: '#fff' }}>
+                                    <MaterialCommunityIcons name = "flag-checkered" size = {18} color = '#000' />
+                                </MapMarker>
+                                <MapPopup text = "Fim do trajeto" />
                             </Marker>
+
                             {lista.map((item, index) => {
                                 const statusLista = getStatus(item.situacao)
                                 return(
@@ -87,7 +95,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                                             <Text style = {{ color: '#333' }}>{index + 1}</Text>
                                         </MapMarker>
                                         <Callout
-                                            style = {{ width: 260 }}
+                                            style = {[elevation.elevation4, { width: 260 }]}
                                             tooltip = {true}
                                             onPress = {() => {
                                                 dispatch(resetScannedSolicitacoes())

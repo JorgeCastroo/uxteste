@@ -1,5 +1,5 @@
 export const SHOW_LOG = {
-    REQUEST: false,
+    REQUEST: true,
     HEADER: false,
     BODY: true,
     RESPONSE: true,

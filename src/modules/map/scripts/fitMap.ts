@@ -4,7 +4,7 @@ import info from "../../../utils/info"
 
 export default function fitMap(mapRef: any, listas: Lista[], start: Coordinates, end: Coordinates){
     try {
-        const bounds = { top: 20, bottom: 20, left: 20, right: 20 }
+        const bounds = { top: 100, bottom: 100, left: 100, right: 100 }
         const markers: Coordinates[] = listas.map(item => {
             return {
                 latitude: Number(item.latitudeDestino),

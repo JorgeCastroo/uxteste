@@ -10,8 +10,8 @@ export default async function getRoteirizacao(dispatch: Function, body: Roteiriz
     try {
         dispatch(R.setRequestGetRoteirizacaoLoading())
 
-        const endpoint = ROTEIRIZACAO_ENDPOINT!
-        const authorization = ROTEIRIZACAO_KEY!
+        const endpoint = ROTEIRIZACAO_ENDPOINT
+        const authorization = ROTEIRIZACAO_KEY
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
         if(response){

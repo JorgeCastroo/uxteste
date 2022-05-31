@@ -7,10 +7,9 @@ import storage from "../../../utils/storage"
 
 export default async function setUserLogout(dispatch: Function, returnHome: () => void){
     try {
-        await closeLista(dispatch)
+        await storage.clear()
         await clearAllSyncStacks()
-        
-        await storage.removeItem('userData')
+        await closeLista(dispatch)
         
         closePushNotifications()
 
