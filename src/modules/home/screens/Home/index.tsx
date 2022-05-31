@@ -12,6 +12,7 @@ import HomeMessage from '../../components/Message'
 import dayMoment from '../../../../utils/dayMoment'
 import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
 import AppVersion from '../../../app/components/AppVersion'
+import { initPushNotification } from '../../../pushNotification'
 
 const Home: React.FC = () => {
 
@@ -19,8 +20,13 @@ const Home: React.FC = () => {
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    const idUser = useAppSelector(s => s.auth.userData!.idUser)
 
     const userName = userData?.nome ?? 'Usuário'
+    
+    useEffect(() => {
+        initPushNotification(idUser)
+    }, [])
 
     useEffect(() => {
         getBackgroundGeolocation(dispatch)

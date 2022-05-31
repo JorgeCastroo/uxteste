@@ -14,13 +14,13 @@ const App: React.FC = () => {
         'ViewPropTypes will be removed from React Native. Migrate to ViewPropTypes exported from \'deprecated-react-native-prop-types\'.',
     ])
 
-    return(
+    return (
 
         <NavigationProvider>
-            <ReduxProvider store = {store}>
-                <PaperProvider theme = {theme}>
+            <ReduxProvider store={store}>
+                <PaperProvider theme={theme}>
                     <Routes />
-                    <FlashMessage position = "top" />
+                    <FlashMessage position="top" />
                 </PaperProvider>
             </ReduxProvider>
         </NavigationProvider>
