@@ -1,8 +1,8 @@
 export const SHOW_LOG = {
-    REQUEST: true,
+    REQUEST: false,
     HEADER: false,
-    BODY: true,
-    RESPONSE: true,
+    BODY: false,
+    RESPONSE: false,
 }
 
 export const APP_VERSION = 'v0.0.1'
