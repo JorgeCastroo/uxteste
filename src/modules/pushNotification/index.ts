@@ -1,9 +1,10 @@
 import OneSignal from "react-native-onesignal";
+import { PUSH_NOTIFICATION_ID } from "@env";
 
 export const initPushNotification = (userId: number) => {
     
     OneSignal.setLogLevel(6, 0)
-    OneSignal.setAppId("81d839cf-0325-4a3b-8414-f3ac678e3939")
+    OneSignal.setAppId(`${PUSH_NOTIFICATION_ID}`)
     OneSignal.setExternalUserId(userId.toString())
     OneSignal.sendTag("user", userId.toString())
 
