@@ -1,9 +1,9 @@
 import { setAuthLogout } from "../reducers/authReducer"
 import clearAllSyncStacks from "../../sync/scripts/clearAllSyncStacks"
 import closeLista from "../../solicitacao/scripts/closeLista"
+import closePushNotifications from "../../app/scripts/pushNotification/closePushNotifications"
 import info from "../../../utils/info"
 import storage from "../../../utils/storage"
-import OneSignal from "react-native-onesignal"
 
 export default async function setUserLogout(dispatch: Function, returnHome: () => void){
     try {
@@ -11,12 +11,10 @@ export default async function setUserLogout(dispatch: Function, returnHome: () =
         await clearAllSyncStacks()
         
         await storage.removeItem('userData')
+        
+        closePushNotifications()
 
         dispatch(setAuthLogout())
-
-        OneSignal.deleteTag("user");
-        OneSignal.removeExternalUserId();
-        
         returnHome()
     } catch (error) {
         info.error('setLogout', error)

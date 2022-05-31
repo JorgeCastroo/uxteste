@@ -11,8 +11,8 @@ import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import dayMoment from '../../../../utils/dayMoment'
 import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
+import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
-import { initPushNotification } from '../../../pushNotification'
 
 const Home: React.FC = () => {
 
@@ -20,17 +20,17 @@ const Home: React.FC = () => {
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const idUser = useAppSelector(s => s.auth.userData!.idUser)
 
     const userName = userData?.nome ?? 'Usuário'
-    
-    useEffect(() => {
-        initPushNotification(idUser)
-    }, [])
+
+    const SHOW_DATA = !!lista && !!roteirizacao
 
     useEffect(() => {
-        getBackgroundGeolocation(dispatch)
-    }, [dispatch])
+        if(userData){
+            initPushNotification(userData.idUser)
+            getBackgroundGeolocation(dispatch)
+        }
+    }, [dispatch, userData])
 
     return(
 
@@ -43,9 +43,9 @@ const Home: React.FC = () => {
                     <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userName}</Text>
                 </Section>
                 <HomeMessage />
-                {!!lista && (
+                {SHOW_DATA && (
                     <>
-                        {!!roteirizacao && <GroupInfo />}
+                        <GroupInfo />
                         <GroupStatus />
                     </>
                 )}

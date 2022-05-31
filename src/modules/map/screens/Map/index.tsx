@@ -6,6 +6,7 @@ import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import Geojson from 'react-native-geojson'
 import { StackScreenProps } from '@react-navigation/stack'
 import { AppRoutesParams } from '../../../app/interfaces/AppRoutesParams'
+import * as S from './styles'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { setRenderMap } from '../../reducers/mapReducer'
@@ -17,6 +18,7 @@ import createRoute from '../../scripts/createRoute'
 import sleep from '../../../../utils/sleep'
 import fitMap from '../../scripts/fitMap'
 import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
+import getStatus from '../../../solicitacao/scripts/getStatus'
 
 const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }) => {
 
@@ -75,23 +77,17 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                             {lista.map((item, index) => (
                                 <Marker
                                     key = {index}
-                                    pinColor = "red"
+                                    pinColor = {getStatus(item.situacao).theme.primary}
                                     coordinate = {{
                                         latitude: Number(item.latitudeDestino),
                                         longitude: Number(item.longitudeDestino),
                                     }}
                                 >
-                                    <Callout
-                                        style = {{ width: 200 }}
-                                        onPress = {() => {
-                                            dispatch(resetScannedSolicitacoes())
-                                            dispatch(setCurrentSolicitacao(item))
-                                            dispatch(setCurrentVolumes(item.listaVolumes))
-                                            navigation.navigate('solicitacaoRoutes', { screen: 'solicitacaoReceivement' } as any)
-                                        }}
-                                    >
-                                        <Text>{getFullAddress(item)}</Text>
-                                    </Callout>
+                                    <S.MarkerWrapper>
+                                        <S.MarkerIndicator color = {getStatus(item.situacao).theme.primary}>
+                                            <Text style = {{color: '#fff', transform: [{ rotate: '-45deg' }]}}>{index + 1}</Text>
+                                        </S.MarkerIndicator>
+                                    </S.MarkerWrapper>
                                 </Marker>
                             ))}
                         </>
