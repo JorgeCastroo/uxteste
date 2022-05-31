@@ -1,12 +1,14 @@
 import styled from 'styled-components/native'
 
-export const PopupContainer = styled.View`
+export const ModalContainer = styled.View`
+    display: flex;
+    flex-direction: column;
     width: 100%;
     border-radius: 20px;
     background-color: #FFF;
 `
 
-export const PopupHeader = styled.View`
+export const ModalHeader = styled.View`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -18,9 +20,8 @@ export const PopupHeader = styled.View`
     background-color: ${props => props.theme};
 `
 
-export const PopupMain = styled.View`
+export const ModalMain = styled.View`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 12px;
 `

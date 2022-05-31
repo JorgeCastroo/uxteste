@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { FAB, Text } from 'react-native-paper'
 import { useIsFocused } from '@react-navigation/native'
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
@@ -10,15 +10,16 @@ import * as S from './styles'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { setRenderMap } from '../../reducers/mapReducer'
-import { resetScannedSolicitacoes } from '../../../solicitacao/reducers/solicitacaoScan/solicitacaoScanReducer'
-import { setCurrentSolicitacao, setCurrentVolumes } from '../../../solicitacao/reducers/lista/listaReducer'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
+import MapMarker from '../../../../components/Marker'
 import createRoute from '../../scripts/createRoute'
 import sleep from '../../../../utils/sleep'
 import fitMap from '../../scripts/fitMap'
 import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
 import getStatus from '../../../solicitacao/scripts/getStatus'
+import { setCurrentSolicitacao, setCurrentVolumes } from '../../../solicitacao/reducers/lista/listaReducer'
+import { resetScannedSolicitacoes } from '../../../solicitacao/reducers/solicitacaoScan/solicitacaoScanReducer'
 
 const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }) => {
 
@@ -74,32 +75,51 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                                     <Text>Fim</Text>
                                 </Callout>
                             </Marker>
-                            {lista.map((item, index) => (
-                                <Marker
-                                    key = {index}
-                                    pinColor = {getStatus(item.situacao).theme.primary}
-                                    coordinate = {{
-                                        latitude: Number(item.latitudeDestino),
-                                        longitude: Number(item.longitudeDestino),
-                                    }}
-                                >
-                                    <S.MarkerWrapper>
-                                        <S.MarkerIndicator color = {getStatus(item.situacao).theme.primary}>
-                                            <Text style = {{color: '#fff', transform: [{ rotate: '-45deg' }]}}>{index + 1}</Text>
-                                        </S.MarkerIndicator>
-                                    </S.MarkerWrapper>
-                                </Marker>
-                            ))}
+                            {lista.map((item, index) => {
+                                const statusLista = getStatus(item.situacao)
+                                return(
+                                    <Marker
+                                        key = {index}
+                                        pinColor = {statusLista.theme.primary}
+                                        coordinate = {{latitude: Number(item.latitudeDestino), longitude: Number(item.longitudeDestino)}}
+                                    >
+                                        <MapMarker theme = {statusLista.theme}>
+                                            <Text style = {{ color: '#333' }}>{index + 1}</Text>
+                                        </MapMarker>
+                                        <Callout
+                                            style = {{ width: 260 }}
+                                            tooltip = {true}
+                                            onPress = {() => {
+                                                dispatch(resetScannedSolicitacoes())
+                                                dispatch(setCurrentSolicitacao(item))
+                                                dispatch(setCurrentVolumes(item.listaVolumes))
+                                                navigation.navigate('solicitacaoRoutes', { screen: 'solicitacaoReceivement' } as any)
+                                            }}
+                                        >
+                                            <S.PopupContainer>
+                                                <S.PopupHeader theme = {statusLista.theme.primary}>
+                                                    <Text style = {{ color: '#fff', fontWeight: 'bold' }}>{statusLista.label.toUpperCase()}</Text>
+                                                </S.PopupHeader>
+                                                <S.PopupMain>
+                                                    <Text>{getFullAddress(item)}</Text>
+                                                </S.PopupMain>
+                                            </S.PopupContainer>
+                                        </Callout>
+                                    </Marker>
+                                )
+                            })}
                         </>
                     )}
                 </MapView>
                 {SHOW_DATA && isFocused && (
-                    <FAB
-                        icon = "map-marker-multiple"
-                        color = {themes.colors.primary}
-                        style = {{position: 'absolute', bottom: 20, right: 20, backgroundColor: '#fff'}}
-                        onPress = {() => fitMap(mapRef.current!, lista, startCoords!, endCoords!)}
-                    />
+                    <>
+                        <FAB
+                            icon = "map-marker-multiple"
+                            color = {themes.colors.primary}
+                            style = {{position: 'absolute', bottom: 20, right: 20, backgroundColor: '#fff'}}
+                            onPress = {() => fitMap(mapRef.current!, lista, startCoords!, endCoords!)}
+                        />
+                    </>
                 )}
             </Render>
         </>
