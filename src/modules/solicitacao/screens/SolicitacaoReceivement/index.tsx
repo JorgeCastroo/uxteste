@@ -20,6 +20,7 @@ import { idStatusLista } from '../../../../constants/idStatusLista'
 import findListaPosition from '../../scripts/findListaPosition'
 import cancel from './scripts/cancel'
 import Form from './components/Form'
+import SuccessModal from './components/SuccessModal'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -32,6 +33,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { requestStartReceivingLista, requestSaveLista, requestCancelLista } = useAppSelector(s => s.requestLista)
 
     const [openForm, setOpenForm] = useState(false)
+    const [openSuccessModal, setOpenSuccessModal] = useState(false)
     const [motivoCancelamento, setMotivoCancelamento] = useState('')
 
     const handleNavigate = () => {
@@ -45,7 +47,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             dispatch, 
             !!network, 
             () => navigation.navigate('solicitacaoList'),
-            userData!.idUser,
+            () => setOpenSuccessModal(true),
+            userData!.idUsuarioSistema,
             currentSolicitacao!.idLista,
             currentSolicitacao!.idRemetente,
             findLista(lista!, currentSolicitacao!.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
@@ -57,7 +60,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             dispatch, 
             !!network, 
             () => navigation.navigate('solicitacaoList'), 
-            userData!.idUser, 
+            userData!.idUsuarioSistema, 
             currentSolicitacao!.idLista, 
             currentSolicitacao!.idRemetente, 
             motivoCancelamento
@@ -144,7 +147,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         disabled = {requestSaveLista.loading || syncAddLoading}
                                         onPress = {() => {
                                             const current = findLista(lista!, currentSolicitacao!.idRemetente)
-                                            if(current.listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length !== current.qtdeVolumes){
+                                            console.log(current.listaVolumes.some(f => f.dtLeituraFirstMile.length > 1))
+                                            if(!current.listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
                                                 Alert.alert('Atenção', 'Não é possível finalizar o recebimento da lista sem escanear todos os volumes!', [{ text: 'Ok' }])
                                             }else handleSend()
                                         }}
@@ -162,6 +166,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 setMotivo = {setMotivoCancelamento} 
                 onSubmit = {handleCancel}
             />
+            <SuccessModal open = {openSuccessModal} setOpen = {setOpenSuccessModal} redirect = {() => navigation.navigate('solicitacaoList')} />
         </>
 
     )

@@ -9,6 +9,7 @@ import { ResponsePattern } from "../../../utils/response/types"
 export default async function getColetas(dispatch: Function, idMotorista: number) {
     try {
         dispatch(setRequestColetasLoading())
+        dispatch(setColetas([]))
 
         const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
         const authorization = 'basic uxAks0947sj@hj'

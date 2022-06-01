@@ -1,7 +1,8 @@
 export interface UserData {
-    idUser: number
-    nome: string
-    placa?: string
-    telefone?: string
-    veiculo?: string
+    idCondutor:       number;
+    idPerfil:         number;
+    idTransportadora: number;
+    idUsuarioSistema: number;
+    info:             null;
+    nomeUsuario:      string;
 }

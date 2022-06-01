@@ -22,13 +22,11 @@ const Home: React.FC = () => {
     const { lista } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
 
-    const userName = userData?.nome ?? 'Usuário'
-
     const SHOW_DATA = !!lista && !!roteirizacao
 
     useEffect(() => {
         if(userData){
-            initPushNotification(userData.idUser)
+            initPushNotification(userData.idUsuarioSistema)
             getBackgroundGeolocation(dispatch)
         }
     }, [dispatch, userData])
@@ -42,7 +40,7 @@ const Home: React.FC = () => {
                     <TopBox />
                     <Section marginTop = {30} marginBottom = {20}>
                         <Text style = {{color: '#333333', fontSize: 18}}>{dayMoment()}</Text>
-                        <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userName}</Text>
+                        <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userData?.nomeUsuario ?? 'Usuário'}</Text>
                     </Section>
                     <HomeMessage />
                     {SHOW_DATA && (

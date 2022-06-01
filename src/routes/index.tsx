@@ -39,7 +39,7 @@ const Routes: React.FC = () => {
     useEffect(() => {
         if(netInfo.isInternetReachable !== null && !!userData){
             dispatch(setAppNetwork(netInfo.isInternetReachable))
-            if(netInfo.isInternetReachable === true) syncAll(dispatch, userData.idUser)
+            if(netInfo.isInternetReachable === true) syncAll(dispatch, userData.idUsuarioSistema)
         }
     }, [netInfo.isInternetReachable, userData])
 

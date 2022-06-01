@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { PermissionsAndroid } from 'react-native'
+import { PermissionsAndroid, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import { PERMISSIONS, request } from 'react-native-permissions'
 import AutoHeightImage from 'react-native-auto-height-image'
@@ -21,27 +21,16 @@ const AuthLogin: React.FC = () => {
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     {
                         title: "Permissão de localização",
-                        message: "O app First Mile coleta dados de local para ativar o recurso de cálculo de distância e rastreamento do motorista pela empresa, mesmo quando o app está fechado ou não está em uso.",
+                        message: "O app UX First Mile coleta dados de local para ativar o recurso de cálculo de distância e rastreamento do motorista pela empresa",
                         buttonNegative: "Cancelar",
                         buttonPositive: "OK"
                     }
                 )
-                granted === PermissionsAndroid.RESULTS.GRANTED ? requestAlways() : setBlocked(true)
+                if(granted === PermissionsAndroid.RESULTS.GRANTED) setBlocked(false)
+                else setBlocked(true)
             } catch (error) { 
                 info.error('locationPermission',error)
             }
-        }
-    }, [])
-
-    const requestAlways = useCallback(async () => {
-        try {
-            const result = await request(PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION)
-            if (result === 'denied'){
-                locationPermission(true)
-                setBlocked(true) 
-            }else if (result === 'blocked') setBlocked(true)
-        } catch (error) {
-            info.error('requestAlways',error)
         }
     }, [])
 
@@ -56,16 +45,24 @@ const AuthLogin: React.FC = () => {
                 statusBarOptions = {{ barStyle: 'dark-content', backgroundColor: '#fff' }} 
                 wrapperColor = '#fff'
                 paddingBottom = {20}
+                align = "space-between"
             >
-                <Section marginTop = {60} marginBottom = {110} center>
+                <Section marginTop = {20} marginBottom = {40} center>
                     <AutoHeightImage
-                        source = { require('../../../../assets/images/logo2.png') }
-                        width = {240}
+                        source = { require('../../../../assets/images/logo4.png') }
+                        width = {200}
                     />
                 </Section>
                 {blocked && (
-                    <Section center>
-                        <Text style = {{color: '#333333', fontSize: 20, textAlign: 'center'}}>Você tem que permitir a localização o tempo todo para usar o app!</Text>
+                    <Section padding = {false}>
+                        <Section center>
+                            <Text style = {{color: '#333333', fontSize: 20, textAlign: 'center'}}>Você tem que permitir a localização o tempo todo para usar o app!</Text>
+                        </Section>
+                        <Section marginTop = {20} center>
+                            <TouchableOpacity onPress = {() => locationPermission(true)}>
+                                <Text style = {{color: '#333333', fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>Permitir</Text>
+                            </TouchableOpacity>
+                        </Section>
                     </Section>
                 )}
                 {!blocked && <Form />}

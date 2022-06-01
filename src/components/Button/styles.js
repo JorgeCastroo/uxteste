@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native"
 
 export const buttonStyles = StyleSheet.create({
     gradient: {
+        paddingHorizontal: 12,
         borderRadius: 8,
         shadowColor: '#5F5F5F',
         elevation: 5,

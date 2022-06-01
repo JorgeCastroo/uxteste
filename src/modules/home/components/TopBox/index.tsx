@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Text } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import * as S from './styles'
