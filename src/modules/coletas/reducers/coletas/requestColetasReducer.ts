@@ -13,7 +13,7 @@ interface State {
 
 const initialState: State = {
     requestColeta: {
-        loading: true,
+        loading: false,
         loadingColetasAceitas: false,
         data: null,
         erro: null,
@@ -34,6 +34,11 @@ const requestColetas = createSlice({
             state.requestColeta.loading = true
             state.requestColeta.erro = false
         },
+        setRequestColetasErro: (state) => {
+            state.requestColeta.loading = false
+            state.requestColeta.erro = true
+        },
+        
         setRequestColetasAceitasData: (state, action: PayloadAction<any>) => {
             state.requestColeta.coletasAceitasData = action.payload
             state.requestColeta.loadingColetasAceitas = false
@@ -44,5 +49,5 @@ const requestColetas = createSlice({
     }
 })
 
-export const { setRequestColetasData, setRequestColetasLoading, setRequestColetasAceitasData, setRequestAcceptColetasLoading } = requestColetas.actions
+export const { setRequestColetasData, setRequestColetasLoading, setRequestColetasAceitasData, setRequestAcceptColetasLoading, setRequestColetasErro } = requestColetas.actions
 export default requestColetas.reducer

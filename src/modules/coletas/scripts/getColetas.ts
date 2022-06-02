@@ -1,15 +1,16 @@
 import { TRUX_HML_ENDPOINT } from "@env"
 import { setColetas } from "../reducers/coletas/coletas"
 import { Lista } from "../../solicitacao/interfaces/Lista"
-import { setRequestColetasData, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
+import { setRequestColetasData, setRequestColetasErro, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
+import MOCK_LISTA from "../../../mock/lista"
 
 export default async function getColetas(dispatch: Function, idMotorista: number) {
     try {
         dispatch(setRequestColetasLoading())
-        dispatch(setColetas([]))
+        dispatch(setColetas(null))
 
         const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
         const authorization = 'basic uxAks0947sj@hj'
@@ -27,5 +28,6 @@ export default async function getColetas(dispatch: Function, idMotorista: number
         } else throw new Error('Erro na requisição')
     } catch (error: any) {
         info.error('getColetas', error)
+        dispatch(setRequestColetasErro())
     }
 }

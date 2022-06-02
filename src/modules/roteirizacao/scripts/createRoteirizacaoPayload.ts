@@ -18,7 +18,7 @@ export default async function createRoteirizacaoPayload(dispatch: Function, list
     const adresses: RoteirizacaoPayload['adresses'] = listas.map(lista => {
         return {
             description: lista.nomeCliente,
-            id: lista.idRemetente,
+            id: lista.idLista,
             location: {
                 latitude: Number(lista.latitudeDestino),
                 longitude: Number(lista.longitudeDestino),

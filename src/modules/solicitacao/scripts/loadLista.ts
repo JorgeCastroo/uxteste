@@ -15,7 +15,7 @@ export default async function loadLista(dispatch: Function, idMotorista: number,
         if(!!reponseLista){
             let newListas: Lista[] = []
 
-            if(oldListas) newListas = [...reponseLista.filter(f => !oldListas.map(item => item.idRemetente).includes(f.idRemetente)), ...oldListas]
+            if(oldListas) newListas = [...reponseLista.filter(f => !oldListas.map(item => item.idLista).includes(f.idLista)), ...oldListas]
             else newListas = reponseLista
 
             const roteirizacaoPayload = await createRoteirizacaoPayload(dispatch, newListas, coords)

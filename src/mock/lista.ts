@@ -1,7 +1,6 @@
 const MOCK_LISTA = [
     {
         "idLista": 333025,
-        "idRemetente": 123,
         "idUsuario": 1,
         "nomeCliente": "ESTRELA10",
         "nomeResponsavel": "ESTRELA10",
@@ -42,7 +41,6 @@ const MOCK_LISTA = [
     },
     {
         "idLista": 333026,
-        "idRemetente": 321,
         "idUsuario": 1,
         "nomeCliente": "ESTRELA10",
         "nomeResponsavel": "ESTRELA10",

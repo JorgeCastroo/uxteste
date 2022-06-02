@@ -4,12 +4,12 @@ import createValueToSync from "../../../../sync/scripts/createValueToSync"
 import cancelLista from "../../../scripts/requests/requestCancelLista"
 import info from "../../../../../utils/info"
 
-export default async function cancel(dispatch: Function, network: boolean, redirect: () => void, idMotorista: number, idLista: number, idRemetente: number, motivoCancelamento: string){
+export default async function cancel(dispatch: Function, network: boolean, redirect: () => void, idMotorista: number, idLista: number, motivoCancelamento: string){
     try {
-        if(network) await cancelLista(dispatch, redirect, false, idMotorista, idLista, idRemetente, motivoCancelamento)
+        if(network) await cancelLista(dispatch, redirect, false, idMotorista, idLista, motivoCancelamento)
         else{
-            await addToSyncStack('syncListaCancel', createValueToSync({idLista, idRemetente, motivoCancelamento}))
-            dispatch(updateSituacao({status: 'CANCELADO', idRemetente}))
+            await addToSyncStack('syncListaCancel', createValueToSync({idLista, motivoCancelamento}))
+            dispatch(updateSituacao({status: 'CANCELADO', idLista}))
             redirect()
         }
     } catch (error) {

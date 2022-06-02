@@ -31,8 +31,8 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const [allIsSync, setAllIsSync] = useState(true)
 
     const SHOW_LOADING = loadingNewLista
+    const SHOW_NO_LISTA = !SHOW_LOADING && !lista && !roteirizacao
     const SHOW_LISTA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
-    const SHOW_NO_LISTA = !lista && !roteirizacao
 
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
     const SHOW_FILTERED_LISTA_NO_DATA = !SHOW_LOADING && !!filteredLista && filteredLista.length === 0

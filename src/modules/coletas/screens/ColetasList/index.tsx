@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import { Alert, View } from 'react-native'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import React from 'react'
+import { Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setloadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
+import { setColetas, setloadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
@@ -26,7 +26,6 @@ const ColetasList: React.FC = () => {
     const { lista } = useAppSelector(s => s.lista)
     const { requestColeta } = useAppSelector(s => s.requestColetas)
     const navigation = useNavigation<any>()
-    const isFocused = useIsFocused()
 
     const SHOW_LOADING = requestColeta.loading
     const SHOW_DATA = !SHOW_LOADING && !!coletas
@@ -48,21 +47,18 @@ const ColetasList: React.FC = () => {
         }
 
         dispatch(setloadingColetasAprovadas(false))
-
+        
         if (!!response) {
             if (!response.flagErro){
                 loadLista(dispatch, userData!.idUsuarioSistema, { latitude: location![0], longitude: location![1] }, lista)
                 dispatch(setResetColetasAprovadas())
+                dispatch(setColetas(null))
                 navigation.navigate("solicitacaoRoutes")
             }else Alert.alert("Erro ao prosseguir com as coletas!")
         } else {
             console.log('coleta',response)
         }
     }
-
-    useEffect(() => {
-        if(isFocused) getColetas(dispatch, userData!.idUsuarioSistema)
-    }, [isFocused, dispatch])
 
     return (
 
@@ -86,7 +82,7 @@ const ColetasList: React.FC = () => {
                                     {coletas.map((coleta, index) => (
                                         <ColetasBox
                                             key={index}
-                                            selected={!!coletasAprovadas.find(f => f.idRemetente === coleta.idRemetente)}
+                                            selected={!!coletasAprovadas.find(f => f.idLista === coleta.idLista)}
                                             id={coleta.idLista}
                                             cliente={coleta.nomeCliente}
                                             coleta={coleta}
@@ -103,15 +99,17 @@ const ColetasList: React.FC = () => {
                             </>
                         )}
                         {SHOW_NO_COLETAS && <NoData emoji = "confused" message = {['Nenhuma coleta encontrada!']} />}
-                        <Container>
-                        <Button
-                            label="Prosseguir"
-                            marginHorizontal={true}
-                            loading={loadingColetasAprovadas}
-                            disabled={loadingColetasAprovadas || coletasAprovadas.length === 0}
-                            onPress={handleAceitarColetas}
-                        />
-                        </Container>
+                        {SHOW_DATA && coletasAprovadas.length > 0 && (
+                            <Container>
+                                <Button
+                                    label="Prosseguir"
+                                    marginHorizontal={true}
+                                    loading={loadingColetasAprovadas}
+                                    disabled={loadingColetasAprovadas}
+                                    onPress={handleAceitarColetas}
+                                />
+                            </Container>
+                        )}
                     </>
                 )}
             </Render>
