@@ -5,7 +5,7 @@ export const ModalContainer = styled.View`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 20px 0;
+    border-radius: 16px;
     background-color: #fff;
 `

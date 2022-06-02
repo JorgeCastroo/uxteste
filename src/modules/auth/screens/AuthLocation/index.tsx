@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { Text } from 'react-native-paper'
 import { PermissionsAndroid } from 'react-native'
@@ -17,7 +17,6 @@ const { PRIORITIES: { HIGH_ACCURACY }, useLocationSettings } = LocationEnabler
 
 const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>> = ({ navigation }) => {
 
-    const [locationEnabled, setLocationEnabled] = useState<boolean>(false)
     const [gpsEnabled, setGpsEnabled] = useLocationSettings({
         priority: HIGH_ACCURACY,
         alwaysShow: true,
@@ -76,13 +75,12 @@ const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>
                     <Button
                         label = {gpsEnabled ? "GPS Ativo" : "Ativar GPS"}
                         marginBottom = {20}
-                        color = {gpsEnabled ? [themes.status.success.primary, themes.status.success.secondary] : themes.gradient.disabled}
+                        color = {gpsEnabled ? [themes.status.success.primary, themes.status.success.secondary] : undefined}
                         onPress = {setGpsEnabled}
                     />
                     {gpsEnabled && (
                         <Button
                             label = "Permitir acesso à localização"
-                            color = {[themes.status.success.primary, themes.status.success.secondary]}
                             onPress = {locationPermission}
                         />
                     )}

@@ -4,9 +4,12 @@ import { AppVersion } from "../interfaces/AppVersion"
 
 interface State {
     network?: boolean
+
     location: number[] | null
+
     appVersion: AppVersion | null
     isVersionDeprected: boolean
+    openVersionDialog: boolean
 }
 
 const initialState: State = {
@@ -14,6 +17,7 @@ const initialState: State = {
     location: null,
     appVersion: null,
     isVersionDeprected: false,
+    openVersionDialog: false,
 }
 
 const appSlice = createSlice({
@@ -28,13 +32,17 @@ const appSlice = createSlice({
         },
         setAppVersion: (state, action: PayloadAction<AppVersion>) => {
             state.appVersion = action.payload
-            //state.isVersionDeprected = action.payload.versaoAtual !== APP_VERSION
+            state.isVersionDeprected = action.payload.versaoAtual !== APP_VERSION
+            state.openVersionDialog = action.payload.versaoAtual !== APP_VERSION
         },
         setAppVersionDeprected: (state, action: PayloadAction<boolean>) => {
             state.isVersionDeprected = action.payload
         },
+        setAppVersionDialog: (state, action: PayloadAction<boolean>) => {
+            state.openVersionDialog = action.payload
+        },
     }
 })
 
-export const { setAppNetwork, setAppLocation, setAppVersion, setAppVersionDeprected } = appSlice.actions
+export const { setAppNetwork, setAppLocation, setAppVersion, setAppVersionDeprected, setAppVersionDialog } = appSlice.actions
 export default appSlice.reducer

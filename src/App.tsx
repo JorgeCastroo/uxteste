@@ -7,20 +7,23 @@ import FlashMessage from "react-native-flash-message"
 import store from './redux/store'
 import Routes from './routes'
 import theme from './constants/paper/theme'
+import ModalAppVersion from './modules/app/components/ModalAppVersion'
 
 const App: React.FC = () => {
 
     LogBox.ignoreLogs([
         'ViewPropTypes will be removed from React Native. Migrate to ViewPropTypes exported from \'deprecated-react-native-prop-types\'.',
+        'new NativeEventEmitter()` was called with a non-null argument without the required'
     ])
 
     return (
 
         <NavigationProvider>
-            <ReduxProvider store={store}>
-                <PaperProvider theme={theme}>
+            <ReduxProvider store = {store}>
+                <PaperProvider theme = {theme}>
                     <Routes />
-                    <FlashMessage position="top" />
+                    <ModalAppVersion />
+                    <FlashMessage position = "top" />
                 </PaperProvider>
             </ReduxProvider>
         </NavigationProvider>
