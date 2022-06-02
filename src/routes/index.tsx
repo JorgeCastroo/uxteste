@@ -5,6 +5,7 @@ import themes from '../styles/themes'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import AppRoutes from '../modules/app/routes'
 import { setAppNetwork } from '../modules/app/reducers/appReducer'
+import getAppVersion from '../modules/app/scripts/requests/getAppVersion'
 import { setAuthLoading } from '../modules/auth/reducers/authReducer'
 import AuthRoutes from '../modules/auth/routes'
 import getUserData from '../modules/auth/scripts/getUserData'
@@ -23,6 +24,8 @@ const Routes: React.FC = () => {
 
     useEffect(() => {
         (async() => {
+            getAppVersion(dispatch)
+
             await getUserData(dispatch)
             await localGetLista(dispatch)
             await localGetRoteirizacao(dispatch)

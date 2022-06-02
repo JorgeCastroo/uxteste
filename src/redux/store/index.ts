@@ -12,10 +12,12 @@ import appReducer from '../../modules/app/reducers/appReducer'
 import mapReducer from '../../modules/map/reducers/mapReducer'
 import syncReducer from '../../modules/sync/reducers/syncReducer'
 import requestAuthCodeReducer from '../../modules/auth/reducers/authCode/requestAuthCodeReducer'
+import requestAppReducer from '../../modules/app/reducers/requestAppReducer'
 
 const store = configureStore({
     reducer: {
         app: appReducer,
+        requestApp: requestAppReducer,
         sync: syncReducer,
         
         auth: authReducer,

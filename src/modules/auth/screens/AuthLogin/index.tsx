@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { PermissionsAndroid, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
-import { PERMISSIONS, request } from 'react-native-permissions'
 import AutoHeightImage from 'react-native-auto-height-image'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
@@ -34,10 +33,6 @@ const AuthLogin: React.FC = () => {
         }
     }, [])
 
-    useEffect(() => {
-        locationPermission(true)
-    }, [])
-
     return(
 
         <>
@@ -65,7 +60,7 @@ const AuthLogin: React.FC = () => {
                         </Section>
                     </Section>
                 )}
-                {!blocked && <Form />}
+                <Form />
                 <AppVersion />
             </Render>
         </>

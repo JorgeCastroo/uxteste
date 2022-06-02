@@ -16,6 +16,7 @@ import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
 import getColetas from '../../../coletas/scripts/getColetas'
+import ModalAppVersion from '../../../app/components/ModalAppVersion'
 
 const Home: React.FC = () => {
 
@@ -62,6 +63,7 @@ const Home: React.FC = () => {
                 </Container>
                 <AppVersion />
             </Render>
+            <ModalAppVersion />
         </>
 
     )

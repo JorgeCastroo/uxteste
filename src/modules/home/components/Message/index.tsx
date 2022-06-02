@@ -13,7 +13,7 @@ const HomeMessage: React.FC = () => {
     return (
 
         <Section marginBottom={40}>
-            <S.Box style={elevation.elevation4}>
+            <S.Box style={elevation.elevation4} onPress={() => navigation.navigate('coletasRoutes')}>
                 <S.Indicator>
                     <Text style={{ color: '#037E41', fontSize: 50, fontWeight: 'bold' }}>!</Text>
                 </S.Indicator>
