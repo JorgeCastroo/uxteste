@@ -36,7 +36,7 @@ const coletasSlice = createSlice({
         setColetas: (state, action: PayloadAction<any>) => {
             state.coletas = action.payload
         },
-        setloadingColetasAprovadas: (state, action: PayloadAction<any>) => {
+        setLoadingColetasAprovadas: (state, action: PayloadAction<any>) => {
             state.loadingColetasAprovadas = action.payload
         },
         setResetColetasAprovadas: (state) => {
@@ -73,7 +73,7 @@ const coletasSlice = createSlice({
 
 export const {
     setColetas,
-    setloadingColetasAprovadas,
+    setLoadingColetasAprovadas,
     setColetasAprovadas, setResetColetasAprovadas,
     setColetasReprovadas,
     setRemoveAllColetas,
