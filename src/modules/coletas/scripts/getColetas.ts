@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT } from "@env"
+import { TRUX_ENDPOINT } from "@env"
 import { setColetas } from "../reducers/coletas/coletas"
 import { Lista } from "../../solicitacao/interfaces/Lista"
 import { setRequestColetasData, setRequestColetasErro, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
@@ -12,10 +12,10 @@ export default async function getColetas(dispatch: Function, idMotorista: number
         dispatch(setRequestColetasLoading())
         dispatch(setColetas(null))
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
+        const authorization = 'basic mc0}fn7)za6#'
         const body = {
-            idTransportadora: 18,
+            idTransportadora: 1,
             idMotorista,
             idStatusLista: 1,
         }

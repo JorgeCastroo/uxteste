@@ -32,8 +32,8 @@ const appSlice = createSlice({
         },
         setAppVersion: (state, action: PayloadAction<AppVersion>) => {
             state.appVersion = action.payload
-            state.isVersionDeprected = action.payload.versaoAtual !== APP_VERSION
-            state.openVersionDialog = action.payload.versaoAtual !== APP_VERSION
+            //state.isVersionDeprected = action.payload.versaoAtual !== APP_VERSION
+            //state.openVersionDialog = action.payload.versaoAtual !== APP_VERSION
         },
         setAppVersionDeprected: (state, action: PayloadAction<boolean>) => {
             state.isVersionDeprected = action.payload

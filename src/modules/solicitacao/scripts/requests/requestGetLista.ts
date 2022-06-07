@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT } from "@env"
+import { TRUX_ENDPOINT } from "@env"
 import { Lista } from "../../interfaces/Lista"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -12,10 +12,10 @@ export default async function getLista(dispatch: Function, idMotorista: number){
     try {
         dispatch(R.setRequestGetListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
+        const authorization = 'basic mc0}fn7)za6#'
         const body = {
-            idTransportadora: 18,
+            idTransportadora: 1,
             // idMotorista: MOCK_USERDATA.idUser,
             idMotorista,
             idStatusLista: idStatusLista['APROVADO'],

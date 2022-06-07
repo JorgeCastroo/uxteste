@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT } from "@env"
+import { TRUX_ENDPOINT } from "@env"
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -11,8 +11,8 @@ export default async function startReceivingLista(dispatch: Function, redirect: 
     try {
         dispatch(R.setRequestStartReceivingListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
+        const authorization = 'basic mc0}fn7)za6#'
         const body = {
             idLista,
             idStatusLista: idStatusLista['COLETANDO'],

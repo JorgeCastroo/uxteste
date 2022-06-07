@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT } from "@env"
+import { TRUX_ENDPOINT } from "@env"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import { updateSituacao } from "../../reducers/lista/listaReducer"
@@ -9,10 +9,10 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
     try {
         dispatch(R.setRequestCancelListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
+        const authorization = 'basic mc0}fn7)za6#'
         const body = {
-            idTransportadora: 18,
+            idTransportadora: 1,
             idMotorista,
             idLista,
             motivoCancelamento,
