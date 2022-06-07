@@ -31,8 +31,8 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const [allIsSync, setAllIsSync] = useState(true)
 
     const SHOW_LOADING = loadingNewLista
-    const SHOW_NO_LISTA = !SHOW_LOADING && !lista && !roteirizacao
-    const SHOW_LISTA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
+    const SHOW_NO_LISTA = !SHOW_LOADING && (!lista || !roteirizacao)
+    const SHOW_DATA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
 
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredLista
     const SHOW_FILTERED_LISTA_NO_DATA = !SHOW_LOADING && !!filteredLista && filteredLista.length === 0
@@ -66,14 +66,14 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} 
                 paddingBottom = {20} 
                 align = {SHOW_LOADING ? 'space-between' : undefined}
-                onRefresh = {() => localGetLista(dispatch)}
+                onRefresh = {async () => await localGetLista(dispatch)}
             >
                 <Header title = "Listas" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 {SHOW_NO_LISTA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
-                {SHOW_LISTA && (
+                {SHOW_DATA && (
                     <>
-                        {lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length > 0 && <SolicitacaoListSearchbar />}
+                        {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
                         <Section>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum item encontrado!']} />}
                             {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (

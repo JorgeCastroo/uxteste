@@ -10,6 +10,7 @@ import TopBox from '../../components/TopBox'
 import GroupInfo from '../../components/Group/Info'
 import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
+import SkeletonHomeMessage from '../../components/Message/Skeleton'
 import Container from '../../../../components/Container'
 import dayMoment from '../../../../utils/dayMoment'
 import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
@@ -27,7 +28,8 @@ const Home: React.FC = () => {
     const { requestColeta } = useAppSelector(s => s.requestColetas)
     const isFocused = useIsFocused()
 
-    const SHOW_COLETAS = !!coletas && coletas.length > 0 && !requestColeta.loading
+    const SHOW_COLETAS_LOADING = requestColeta.loading
+    const SHOW_COLETAS_DATA = !SHOW_COLETAS_LOADING && !!coletas && coletas.length > 0
     const SHOW_DATA = !!lista && !!roteirizacao
 
     useEffect(() => {
@@ -38,13 +40,18 @@ const Home: React.FC = () => {
     }, [dispatch, userData])
 
     useEffect(() => {
-        if(isFocused && userData) getColetas(dispatch, userData!.idUsuarioSistema)
+        if(isFocused && userData) getColetas(dispatch, userData.idUsuarioSistema)
     }, [dispatch, isFocused, userData])
 
     return(
 
         <>
-            <Render statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }} align = "space-between" paddingBottom = {24}>
+            <Render
+                statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }}
+                align = "space-between"
+                paddingBottom = {32}
+                onRefresh = {async () => await getColetas(dispatch, userData!.idUsuarioSistema)}
+            >
                 <Container padding = {false}>
                     <HomeHeader />
                     <TopBox />
@@ -52,7 +59,10 @@ const Home: React.FC = () => {
                         <Text style = {{color: '#333333', fontSize: 18}}>{dayMoment()}</Text>
                         <Text style = {{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>{userData?.nomeUsuario ?? 'Usuário'}</Text>
                     </Section>
-                    {SHOW_COLETAS && <HomeMessage />}
+                    <Section marginBottom = {40}>
+                        {SHOW_COLETAS_LOADING && <SkeletonHomeMessage />}
+                        {SHOW_COLETAS_DATA && <HomeMessage />}
+                    </Section>
                     {SHOW_DATA && (
                         <>
                             <GroupInfo />
@@ -62,7 +72,6 @@ const Home: React.FC = () => {
                 </Container>
                 <AppVersion />
             </Render>
-            
         </>
 
     )

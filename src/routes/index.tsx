@@ -44,9 +44,9 @@ const Routes: React.FC = () => {
             dispatch(setAppNetwork(netInfo.isInternetReachable))
             if(netInfo.isInternetReachable === true) syncAll(dispatch, userData.idUsuarioSistema)
         }
-    }, [netInfo.isInternetReachable, userData])
+    }, [dispatch, netInfo.isInternetReachable, userData])
 
-    if(authLoading) return <ActivityIndicator color = {themes.colors.primary} />
+    if(authLoading) return <ActivityIndicator style = {{marginTop: 20}} color = {themes.colors.primary} />
     else return isLogged ? <AppRoutes /> : <AuthRoutes />
 
 }
