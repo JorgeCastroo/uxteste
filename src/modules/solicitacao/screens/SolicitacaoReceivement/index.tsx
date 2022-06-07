@@ -48,7 +48,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             !!network, 
             () => navigation.navigate('solicitacaoList'),
             () => setOpenSuccessModal(true),
-            userData!.idUsuarioSistema,
+            userData!,
             currentSolicitacao!.idLista,
             findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
         )
@@ -59,7 +59,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             dispatch, 
             !!network, 
             () => navigation.navigate('solicitacaoList'), 
-            userData!.idUsuarioSistema, 
+            userData!, 
             currentSolicitacao!.idLista, 
             motivoCancelamento
         )

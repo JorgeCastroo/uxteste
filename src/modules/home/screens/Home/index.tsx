@@ -40,7 +40,7 @@ const Home: React.FC = () => {
     }, [dispatch, userData])
 
     useEffect(() => {
-        if(isFocused && userData) getColetas(dispatch, userData.idUsuarioSistema)
+        if(isFocused && userData) getColetas(dispatch, userData)
     }, [dispatch, isFocused, userData])
 
     return(
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
                 statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }}
                 align = "space-between"
                 paddingBottom = {32}
-                onRefresh = {async () => await getColetas(dispatch, userData!.idUsuarioSistema)}
+                onRefresh = {async () => await getColetas(dispatch, userData!)}
             >
                 <Container padding = {false}>
                     <HomeHeader />

@@ -1,23 +1,22 @@
 import { TRUX_ENDPOINT } from "@env"
 import { Lista } from "../../interfaces/Lista"
+import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 import localSetLista from "../local/localSetLista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
-import MOCK_USERDATA from "../../../../mock/userData"
 
-export default async function getLista(dispatch: Function, idMotorista: number){
+export default async function getLista(dispatch: Function, userData: UserData){
     try {
         dispatch(R.setRequestGetListaLoading())
 
         const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
         const authorization = 'basic mc0}fn7)za6#'
         const body = {
-            idTransportadora: 1,
-            // idMotorista: MOCK_USERDATA.idUser,
-            idMotorista,
+            idTransportadora: userData.idTransportadora,
+            idMotorista: userData.idUsuarioSistema,
             idStatusLista: idStatusLista['APROVADO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })

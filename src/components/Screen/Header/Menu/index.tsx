@@ -36,7 +36,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                     <Menu.Item 
                         icon = "cloud-download-outline" 
                         title = "Baixar lista" 
-                        onPress = {() => handleOnPress(() => loadLista(dispatch, userData!.idUsuarioSistema, { latitude: location![0], longitude: location![1] }, lista))}
+                        onPress = {() => handleOnPress(() => loadLista(dispatch, userData!, { latitude: location![0], longitude: location![1] }, lista))}
                     />
                     <Menu.Item 
                         icon = "cloud-check-outline" 

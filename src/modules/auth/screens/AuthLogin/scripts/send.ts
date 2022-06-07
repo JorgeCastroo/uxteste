@@ -1,5 +1,5 @@
 
-import { TMS_ENDPOINT } from "@env"
+import { TRUX_ENDPOINT } from "@env"
 import { UserData } from "../../../../../interfaces/UserData"
 import * as R from "../../../reducers/authLogin/requestAuthLoginReducer"
 import info from "../../../../../utils/info"
@@ -11,8 +11,8 @@ export default async function send(dispatch: Function, body: typeof loginFormVal
     try {
         dispatch(R.setRequestSendAuthLoginLoading())
 
-        const endpoint = `${TMS_ENDPOINT}/Permissao/Login`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${TRUX_ENDPOINT}/Permissao/Login`
+        const authorization = 'basic mc0}fn7)za6#'
         const response = await request.post<UserData>({ endpoint, authorization, body })
 
         if (response) {

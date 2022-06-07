@@ -1,3 +1,4 @@
+import { UserData } from "../../../interfaces/UserData"
 import { Coordinates } from "../../../interfaces/Coordinates"
 import { Lista } from "../interfaces/Lista"
 import { setLoadingNewLista } from "../reducers/lista/listaReducer"
@@ -7,11 +8,11 @@ import createRoteirizacaoPayload from "../../roteirizacao/scripts/createRoteiriz
 import info from "../../../utils/info"
 import sleep from "../../../utils/sleep"
 
-export default async function loadLista(dispatch: Function, idMotorista: number, coords: Coordinates, oldListas: Lista[] | null){
+export default async function loadLista(dispatch: Function, userData: UserData, coords: Coordinates, oldListas: Lista[] | null){
     try {
         dispatch(setLoadingNewLista(true))
 
-        const reponseLista = await getLista(dispatch, idMotorista)
+        const reponseLista = await getLista(dispatch, userData)
         if(!!reponseLista){
             let newListas: Lista[] = []
 

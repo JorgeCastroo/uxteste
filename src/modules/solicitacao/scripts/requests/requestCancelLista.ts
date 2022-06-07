@@ -1,19 +1,20 @@
 import { TRUX_ENDPOINT } from "@env"
+import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import { updateSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function cancelLista(dispatch: Function, redirect: () => void, sync: boolean, idMotorista: number, idLista: number, motivoCancelamento: string){
+export default async function cancelLista(dispatch: Function, redirect: () => void, sync: boolean, userData: UserData, idLista: number, motivoCancelamento: string){
     try {
         dispatch(R.setRequestCancelListaLoading())
 
         const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
         const authorization = 'basic mc0}fn7)za6#'
         const body = {
-            idTransportadora: 1,
-            idMotorista,
+            idTransportadora: userData.idTransportadora,
+            idMotorista: userData.idUsuarioSistema,
             idLista,
             motivoCancelamento,
         }

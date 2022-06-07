@@ -50,7 +50,7 @@ const ColetasList: React.FC = () => {
         
         if (!!response) {
             if (!response.flagErro){
-                loadLista(dispatch, userData!.idUsuarioSistema, { latitude: location![0], longitude: location![1] }, lista)
+                loadLista(dispatch, userData!, { latitude: location![0], longitude: location![1] }, lista)
                 dispatch(setResetColetasAprovadas())
                 dispatch(setColetas(null))
                 navigation.navigate("solicitacaoRoutes")
@@ -69,7 +69,7 @@ const ColetasList: React.FC = () => {
                     backgroundColor: SHOW_LOADING ? '#F5F5F5' : themes.colors.primary,
                 }}
                 align = {SHOW_LOADING ? 'center' : 'flex-start'}
-                onRefresh = {async () => !SHOW_LOADING && await getColetas(dispatch, userData!.idUsuarioSistema)}
+                onRefresh = {async () => !SHOW_LOADING && await getColetas(dispatch, userData!)}
             >
                 {SHOW_LOADING && <Loader />}
                 {SHOW_DATA && (

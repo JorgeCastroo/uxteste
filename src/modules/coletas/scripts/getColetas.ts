@@ -1,4 +1,5 @@
 import { TRUX_ENDPOINT } from "@env"
+import { UserData } from "../../../interfaces/UserData"
 import { setColetas } from "../reducers/coletas/coletas"
 import { Lista } from "../../solicitacao/interfaces/Lista"
 import { setRequestColetasData, setRequestColetasErro, setRequestColetasLoading } from "../reducers/coletas/requestColetasReducer"
@@ -7,7 +8,7 @@ import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
 import MOCK_LISTA from "../../../mock/lista"
 
-export default async function getColetas(dispatch: Function, idMotorista: number) {
+export default async function getColetas(dispatch: Function, userData: UserData) {
     try {
         dispatch(setRequestColetasLoading())
         dispatch(setColetas(null))
@@ -15,8 +16,8 @@ export default async function getColetas(dispatch: Function, idMotorista: number
         const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
         const authorization = 'basic mc0}fn7)za6#'
         const body = {
-            idTransportadora: 1,
-            idMotorista,
+            idTransportadora: userData.idTransportadora,
+            idMotorista: userData.idUsuarioSistema,
             idStatusLista: 1,
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
