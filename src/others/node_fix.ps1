@@ -1,0 +1,1 @@
+(Get-Content node_modules\@mauron85\react-native-background-geolocation\android\common\gradle.properties) -replace 'android.enableUnitTestBinaryResources=true', '' | Out-File -encoding ASCII node_modules\@mauron85\react-native-background-geolocation\android\common\gradle.properties;

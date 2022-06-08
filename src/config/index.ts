@@ -5,4 +5,4 @@ export const SHOW_LOG = {
     RESPONSE: true,
 }
 
-export const APP_VERSION = '0.0.1'
+export const APP_VERSION = '6.0.0'
