@@ -36,6 +36,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
     const [motivoCancelamento, setMotivoCancelamento] = useState('')
 
+    const SHOW_DATA = !!currentSolicitacao && !!roteirizacao
+
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
         if(scannedVolumes.length > 0) scannedVolumes.map(item => item.etiqueta).map(item => dispatch(addScannedSolicitacao(item)))
@@ -80,7 +82,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         <>
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {40}>
                 <Header title = "Lista" />
-                {!!currentSolicitacao && !!roteirizacao && (
+                {SHOW_DATA && (
                     <>
                         <Section marginTop = {20}>
                             <SolicitacaoBox {...currentSolicitacao!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />

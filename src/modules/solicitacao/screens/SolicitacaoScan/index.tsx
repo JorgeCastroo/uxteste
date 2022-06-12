@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { StatusBar } from 'react-native'
 import { RNCamera } from 'react-native-camera'
 import Sound from 'react-native-sound'
@@ -7,7 +7,7 @@ import { showMessage } from "react-native-flash-message"
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { addScannedSolicitacao, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { addScannedSolicitacao, setScanFlashlight, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
@@ -40,15 +40,15 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
-    const { currentVolumes, currentSolicitacao } = useAppSelector(s => s.lista)
-    const { isScanning, modalVisible, scannedSolicitacoes, scanMode } = useAppSelector(s => s.solicitacaoScan)
+    const { currentVolumes } = useAppSelector(s => s.lista)
+    const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight } = useAppSelector(s => s.solicitacaoScan)
 
     const handleScan = useCallback(async (code: string, scanList: string[]) => {
         dispatch(setScanning(true))
         if(currentVolumes!.map(item => item.etiqueta).includes(code)){
             if(!scanList.includes(code)){
                 dispatch(addScannedSolicitacao(code))
-                 dispatch(updateVolume(code))
+                dispatch(updateVolume(code))
                 beepSuccess.play()
                 showMessage({
                     message: 'Código lido com sucesso!',
@@ -75,6 +75,12 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
         dispatch(setScanning(false))
     }, [])
 
+    useEffect(() => {
+        return () => {
+            dispatch(setScanFlashlight(false))
+        }
+    }, [dispatch])
+
     return(
 
         <>
@@ -84,7 +90,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                     ref = {cameraRef}
                     type = {RNCamera.Constants.Type.back}
                     style = {{width: '100%', height: '100%'}}
-                    flashMode = {RNCamera.Constants.FlashMode.off}
+                    flashMode = {RNCamera.Constants.FlashMode[scanFlashlight ? 'torch' : 'off']}
                     captureAudio = {false}
                     androidCameraPermissionOptions = {{
                         title: 'Permission to use camera',
@@ -94,7 +100,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                     }}
                     //barCodeTypes = {[scanMode as any]} //! REMOVE IN PROD
                     onBarCodeRead = {code => {
-                        if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
+                        if(!isScanning && !modalVisible) handleScan(code.data.toLowerCase(), scannedSolicitacoes)
                     }}
                 >
                     <BarcodeMask 

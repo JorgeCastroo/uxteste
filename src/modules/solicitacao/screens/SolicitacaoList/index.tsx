@@ -38,7 +38,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const SHOW_FILTERED_LISTA_NO_DATA = !SHOW_LOADING && !!filteredLista && filteredLista.length === 0
 
     const SHOW_LISTA_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista
-    const SHOW_LISTA_NO_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista && (lista.length === 0 || lista.every(f => f.situacao === idStatusLista['FINALIZADO']))
+    const SHOW_LISTA_NO_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista && lista.length === 0
 
     const loaderPercent = requestGetLista.data && requestGetRoteirizacao.data ? 100 : requestGetLista.data ? 50 : 0
 

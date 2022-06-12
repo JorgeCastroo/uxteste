@@ -1,10 +1,10 @@
 import { RequestMethods } from "../../types"
-import { SHOW_LOG } from "../../../../config"
+import { SHOW_RESPONSE_LOG } from "../../../../config"
 
 const line = () => console.log('------------------------------------------------------')
 
 function requestLog(method: RequestMethods, endpoint: string){
-    if(SHOW_LOG.REQUEST){
+    if(SHOW_RESPONSE_LOG.REQUEST){
         line()
         console.log(`REQUEST: ${method} ${endpoint}`)
         line()
@@ -12,7 +12,7 @@ function requestLog(method: RequestMethods, endpoint: string){
 }
 
 function headerLog(method: RequestMethods, endpoint: string, header: HeadersInit_){
-    if(SHOW_LOG.HEADER){
+    if(SHOW_RESPONSE_LOG.HEADER){
         line()
         console.log(`HEADER: ${method} ${endpoint}`)
         console.log(header)
@@ -21,7 +21,7 @@ function headerLog(method: RequestMethods, endpoint: string, header: HeadersInit
 }
 
 function bodyLog(body: any, endpoint: string){
-    if(SHOW_LOG.BODY){
+    if(SHOW_RESPONSE_LOG.BODY){
         line()
         console.log('INIT:',endpoint)
         console.log('BODY:',body)
@@ -30,7 +30,7 @@ function bodyLog(body: any, endpoint: string){
 }
 
 function responseLog(response: any, endpoint: string){
-    if(SHOW_LOG.RESPONSE){
+    if(SHOW_RESPONSE_LOG.RESPONSE){
         line()
         console.log('INIT:',endpoint)
         console.log('RESPONSE:',response)
