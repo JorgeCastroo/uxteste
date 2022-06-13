@@ -38,14 +38,14 @@ const Routes: React.FC = () => {
     useEffect(() => {
         if(!!lista && JSON.stringify(lista) !== JSON.stringify(oldLista ?? [])) localSetLista(dispatch, lista)
     }, [dispatch, lista])
-
+    
     useEffect(() => {
         if(netInfo.isInternetReachable !== null && !!userData){
             dispatch(setAppNetwork(netInfo.isInternetReachable))
             if(netInfo.isInternetReachable === true) syncAll(dispatch, userData)
         }
     }, [dispatch, netInfo.isInternetReachable, userData])
-
+    
     if(authLoading) return <ActivityIndicator style = {{marginTop: 20}} color = {themes.colors.primary} />
     else return isLogged ? <AppRoutes /> : <AuthRoutes />
 

@@ -4,7 +4,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'UxFirstMile' do
+target 'uxfirstmile' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -19,10 +19,7 @@ target 'UxFirstMile' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod '@mauron85_react-native-background-geolocation', :path => '../node_modules/@mauron85/react-native-background-geolocation'
-  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
-
-  target 'UxFirstMileTests' do
+  target 'uxfirstmileTests' do
     inherit! :complete
     # Pods for testing
   end

@@ -7,9 +7,6 @@
             "whitelist": null, 
             "safe": false, 
             "allowUndefined": true
-        }],
-        ["babel-plugin-inline-import",{
-            "extensions": [".svg"]
         }]
     ]
 } 

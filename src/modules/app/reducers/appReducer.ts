@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { APP_VERSION } from "../../../config"
+import { GeoPosition } from "react-native-geolocation-service"
 import { AppVersion } from "../interfaces/AppVersion"
+import { APP_VERSION } from "../../../config"
 
 interface State {
     network?: boolean
 
-    location: number[] | null
+    location: GeoPosition | null
 
     appVersion: AppVersion | null
     isVersionDeprected: boolean
@@ -27,7 +28,7 @@ const appSlice = createSlice({
         setAppNetwork: (state, action: PayloadAction<boolean>) => {
             state.network = action.payload
         },
-        setAppLocation: (state, action: PayloadAction<number[]>) => {
+        setAppLocation: (state, action: PayloadAction<GeoPosition>) => {
             state.location = action.payload
         },
         setAppVersion: (state, action: PayloadAction<AppVersion>) => {

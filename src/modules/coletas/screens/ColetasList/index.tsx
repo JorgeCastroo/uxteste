@@ -13,9 +13,10 @@ import ColetasSelect from '../../components/Select'
 import NoData from '../../../../components/NoData'
 import Loader from './components/Loader'
 import acceptColeta from '../../scripts/acceptColeta'
-import getColetas from '../../scripts/getColetas'
 import loadLista from '../../../solicitacao/scripts/loadLista'
+import getColetas from '../../scripts/getColetas'
 import Container from '../../../../components/Container'
+import { getCoords } from '../../../app/scripts/geolocationService'
 
 const ColetasList: React.FC = () => {
 
@@ -50,7 +51,7 @@ const ColetasList: React.FC = () => {
         
         if (!!response) {
             if (!response.flagErro){
-                loadLista(dispatch, userData!, { latitude: location![0], longitude: location![1] }, lista)
+                loadLista(dispatch, userData!, getCoords(location!), lista)
                 dispatch(setResetColetasAprovadas())
                 dispatch(setColetas(null))
                 navigation.navigate("solicitacaoRoutes")

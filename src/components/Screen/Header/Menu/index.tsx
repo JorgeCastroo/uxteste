@@ -5,17 +5,13 @@ import { useNavigation } from '@react-navigation/native'
 import { HeaderMenuProps } from './types'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
-import loadLista from '../../../../modules/solicitacao/scripts/loadLista'
-import closeLista from '../../../../modules/solicitacao/scripts/closeLista'
 import clearAllSyncStacks from '../../../../modules/sync/scripts/clearAllSyncStacks'
 import { APP_VERSION } from '../../../../config'
 
 const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
     const dispatch = useAppDispatch()
-    const { location, isVersionDeprected } = useAppSelector(s => s.app)
-    const { userData } = useAppSelector(s => s.auth)
-    const { lista } = useAppSelector(s => s.lista)
+    const { isVersionDeprected } = useAppSelector(s => s.app)
     const [menuVisible, setMenuVisible] = React.useState(false)
     const navigation = useNavigation<any>()
 
@@ -33,16 +29,6 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
         >
             {screenName === 'solicitacaoList' && (
                 <>
-                    <Menu.Item 
-                        icon = "cloud-download-outline" 
-                        title = "Baixar lista" 
-                        onPress = {() => handleOnPress(() => loadLista(dispatch, userData!, { latitude: location![0], longitude: location![1] }, lista))}
-                    />
-                    <Menu.Item 
-                        icon = "cloud-check-outline" 
-                        title = "Encerrar lista" 
-                        onPress = {() => handleOnPress(() => closeLista(dispatch))} 
-                    />
                     <Menu.Item
                         icon = "sync-off"
                         title = "Limpar Sync"

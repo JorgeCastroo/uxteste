@@ -1,5 +1,5 @@
 
-import { TRUX_ENDPOINT } from "@env"
+import { TRUX_HML_ENDPOINT, TRUX_AUTHORIZATION } from "@env"
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
@@ -16,8 +16,8 @@ export default async function acceptColeta(dispatch: Function, body: Body) {
     try {
         dispatch(setRequestAcceptColetasLoading())
 
-        const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
-        const authorization = "basic mc0}fn7)za6#"
+        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
+        const authorization = TRUX_AUTHORIZATION
         const response = await request.post<ResponsePattern<any>>({ authorization, endpoint, body })
 
         if (response) {

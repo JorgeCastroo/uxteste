@@ -16,7 +16,7 @@ const App: React.FC = () => {
         'new NativeEventEmitter()` was called with a non-null argument without the required'
     ])
 
-    return (
+    return(
 
         <NavigationProvider>
             <ReduxProvider store = {store}>

@@ -75,13 +75,14 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                                 </MapMarker>
                                 <MapPopup text = "Início do trajeto" />
                             </Marker>
-
+                            {/* 
                             <Marker pinColor = {themes.colors.primary} coordinate = {endCoords!}>
                                 <MapMarker theme = {{ primary: '#000', secondary: '', tertiary: '#fff' }}>
                                     <MaterialCommunityIcons name = "flag-checkered" size = {18} color = '#000' />
                                 </MapMarker>
                                 <MapPopup text = "Fim do trajeto" />
                             </Marker>
+                            */}
 
                             {lista.map((item, index) => {
                                 const statusLista = getStatus(item.situacao)

@@ -23,6 +23,7 @@ export const PositionIndicator = styled.View`
     height: 32px;
     border-radius: 16px;
     background-color: ${props => props.theme};
+    z-index: 100;
 `
 
 

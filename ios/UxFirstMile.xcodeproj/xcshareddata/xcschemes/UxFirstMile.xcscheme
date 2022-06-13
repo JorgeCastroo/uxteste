@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "UxFirstMile.app"
-               BlueprintName = "UxFirstMile"
-               ReferencedContainer = "container:UxFirstMile.xcodeproj">
+               BuildableName = "uxfirstmile.app"
+               BlueprintName = "uxfirstmile"
+               ReferencedContainer = "container:uxfirstmile.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "UxFirstMileTests.xctest"
-               BlueprintName = "UxFirstMileTests"
-               ReferencedContainer = "container:UxFirstMile.xcodeproj">
+               BuildableName = "uxfirstmileTests.xctest"
+               BlueprintName = "uxfirstmileTests"
+               ReferencedContainer = "container:uxfirstmile.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "UxFirstMile.app"
-            BlueprintName = "UxFirstMile"
-            ReferencedContainer = "container:UxFirstMile.xcodeproj">
+            BuildableName = "uxfirstmile.app"
+            BlueprintName = "uxfirstmile"
+            ReferencedContainer = "container:uxfirstmile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "UxFirstMile.app"
-            BlueprintName = "UxFirstMile"
-            ReferencedContainer = "container:UxFirstMile.xcodeproj">
+            BuildableName = "uxfirstmile.app"
+            BlueprintName = "uxfirstmile"
+            ReferencedContainer = "container:uxfirstmile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

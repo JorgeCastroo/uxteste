@@ -1,9 +1,9 @@
 import React from 'react'
+import { Text } from 'react-native-paper'
 import themes from '../../../../styles/themes'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
 import Section from '../../../../components/Screen/Section'
-import { Text } from 'react-native-paper'
 import { APP_VERSION } from '../../../../config'
 
 const About: React.FC = () => {

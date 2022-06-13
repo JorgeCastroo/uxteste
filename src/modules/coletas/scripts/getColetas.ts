@@ -1,4 +1,4 @@
-import { TRUX_ENDPOINT } from "@env"
+import { TRUX_HML_ENDPOINT, TRUX_AUTHORIZATION } from "@env"
 import { UserData } from "../../../interfaces/UserData"
 import { setColetas } from "../reducers/coletas/coletas"
 import { Lista } from "../../solicitacao/interfaces/Lista"
@@ -6,15 +6,14 @@ import { setRequestColetasData, setRequestColetasErro, setRequestColetasLoading 
 import info from "../../../utils/info"
 import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
-import MOCK_LISTA from "../../../mock/lista"
 
 export default async function getColetas(dispatch: Function, userData: UserData) {
     try {
         dispatch(setRequestColetasLoading())
         dispatch(setColetas(null))
 
-        const endpoint = `${TRUX_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
-        const authorization = 'basic mc0}fn7)za6#'
+        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
+        const authorization = TRUX_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,

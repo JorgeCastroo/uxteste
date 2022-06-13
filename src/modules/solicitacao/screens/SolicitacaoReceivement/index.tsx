@@ -21,6 +21,7 @@ import findListaPosition from '../../scripts/findListaPosition'
 import cancel from './scripts/cancel'
 import Form from './components/Form'
 import SuccessModal from './components/SuccessModal'
+import { getCoords } from '../../../app/scripts/geolocationService'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -68,13 +69,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     }
 
     const handleStart = () => {
-        start(
-            dispatch, 
-            !!network, 
-            handleNavigate, 
-            currentSolicitacao!.idLista, 
-            {latitude: location![0], longitude: location![1]}
-        )
+        start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, getCoords(location!))
     }
 
     return(

@@ -78,7 +78,7 @@ const FormInput: React.FC <FormInputProps> = ({ id, mode, label, placeholder, ke
                         ) : !!error ? (
                             <TextInput.Icon
                                 name = "alert-circle"
-                                color = {'red'} //! ALTERAR
+                                color = {themes.status.error.primary}
                                 forceTextInputFocus = {false}
                             />
                         ) : null

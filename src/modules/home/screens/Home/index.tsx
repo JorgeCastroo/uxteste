@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text } from 'react-native-paper'
 import { useIsFocused } from '@react-navigation/native'
+import { interval } from 'rxjs'
+import { useObservable } from 'beautiful-react-hooks'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
@@ -13,10 +15,12 @@ import HomeMessage from '../../components/Message'
 import SkeletonHomeMessage from '../../components/Message/Skeleton'
 import Container from '../../../../components/Container'
 import dayMoment from '../../../../utils/dayMoment'
-import getBackgroundGeolocation from '../../../app/scripts/backgroundGeolocation/getBackgroundGeolocation'
+import { getGeolocation } from '../../../app/scripts/geolocationService'
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
 import getColetas from '../../../coletas/scripts/getColetas'
+
+const requestInterval = interval(1000)
 
 const Home: React.FC = () => {
 
@@ -28,20 +32,25 @@ const Home: React.FC = () => {
     const { requestColeta } = useAppSelector(s => s.requestColetas)
     const isFocused = useIsFocused()
 
+    const [seconds, setSeconds] = useState<any>(0)
+
     const SHOW_COLETAS_LOADING = requestColeta.loading
     const SHOW_COLETAS_DATA = !SHOW_COLETAS_LOADING && !!coletas && coletas.length > 0
     const SHOW_DATA = !!lista && !!roteirizacao
 
+    useObservable(requestInterval, setSeconds as any)
+
     useEffect(() => {
-        if(userData){
-            initPushNotification(userData.idUsuarioSistema)
-            getBackgroundGeolocation(dispatch)
-        }
+        if(userData) initPushNotification(userData.idUsuarioSistema)
     }, [dispatch, userData])
 
     useEffect(() => {
         if(isFocused && userData) getColetas(dispatch, userData)
     }, [dispatch, isFocused, userData])
+
+    useEffect(() => {
+        if(userData && seconds % 10 === 0) getGeolocation(dispatch)
+    }, [dispatch, userData, seconds])
 
     return(
 

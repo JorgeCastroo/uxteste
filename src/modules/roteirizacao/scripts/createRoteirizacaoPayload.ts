@@ -9,8 +9,8 @@ export default async function createRoteirizacaoPayload(dispatch: Function, list
         longitude: coords.longitude,
     }
     const end = {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
+        latitude: Number(listas[listas.length - 1].latitudeDestino),
+        longitude: Number(listas[listas.length - 1].longitudeDestino),
     }
     
     await localSetCoords(dispatch, start, end)
@@ -26,9 +26,5 @@ export default async function createRoteirizacaoPayload(dispatch: Function, list
         }
     })
 
-    return {
-        start,
-        end,
-        adresses,
-    }
+    return { start, end, adresses }
 }

@@ -14,8 +14,14 @@ export default function getStatus(idStatus: number){
             theme: themes.status.success,
         }
     }
+    if(idStatus === idStatusLista.CANCELADO){
+        return{
+            label: 'Cancelado',
+            theme: themes.status.error,
+        }
+    }
     return {
-        label: 'Cancelado',
-        theme: themes.status.error,
+        label: 'Em Aberto',
+        theme: themes.status.info,
     }
 }
