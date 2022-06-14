@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT, TRUX_AUTHORIZATION } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { Lista } from "../../interfaces/Lista"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
@@ -12,8 +12,8 @@ export default async function getLista(dispatch: Function, userData: UserData){
     try {
         dispatch(R.setRequestGetListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
-        const authorization = TRUX_AUTHORIZATION
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
+        const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,

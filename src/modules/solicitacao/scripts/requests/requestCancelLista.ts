@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT, TRUX_AUTHORIZATION } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -10,8 +10,8 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
     try {
         dispatch(R.setRequestCancelListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
-        const authorization = TRUX_AUTHORIZATION
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
+        const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
