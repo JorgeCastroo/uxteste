@@ -138,8 +138,8 @@ android {
         applicationId "com.uxfirstmile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "6.1.0"
+        versionCode 11
+        versionName "6.1.1"
         missingDimensionStrategy 'react-native-camera', 'general'
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
