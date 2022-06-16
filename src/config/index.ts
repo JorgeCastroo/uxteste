@@ -6,9 +6,9 @@ export const SHOW_RESPONSE_LOG = {
 }
 
 export const SHOW_LOG = {
-    LOG: true,
+    LOG: false,
     DATA: false,
-    ERROR: true,
+    ERROR: false,
     WARN: false,
 }
 
