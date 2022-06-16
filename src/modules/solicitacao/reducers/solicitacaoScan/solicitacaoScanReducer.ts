@@ -40,8 +40,8 @@ const solicitacaoScanSlice = createSlice({
             state.isScanning = action.payload
         },
         addScannedSolicitacao: (state, action: PayloadAction<string>) => {
-            if(!state.scannedSolicitacoes.includes(action.payload.toLowerCase())){
-                state.scannedSolicitacoes.push(action.payload.toLowerCase())
+            if(!state.scannedSolicitacoes.includes(action.payload)){
+                state.scannedSolicitacoes.push(action.payload)
             }
         },
         resetScannedSolicitacoes: (state) => {

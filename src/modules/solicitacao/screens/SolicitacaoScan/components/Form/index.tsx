@@ -24,7 +24,7 @@ const Form: React.FC = () => {
     }
 
     const handleCode = useCallback((cod: string) => {
-        if(currentVolumes!.map(item => item.etiqueta.toLowerCase()).includes(cod)){
+        if(currentVolumes!.map(item => item.etiqueta).includes(cod)){
             if(!scannedSolicitacoes.includes(cod)){
                 dispatch(addScannedSolicitacao(cod))
                 dispatch(updateVolume(cod))
@@ -71,7 +71,7 @@ const Form: React.FC = () => {
                                 }
                             }}
                             value = {code}
-                            onChangeText = {t => setCode(t.toLowerCase())}
+                            onChangeText = {t => setCode(t)}
                         />
                         <FormError
                             marginTop = {16}
@@ -85,7 +85,7 @@ const Form: React.FC = () => {
                             uppercase = {false} 
                             disabled = {code === ''}
                             color = {themes.status.success.primary} 
-                            onPress = {() => handleCode(code.toLowerCase())}
+                            onPress = {() => handleCode(code)}
                         >Ok</Button>
                     </Dialog.Actions>
                 </Dialog>

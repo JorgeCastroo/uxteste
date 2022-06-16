@@ -100,7 +100,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                     }}
                     //barCodeTypes = {[scanMode as any]} //! REMOVE IN PROD
                     onBarCodeRead = {code => {
-                        if(!isScanning && !modalVisible) handleScan(code.data.toLowerCase(), scannedSolicitacoes)
+                        if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
                     }}
                 >
                     <BarcodeMask 

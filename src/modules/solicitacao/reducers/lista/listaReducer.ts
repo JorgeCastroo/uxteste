@@ -59,7 +59,7 @@ const listaSlice = createSlice({
             state.lista = [...state.lista!]
         },
         updateVolume: (state, action: PayloadAction<string>) => {
-            const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta.toLowerCase() === action.payload.toLowerCase())!
+            const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
             
             state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
             state.lista = [...state.lista!]
