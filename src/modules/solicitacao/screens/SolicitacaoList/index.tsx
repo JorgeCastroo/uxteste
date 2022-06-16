@@ -53,8 +53,8 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
         (async() => {
             if(lista && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length === 0){
                 const syncStatus = await syncValuesLista()
-                setAllIsSync(!syncStatus)
-                if(!syncStatus) closeLista(dispatch)
+                setAllIsSync(syncStatus)
+                if(syncStatus) closeLista(dispatch)
             }
         })()
     }, [lista])
@@ -74,7 +74,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 {SHOW_DATA && (
                     <>
                         {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
-                        <Section>
+                        <Section marginTop = {20}>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum item encontrado!']} />}
                             {SHOW_FILTERED_LISTA_DATA && orderLista(filteredLista, roteirizacao).map((item, index) => (
                                 <SolicitacaoBox 
