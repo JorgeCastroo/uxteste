@@ -43,8 +43,6 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
     const { currentVolumes } = useAppSelector(s => s.lista)
     const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight } = useAppSelector(s => s.solicitacaoScan)
 
-    console.log(currentVolumes!.map(item => item.etiqueta))
-
     const handleScan = useCallback(async (code: string, scanList: string[]) => {
         dispatch(setScanning(true))
         if(currentVolumes!.map(item => item.etiqueta).includes(code)){
