@@ -2,7 +2,7 @@ export const SHOW_RESPONSE_LOG = {
     REQUEST: false,
     HEADER: false,
     BODY: false,
-    RESPONSE: true,
+    RESPONSE: false,
 }
 
 export const SHOW_LOG = {
