@@ -45,32 +45,22 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
 
     const handleScan = useCallback(async (code: string, scanList: string[]) => {
         dispatch(setScanning(true))
+        let flashMessage = { message: '', type: '' }
         if(currentVolumes!.map(item => item.etiqueta).includes(code)){
             if(!scanList.includes(code)){
                 dispatch(addScannedSolicitacao(code))
                 dispatch(updateVolume(code))
                 beepSuccess.play()
-                showMessage({
-                    message: 'Código lido com sucesso!',
-                    type: 'success',
-                    statusBarHeight: StatusBar.currentHeight,
-                })
+                flashMessage = { message: 'Código lido com sucesso!', type: 'success' }
             }else{
                 beepError.play()
-                showMessage({
-                    message: 'Código já inserido!',
-                    type: 'danger',
-                    statusBarHeight: StatusBar.currentHeight,
-                })
+                flashMessage = { message: 'Código já lido!', type: 'danger' }
             }
         }else{
             beepError.play()
-            showMessage({
-                message: 'Código não existe nos volumes!',
-                type: 'danger',
-                statusBarHeight: StatusBar.currentHeight,
-            })
+            flashMessage = { message: 'Código não encontrado!', type: 'danger' }
         }
+        showMessage({...flashMessage as any, statusBarHeight: StatusBar.currentHeight })
         await sleep(3000)
         dispatch(setScanning(false))
     }, [])
@@ -98,7 +88,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    //barCodeTypes = {[scanMode as any]} //! REMOVE IN PROD
+                    barCodeTypes = {scanMode === 'QR_CODE' ? [scanMode] as any : undefined}
                     onBarCodeRead = {code => {
                         if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
                     }}

@@ -7,6 +7,7 @@ export interface ScreenStatusBarProps {
 
 export interface ScreenRenderProps {
     statusBarOptions?: ScreenStatusBarProps
+    statusBarMargin?: boolean
     align?: 'center' | 'flex-start' | 'space-between'
     wrapperColor?: string
     paddingBottom?: number
