@@ -1,69 +1,23 @@
-import React, { useCallback, useEffect, useRef } from 'react'
-import { StatusBar } from 'react-native'
+import React, { useEffect, useRef } from 'react'
 import { RNCamera } from 'react-native-camera'
-import Sound from 'react-native-sound'
 import BarcodeMask from "react-native-barcode-mask"
-import { showMessage } from "react-native-flash-message"
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { addScannedSolicitacao, setScanFlashlight, setScanning } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { setScanFlashlight, setScanLayout } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
 import Control from './components/Control'
-import info from '../../../../utils/info'
-import sleep from '../../../../utils/sleep'
-import { updateVolume } from '../../reducers/lista/listaReducer'
-//@ts-ignore
-import BeepSuccessAudio from '../../../../assets/audio/beep_success.mp3'
-//@ts-ignore
-import BeepErrorAudio from '../../../../assets/audio/beep_error.mp3'
-
-Sound.setCategory('Playback')
-
-const beepSuccess = new Sound(BeepSuccessAudio, error => {
-    if(error){
-        info.error('beepSuccess',error)
-        return
-    }
-})
-
-const beepError = new Sound(BeepErrorAudio, error => {
-    if(error){
-        info.error('beepError',error)
-        return
-    }
-})
+import handleScan from './scripts/handleScan'
+import checkBounds from './scripts/checkBounds'
 
 const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoScan'>> = ({ navigation }) => {
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
     const { currentVolumes } = useAppSelector(s => s.lista)
-    const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight } = useAppSelector(s => s.solicitacaoScan)
-
-    const handleScan = useCallback(async (code: string, scanList: string[]) => {
-        dispatch(setScanning(true))
-        let flashMessage = { message: '', type: '' }
-        if(currentVolumes!.map(item => item.etiqueta).includes(code)){
-            if(!scanList.includes(code)){
-                dispatch(addScannedSolicitacao(code))
-                dispatch(updateVolume(code))
-                beepSuccess.play()
-                flashMessage = { message: 'Código lido com sucesso!', type: 'success' }
-            }else{
-                beepError.play()
-                flashMessage = { message: 'Código já lido!', type: 'danger' }
-            }
-        }else{
-            beepError.play()
-            flashMessage = { message: 'Código não encontrado!', type: 'danger' }
-        }
-        showMessage({...flashMessage as any, statusBarHeight: StatusBar.currentHeight })
-        await sleep(3000)
-        dispatch(setScanning(false))
-    }, [])
+    const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight, scanLayout } = useAppSelector(s => s.solicitacaoScan)
 
     useEffect(() => {
         return () => {
@@ -88,16 +42,24 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    barCodeTypes = {scanMode === 'QR_CODE' ? [scanMode] as any : undefined}
-                    onBarCodeRead = {code => {
-                        if(!isScanning && !modalVisible) handleScan(code.data, scannedSolicitacoes)
+                    rectOfInterest = {scanLayout ? {...scanLayout} : undefined}
+                    onGoogleVisionBarcodesDetected = {({ barcodes = [] }) => {
+                        if(!isScanning && !modalVisible && barcodes.length > 0){
+                            const collidingBarcodes = barcodes.filter(code => !checkBounds(scanLayout, {
+                                height: code.bounds.size.height,
+                                width: code.bounds.size.width,
+                                x: code.bounds.origin.x,
+                                y: code.bounds.origin.y,
+                            }))
+                            if(collidingBarcodes.length > 0) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
+                        }
                     }}
                 >
                     <BarcodeMask 
                         width = {260}
                         height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 260 : 100}
                         showAnimatedLine = {false}
-                        //onLayoutMeasured = {({ nativeEvent: { layout } }) => dispatch(setScanLayout(layout))}
+                        onLayoutMeasured = {({ nativeEvent: { layout } }) => dispatch(setScanLayout(layout))}
                     />
                 </RNCamera>
                 <Control navigation = {navigation} />
