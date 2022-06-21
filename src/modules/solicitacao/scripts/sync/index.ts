@@ -1,6 +1,5 @@
 import { SyncCancelLista, SyncSaveLista, SyncStartLista } from "./types"
 import { UserData } from "../../../../interfaces/UserData"
-import { ValueToSync } from "../../../sync/interfaces/ValueToSync"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
 import getSyncStack from "../../../sync/scripts/getSyncStack"
 import info from "../../../../utils/info"
@@ -8,6 +7,7 @@ import storage from "../../../../utils/storage"
 import startReceivingLista from "../requests/requestStartReceivingLista"
 import saveLista from "../requests/requestSaveLista"
 import cancelLista from "../requests/requestCancelLista"
+import getSyncStorage from "../../../sync/scripts/getSyncStorage"
 
 export async function syncValuesLista(){
     const synchronizedStartLista = await getSyncStack('syncStartLista')
@@ -20,10 +20,10 @@ export async function syncValuesLista(){
 export async function syncStartLista(dispatch: Function){
     try {
         const storageKey = 'syncListaStart'
-        const storageItems = await storage.getItem<ValueToSync<SyncStartLista>[]>(storageKey)
+        const storageItems = await getSyncStorage<SyncStartLista>(storageKey)
         
         if(!!storageItems && storageItems.length > 0){
-            storageItems.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
                 const response = await startReceivingLista(dispatch, () => {}, false, value.idLista, value.coords)
                 if(response) await updateSyncValue(storageKey, storageItems, value)
             })
@@ -36,10 +36,10 @@ export async function syncStartLista(dispatch: Function){
 export async function syncSaveLista(dispatch: Function, userData: UserData){
     try {
         const storageKey = 'syncListaSave'
-        const storageItems = await storage.getItem<ValueToSync<SyncSaveLista>[]>(storageKey)
+        const storageItems = await getSyncStorage<SyncSaveLista>(storageKey)
 
         if(!!storageItems && storageItems.length > 0){
-            storageItems.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
                 const response = await saveLista(dispatch, () => {}, false, userData, value.idLista, value.volumes)
                 if(response) await updateSyncValue(storageKey, storageItems, value)
             })
@@ -52,10 +52,10 @@ export async function syncSaveLista(dispatch: Function, userData: UserData){
 export async function syncCancelLista(dispatch: Function, userData: UserData){
     try {
         const storageKey = 'syncListaCancel'
-        const storageItems = await storage.getItem<ValueToSync<SyncCancelLista>[]>(storageKey)
+        const storageItems = await getSyncStorage<SyncCancelLista>(storageKey)
 
         if(!!storageItems && storageItems.length > 0){
-            storageItems.filter(f => !f.sync && !f.dtSync).forEach(async ({ value }) => {
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
                 const response = await cancelLista(dispatch, () => {}, false, userData, value.idLista, value.motivoCancelamento)
                 if(response) await updateSyncValue(storageKey, storageItems, value)
             })
