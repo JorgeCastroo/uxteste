@@ -10,7 +10,7 @@ import Form from './components/Form'
 import Header from './components/Header'
 import Control from './components/Control'
 import handleScan from './scripts/handleScan'
-import checkBounds from './scripts/checkBounds'
+import { checkIfInside } from './scripts/checkBounds'
 
 const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoScan'>> = ({ navigation }) => {
 
@@ -42,16 +42,14 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonPositive: 'Ok',
                         buttonNegative: 'Cancel',
                     }}
-                    rectOfInterest = {scanLayout ? {...scanLayout} : undefined}
                     onGoogleVisionBarcodesDetected = {({ barcodes = [] }) => {
                         if(!isScanning && !modalVisible && barcodes.length > 0){
-                            const collidingBarcodes = barcodes.filter(code => !checkBounds(scanLayout, {
-                                height: code.bounds.size.height,
-                                width: code.bounds.size.width,
-                                x: code.bounds.origin.x,
-                                y: code.bounds.origin.y,
-                            }))
-                            if(collidingBarcodes.length > 0) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
+                            const isInside = checkIfInside(scanLayout!, {
+                                ...barcodes[0].bounds.size, 
+                                ...barcodes[0].bounds.origin,
+                            })
+                            const modeCheck = scanMode === 'QR_CODE' ? barcodes[0].format === 'QR_CODE' : true
+                            if(isInside && modeCheck) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
                         }
                     }}
                 >
