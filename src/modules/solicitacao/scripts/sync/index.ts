@@ -1,7 +1,7 @@
 import { SyncCancelLista, SyncSaveLista, SyncStartLista } from "./types"
 import { UserData } from "../../../../interfaces/UserData"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
-import getSyncStack from "../../../sync/scripts/getSyncStack"
+import getSyncStatus from "../../../sync/scripts/getSyncStatus"
 import info from "../../../../utils/info"
 import storage from "../../../../utils/storage"
 import startReceivingLista from "../requests/requestStartReceivingLista"
@@ -10,9 +10,9 @@ import cancelLista from "../requests/requestCancelLista"
 import getSyncStorage from "../../../sync/scripts/getSyncStorage"
 
 export async function syncValuesLista(){
-    const synchronizedStartLista = await getSyncStack('syncStartLista')
-    const synchronizedSaveLista = await getSyncStack('syncSaveLista')
-    const synchronizedCancelLista = await getSyncStack('syncCancelLista')
+    const synchronizedStartLista = await getSyncStatus('syncStartLista')
+    const synchronizedSaveLista = await getSyncStatus('syncSaveLista')
+    const synchronizedCancelLista = await getSyncStatus('syncCancelLista')
 
     return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista
 }
