@@ -32,7 +32,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
 
         <>
             <S.PositionIndicator theme = {status.theme.tertiary}>
-                <Text style={{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{lista.position}</Text>
+                <Text style = {{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{lista.position}</Text>
             </S.PositionIndicator>
             <List.Item
                 title = {lista.nomeCliente}

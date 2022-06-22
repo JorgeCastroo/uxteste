@@ -13,7 +13,7 @@ interface State {
 
 const initialState: State = {
     modalVisible: false,
-    scanMode: 'CODE_39',
+    scanMode: 'QR_CODE',
     scanFlashlight: false,
     scanLayout: null,
     isScanning: false,

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { StatusBar } from 'react-native'
 import { Button, Dialog, Portal, TextInput } from 'react-native-paper'
-import FlashMessage, { showMessage } from 'react-native-flash-message'
+import FlashMessage from 'react-native-flash-message'
 import { useIsFocused } from '@react-navigation/native'
 import themes from '../../../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
@@ -12,11 +12,12 @@ import FormError from '../../../../../../components/Form/Error'
 const Form: React.FC = () => {
 
     const messageRef = useRef<FlashMessage>(null)
+    const isFocused = useIsFocused()
+
     const dispatch = useAppDispatch()
     const { currentVolumes } = useAppSelector(s => s.lista)
     const { modalVisible, scannedSolicitacoes } = useAppSelector(s => s.solicitacaoScan)
     const [code, setCode] = useState('')
-    const isFocused = useIsFocused()
 
     const onClose = () => {
         setCode('')
@@ -24,30 +25,23 @@ const Form: React.FC = () => {
     }
 
     const handleCode = useCallback((cod: string) => {
+        let flashMessage = { message: '', type: '' }
         if(currentVolumes!.map(item => item.etiqueta).includes(cod)){
             if(!scannedSolicitacoes.includes(cod)){
                 dispatch(addScannedSolicitacao(cod))
                 dispatch(updateVolume(cod))
                 onClose()
-                showMessage({
-                    message: 'Código lido com sucesso!',
-                    type: 'success',
-                    statusBarHeight: StatusBar.currentHeight,
-                })
+                flashMessage = { message: 'Código lido com sucesso!', type: 'success' }
             }else{
-                messageRef.current!.showMessage({
-                    message: 'Código já inserido!',
-                    type: 'danger',
-                    statusBarHeight: StatusBar.currentHeight,
-                })
+                flashMessage = { message: 'Código já lido!', type: 'danger' }
             }
         }else{
-            messageRef.current!.showMessage({
-                message: 'Código não existe nos volumes!',
-                type: 'danger',
-                statusBarHeight: StatusBar.currentHeight,
-            })
+            flashMessage = { message: 'Código não encontrado!', type: 'danger' }
         }
+        messageRef.current!.showMessage({
+            ...flashMessage as any,
+            statusBarHeight: StatusBar.currentHeight
+        })
     }, [])
 
     return(
@@ -64,7 +58,7 @@ const Form: React.FC = () => {
                         <TextInput
                             mode = "flat"
                             label = "Código"
-                            
+                            autoCapitalize = "characters"
                             theme = {{
                                 colors: {
                                     primary: themes.colors.tertiary,
@@ -72,11 +66,11 @@ const Form: React.FC = () => {
                                 }
                             }}
                             value = {code}
-                            onChangeText = {t => setCode(t)}
+                            onChangeText = {t => setCode(t.toUpperCase())}
                         />
                         <FormError
                             marginTop = {16}
-                            visible = {scannedSolicitacoes.includes(code)}
+                            visible = {scannedSolicitacoes.includes(code.toUpperCase())}
                             message = "Código já inserido!"
                         />
                     </Dialog.Content>
@@ -86,7 +80,7 @@ const Form: React.FC = () => {
                             uppercase = {false} 
                             disabled = {code === ''}
                             color = {themes.status.success.primary} 
-                            onPress = {() => handleCode(code)}
+                            onPress = {() => handleCode(code.toUpperCase())}
                         >Ok</Button>
                     </Dialog.Actions>
                 </Dialog>
