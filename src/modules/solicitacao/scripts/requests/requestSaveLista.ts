@@ -1,4 +1,4 @@
-import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -10,7 +10,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
     try {
         dispatch(R.setRequestSaveListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,

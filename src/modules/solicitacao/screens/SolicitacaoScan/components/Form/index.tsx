@@ -64,6 +64,7 @@ const Form: React.FC = () => {
                         <TextInput
                             mode = "flat"
                             label = "Código"
+                            
                             theme = {{
                                 colors: {
                                     primary: themes.colors.tertiary,
