@@ -5,7 +5,7 @@ interface State {
     requestColeta: {
         loading: boolean;
         loadingColetasAceitas: boolean;
-        data: object | null;
+        data: Data | null;
         erro: boolean | null;
         coletasAceitasData: Data | null;
     }
@@ -28,7 +28,6 @@ const requestColetas = createSlice({
         setRequestColetasData: (state, action: PayloadAction<any>) => {
             state.requestColeta.data = action.payload
             state.requestColeta.loading = false
-            state.requestColeta.erro = false
         },
         setRequestColetasLoading: (state) => {
             state.requestColeta.loading = true

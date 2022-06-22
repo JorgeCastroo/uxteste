@@ -3,7 +3,7 @@ import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setColetas, setloadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
+import { setColetas, setLoadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
@@ -34,7 +34,7 @@ const ColetasList: React.FC = () => {
     const SHOW_NO_COLETAS = SHOW_DATA && coletas.length === 0
 
     const handleAceitarColetas = async () => {
-        dispatch(setloadingColetasAprovadas(true))
+        dispatch(setLoadingColetasAprovadas(true))
 
         let response
 
@@ -47,7 +47,7 @@ const ColetasList: React.FC = () => {
             })
         }
 
-        dispatch(setloadingColetasAprovadas(false))
+        dispatch(setLoadingColetasAprovadas(false))
         
         if (!!response) {
             if (!response.flagErro){
@@ -55,9 +55,7 @@ const ColetasList: React.FC = () => {
                 dispatch(setResetColetasAprovadas())
                 dispatch(setColetas(null))
                 navigation.navigate("solicitacaoRoutes")
-            }else Alert.alert("Erro ao prosseguir com as coletas!")
-        } else {
-            console.log('coleta',response)
+            } else Alert.alert("Erro ao prosseguir com as coletas!")
         }
     }
 

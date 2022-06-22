@@ -6,21 +6,21 @@ import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import getColetas from '../../scripts/getColetas'
 import { useIsFocused, useNavigation } from "@react-navigation/native"
-import { setRequestColetasLoading } from '../../reducers/coletas/requestColetasReducer'
 
 const ColetasDownload: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const { userData } = useAppSelector(s => s.auth)
-    const loading = useAppSelector(s => s.requestColetas.requestColeta.loading)
+    const dispatch = useAppDispatch();
+    const { loading, data } = useAppSelector(s => s.requestColetas.requestColeta)
     const navigation = useNavigation<any>()
     const isFocused = useIsFocused()
     /*
     useEffect(() => {
-        getColetas(dispatch)
-    }, [isFocused])
-
-    useEffect(() => {
-        if (!loading) navigation.navigate("coletasList")
+        if (!data) {
+            getColetas(dispatch)
+        } else if (!!data && (!data.flagErro && !loading)) {
+            navigation.navigate("coletasList")
+        } else if (!!data && data.flagErro) {
+            navigation.navigate("home")
+        }
     }, [isFocused, loading])
     */
     return (
