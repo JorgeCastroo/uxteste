@@ -141,7 +141,6 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         disabled = {requestSaveLista.loading || syncAddLoading}
                                         onPress = {() => {
                                             const current = findLista(lista!, currentSolicitacao!.idLista)
-                                            console.log(current.listaVolumes.some(f => f.dtLeituraFirstMile.length > 1))
                                             if(!current.listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
                                                 Alert.alert('Atenção', 'Não é possível finalizar o recebimento da lista sem escanear todos os volumes!', [{ text: 'Ok' }])
                                             }else handleSend()
