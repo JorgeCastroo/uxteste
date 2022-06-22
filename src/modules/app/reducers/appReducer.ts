@@ -1,11 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { GeoPosition } from "react-native-geolocation-service"
+import { AppVersion } from "../interfaces/AppVersion"
+import { APP_VERSION } from "../../../config"
 
 interface State {
     network?: boolean
+
+    location: GeoPosition | null
+
+    appVersion: AppVersion | null
+    isVersionDeprected: boolean
+    openVersionDialog: boolean
 }
 
 const initialState: State = {
-    network: undefined
+    network: undefined,
+    location: null,
+    appVersion: null,
+    isVersionDeprected: false,
+    openVersionDialog: false,
 }
 
 const appSlice = createSlice({
@@ -15,8 +28,22 @@ const appSlice = createSlice({
         setAppNetwork: (state, action: PayloadAction<boolean>) => {
             state.network = action.payload
         },
+        setAppLocation: (state, action: PayloadAction<GeoPosition>) => {
+            state.location = action.payload
+        },
+        setAppVersion: (state, action: PayloadAction<AppVersion>) => {
+            state.appVersion = action.payload
+            //state.isVersionDeprected = action.payload.versaoAtual !== APP_VERSION
+            //state.openVersionDialog = action.payload.versaoAtual !== APP_VERSION
+        },
+        setAppVersionDeprected: (state, action: PayloadAction<boolean>) => {
+            state.isVersionDeprected = action.payload
+        },
+        setAppVersionDialog: (state, action: PayloadAction<boolean>) => {
+            state.openVersionDialog = action.payload
+        },
     }
 })
 
-export const { setAppNetwork } = appSlice.actions
+export const { setAppNetwork, setAppLocation, setAppVersion, setAppVersionDeprected, setAppVersionDialog } = appSlice.actions
 export default appSlice.reducer

@@ -1,4 +1,4 @@
-import { TRUX_HML_ENDPOINT } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -7,12 +7,12 @@ import info from "../../../../utils/info"
 import request from "../../../../utils/request"
 import { idStatusLista } from "../../../../constants/idStatusLista"
 
-export default async function startReceivingLista(dispatch: Function, idLista: number, coords: Coordinates, redirect: () => void){
+export default async function startReceivingLista(dispatch: Function, redirect: () => void, sync: boolean, idLista: number, coords: Coordinates){
     try {
         dispatch(R.setRequestStartReceivingListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
+        const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
             idStatusLista: idStatusLista['COLETANDO'],
@@ -24,13 +24,17 @@ export default async function startReceivingLista(dispatch: Function, idLista: n
         if(response){
             dispatch(R.setRequestStartReceivingListaData(response))
             if(!response.flagErro){
-                dispatch(updateSituacao('COLETANDO'))
-                redirect()   
+                if(!sync){
+                    dispatch(updateSituacao({status: 'COLETANDO', idLista}))
+                    redirect()
+                } 
+                return true
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {
         info.error('startReceivingLista',error)
         dispatch(R.setRequestStartReceivingListaMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestStartReceivingListaError())
+        return false
     }
 }

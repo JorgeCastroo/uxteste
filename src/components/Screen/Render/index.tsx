@@ -7,7 +7,7 @@ import { Wrapper } from './styles'
 import themes from '../../../styles/themes'
 import toPixel from '../../../utils/toPixel'
 
-const Render: React.FC <ScreenRenderProps> = ({ children, align, wrapperColor, paddingBottom, onRefresh, loadingColor, statusBarOptions }) => {
+const Render: React.FC <ScreenRenderProps> = ({ children, align, wrapperColor, statusBarMargin, paddingBottom, onRefresh, loadingColor, statusBarOptions }) => {
 
     const isFocused = useIsFocused()
     const [resfreshLoading, setRefreshLoading] = useState<boolean>(false)
@@ -25,7 +25,8 @@ const Render: React.FC <ScreenRenderProps> = ({ children, align, wrapperColor, p
 
     const wrapperProps = {
         align: align ?? 'flex-start',
-        pad: typeof paddingBottom === 'number' ? toPixel(paddingBottom) : undefined
+        pad: typeof paddingBottom === 'number' ? toPixel(paddingBottom) : undefined,
+        statusBarMargin,
         //marginTop: statusBarProps.translucent,
     }
 

@@ -1,5 +1,6 @@
-import { TRUX_HML_ENDPOINT } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { Lista } from "../../interfaces/Lista"
+import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import request from "../../../../utils/request"
@@ -7,15 +8,15 @@ import info from "../../../../utils/info"
 import localSetLista from "../local/localSetLista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
 
-export default async function getLista(dispatch: Function){
+export default async function getLista(dispatch: Function, userData: UserData){
     try {
         dispatch(R.setRequestGetListaLoading())
 
-        const endpoint = `${TRUX_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
-        const authorization = 'basic uxAks0947sj@hj'
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
+        const authorization = VVLOG_AUTHORIZATION
         const body = {
-            idTransportadora: 18,
-            idMotorista: 9453,
+            idTransportadora: userData.idTransportadora,
+            idMotorista: userData.idUsuarioSistema,
             idStatusLista: idStatusLista['APROVADO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
@@ -23,8 +24,8 @@ export default async function getLista(dispatch: Function){
         if(response){
             dispatch(R.setRequestGetListaData(response))
             if(!response.flagErro){
-                localSetLista(dispatch, response.listaResultado)
-                return response.listaResultado
+                localSetLista(dispatch, response.listaResultados)
+                return response.listaResultados
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {

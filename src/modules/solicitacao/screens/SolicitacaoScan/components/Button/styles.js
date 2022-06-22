@@ -8,5 +8,5 @@ export const IconTouchable = styled.TouchableOpacity`
     align-items: center;
     padding: 4px 8px;
     border-radius: 8px;
-    background-color: ${props => props.theme === true ? themes.colors.tertiary : 'transparent'};
+    background-color: ${props => props.theme === true ? props.type === 'default' ? themes.colors.tertiary : themes.status[props.type].primary : 'transparent'};
 `

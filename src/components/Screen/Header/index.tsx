@@ -8,7 +8,6 @@ import HeaderMenu from './Menu'
 
 const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtitle, screenName }) => {
 
-    const { network } = useAppSelector(s => s.app)
     const { syncLoading } = useAppSelector(s => s.sync)
     const navigation = useNavigation<any>()
 
@@ -21,7 +20,7 @@ const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtit
             <Appbar.Content title = {title} subtitle = {subtitle} />
 
             {syncLoading && <Appbar.Action icon = "sync" />}
-            <Appbar.Action icon = {network ? "cloud-check-outline" : "cloud-off-outline"} />
+            {/* <Appbar.Action icon = {network ? "cloud-check-outline" : "cloud-off-outline"} /> */}
             <HeaderMenu screenName = {screenName} />
         </Appbar.Header>
 

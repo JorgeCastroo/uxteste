@@ -47,7 +47,7 @@ const Form: React.FC = () => {
                             visible = {requestSendAuthLogin.error}
                             message = {requestSendAuthLogin.message}
                         />
-                        <Section marginTop = {80}>
+                        <Section marginTop = {40}>
                             <Button
                                 label = "Entrar"
                                 disabled = {requestSendAuthLogin.loading}

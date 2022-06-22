@@ -10,6 +10,7 @@ interface State {
 
     currentSolicitacao: Lista | null
     currentVolumes: ListaVolume[] | null
+    currentPosition: number | null
 
     loadingNewLista: boolean
 }
@@ -22,6 +23,7 @@ const initialState: State = {
 
     currentSolicitacao: null,
     currentVolumes: null,
+    currentPosition: null,
 
     loadingNewLista: false,
 }
@@ -46,10 +48,13 @@ const listaSlice = createSlice({
         setCurrentVolumes: (state, action: PayloadAction<ListaVolume[]>) => {
             state.currentVolumes = action.payload
         },
+        setCurrentPosition: (state, action: PayloadAction<number>) => {
+            state.currentPosition = action.payload
+        },
 
-        updateSituacao: (state, action: PayloadAction<keyof typeof idStatusLista>) => {
-            state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload]
-            state.currentSolicitacao!.situacao = idStatusLista[action.payload]
+        updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
+            state.lista!.find(f => f.idLista === action.payload.idLista ?? state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload.status]
+            if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
             
             state.lista = [...state.lista!]
         },
@@ -76,7 +81,7 @@ const listaSlice = createSlice({
 
 export const { 
     setLista, setOldLista, setFilteredLista,
-    setCurrentSolicitacao, setCurrentVolumes,
+    setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
     updateVolume, updateSituacao,
     setLoadingNewLista,
     resetLista,

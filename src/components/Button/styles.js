@@ -10,10 +10,10 @@ export const buttonStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 12,
     },
     label: {
         paddingVertical: 14,
-        paddingHorizontal: 24,
         color: '#ffffff',
         fontSize: 20,
         fontWeight: 'bold',

@@ -8,14 +8,17 @@ export const status = {
     error: {
         primary: '#ED2209',
         secondary: '#B21A07',
+        tertiary: '#fce8e6',
     },
     success: {
         primary: '#00AE57',
         secondary: '#03723A',
+        tertiary: '#e6f4ea',
     },
     info: {
         primary: '#1967D3',
         secondary: '#074FB1',
+        tertiary: '#e8f0fe',
     }
 }
 

@@ -3,4 +3,5 @@ export type AppRoutesParams = {
     map: undefined
     solicitacaoRoutes: undefined
     coletasRoutes: undefined
+    about: undefined
 }

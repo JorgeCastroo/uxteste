@@ -1,15 +1,17 @@
 import React from 'react'
-import { Appbar, Menu } from 'react-native-paper'
+import { Linking } from 'react-native'
+import { Appbar, Divider, Menu } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { HeaderMenuProps } from './types'
-import { useAppDispatch } from '../../../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
-import loadLista from '../../../../modules/solicitacao/scripts/loadLista'
-import closeLista from '../../../../modules/solicitacao/scripts/closeLista'
+import clearAllSyncStacks from '../../../../modules/sync/scripts/clearAllSyncStacks'
+import { APP_VERSION } from '../../../../config'
 
 const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
     const dispatch = useAppDispatch()
+    const { isVersionDeprected } = useAppSelector(s => s.app)
     const [menuVisible, setMenuVisible] = React.useState(false)
     const navigation = useNavigation<any>()
 
@@ -27,22 +29,29 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
         >
             {screenName === 'solicitacaoList' && (
                 <>
-                    <Menu.Item 
-                        icon = "cloud-download-outline" 
-                        title = "Baixar lista" 
-                        onPress = {() => handleOnPress(() => loadLista(dispatch))} 
-                    />
-                    <Menu.Item 
-                        icon = "cloud-check-outline" 
-                        title = "Encerrar lista" 
-                        onPress = {() => handleOnPress(() => closeLista(dispatch))} 
+                    <Menu.Item
+                        icon = "sync-off"
+                        title = "Limpar Sync"
+                        onPress = {() => clearAllSyncStacks()}
                     />
                 </>
             )}
+            <Menu.Item
+                icon = "information-outline"
+                title = "Sobre"
+                onPress = {() => handleOnPress(() => navigation.navigate('about'))}
+            />
             <Menu.Item 
                 icon = "logout" 
                 title = "Sair" 
                 onPress = {() => handleOnPress(() => setUserLogout(dispatch, () => navigation.navigate('home')))} 
+            />
+            <Divider />
+            <Menu.Item
+                icon = {isVersionDeprected ? "cellphone-arrow-down" : "cellphone-information"}
+                title = {APP_VERSION}
+                disabled = {!isVersionDeprected}
+                onPress = {() => Linking.openURL("market://details?id=com.uxfirstmile")}
             />
         </Menu>
 

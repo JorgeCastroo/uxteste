@@ -1,49 +1,57 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { List, Text } from 'react-native-paper'
+import Snackbar from 'react-native-snackbar'
 import Clipboard from '@react-native-community/clipboard'
-import { SolicitacaoBoxProps } from './types'
+import { BoxContentProps, SolicitacaoBoxProps } from './types'
 import { Lista } from '../../interfaces/Lista'
 import * as S from './styles'
 import { elevation } from '../../../../styles/layout'
-import themes from '../../../../styles/themes'
-import { idStatusLista } from '../../../../constants/idStatusLista'
 import getFullAddress from '../../scripts/getFullAddress'
+import getStatus from '../../scripts/getStatus'
 
-const BoxContent: React.FC <Lista> = lista => {
-    
-    const theme = themes.colors.tertiary
+const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
+
     const enderecoCompleto = getFullAddress(lista)
-    
-    const getStatus = () => {
-        if(lista.situacao === 1) return 'Em aberto'
-        else return Object.keys(idStatusLista).find(f => (idStatusLista as any)[f] === lista.situacao)!
+    const status = getStatus(lista.situacao)
+
+    const handleCopyAddress = () => {
+        Clipboard.setString(enderecoCompleto)
+        Snackbar.show({
+            text: 'Endereço copiado',
+            duration: Snackbar.LENGTH_SHORT,
+            fontFamily: 'Roboto-Regular',
+            action: {
+                text: 'Ok',
+                onPress: () => {},
+            },
+        })
     }
 
     return (
 
         <>
-            <S.PositionIndicator theme={'#CCE0FF'}>
-                <Text style={{ color: theme, fontSize: 16, fontWeight: 'bold' }}>1</Text>
+            <S.PositionIndicator theme = {status.theme.tertiary}>
+                <Text style={{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{lista.position}</Text>
             </S.PositionIndicator>
             <List.Item
                 title = {lista.nomeCliente}
                 description = {`Quantidade ${lista.qtdeVolumes}`}
-                left = {props => <List.Icon {...props} icon = "office-building" color = {theme} />}
+                left = {props => <List.Icon {...props} icon = "office-building" color = {status.theme.primary} />}
             />
             <List.Item
                 title = "Responsável"
                 description = {lista.nomeResponsavel}
-                left = {props => <List.Icon {...props} icon = "truck" color = {theme} />}
+                left = {props => <List.Icon {...props} icon = "truck" color = {status.theme.primary} />}
             />
             <List.Item
                 title = "Endereço"
                 description = {enderecoCompleto}
-                left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
-                onPress = {() => Clipboard.setString(enderecoCompleto)}
+                left = {props => <List.Icon {...props} icon = "map-marker" color = {status.theme.primary} />}
+                onPress = {handleCopyAddress}
             />
-            <S.StatusContainer theme = {'#CCE0FF'}>
-                <Text style = {{color: theme, fontSize: 18, fontWeight: 'bold'}}>{getStatus().toUpperCase()}</Text>
+            <S.StatusContainer theme = {status.theme.tertiary}>
+                <Text style = {{color: status.theme.primary, fontSize: 18, fontWeight: 'bold'}}>{status.label.toUpperCase()}</Text>
             </S.StatusContainer>
         </>
 
@@ -51,18 +59,18 @@ const BoxContent: React.FC <Lista> = lista => {
 
 }
 
-const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Lista> = ({ onPress, ...props }) => {
+const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Lista> = ({ position, onPress, ...props }) => {
 
     return (
 
         <>
             {(!!onPress && (
                 <TouchableOpacity style = {[S.styles.Box, elevation.elevation4]} onPress = {onPress}>
-                    <BoxContent {...props} />
+                    <BoxContent {...props} position = {position} />
                 </TouchableOpacity>
             )) || (
                 <View style = {[S.styles.Box, elevation.elevation4]}>
-                    <BoxContent {...props} />
+                    <BoxContent {...props} position = {position} />
                 </View>
             )}
         </>

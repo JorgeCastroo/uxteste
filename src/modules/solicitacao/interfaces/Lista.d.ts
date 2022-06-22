@@ -18,7 +18,6 @@ export interface Lista {
     situacao:             number;
     dtCadastro:           Date;
     listaVolumes:         ListaVolume[];
-    sync?:                boolean | null;
 }
 
 export interface ListaVolume {

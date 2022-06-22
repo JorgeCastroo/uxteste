@@ -13,7 +13,7 @@ const Button: React.FC <ButtonProps> = ({ color, label, marginHorizontal, margin
 
         <View style = {{ marginBottom }}>
             <LinearGradient
-                style = {[buttonStyles.gradient, { marginHorizontal: marginHorizontal ? (layout.marginHorizontal * 1.5) : 0 }]}
+                style = {[buttonStyles.gradient, { marginHorizontal: marginHorizontal ? layout.marginHorizontal : 0 }]}
                 colors = {disabled ? themes.gradient.disabled : color ?? themes.gradient.secondary}
                 useAngle
                 angleCenter = {{ x: 0.5, y: 0.5 }}
@@ -21,7 +21,7 @@ const Button: React.FC <ButtonProps> = ({ color, label, marginHorizontal, margin
             >
                 <TouchableRipple style = {buttonStyles.touchable} disabled = {disabled} onPress = {() => onPress && onPress()}>
                     <>
-                        {loading && <ActivityIndicator color = "#ffffff" size = {16} />}
+                        {loading && <ActivityIndicator color = "#ffffff" size = {14} style = {{marginRight: 12}} />}
                         <Text style = {buttonStyles.label}>{label}</Text>
                     </>
                 </TouchableRipple>

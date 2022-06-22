@@ -13,7 +13,7 @@ export const InfoBox = styled.View`
 
 export const StatusBox = styled.View`
     display: flex;
-    flex: 1 1 110px;
+    flex: 1 1 80px;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;

@@ -6,12 +6,14 @@ import { responseInitialValues } from '../../../../utils/response'
 interface State {
     requestGetLista: ResponseDefault<Lista[]>
     requestSaveLista: ResponseDefault<any>
+    requestCancelLista: ResponseDefault<any>
     requestStartReceivingLista: ResponseDefault<any>
 }
 
 const initialState: State = {
     requestGetLista: responseInitialValues,
     requestSaveLista: responseInitialValues,
+    requestCancelLista: responseInitialValues,
     requestStartReceivingLista: responseInitialValues,
 }
 
@@ -59,6 +61,26 @@ const requestListaSlice = createSlice({
             state.requestSaveLista = {...responseInitialValues}
         },
 
+        setRequestCancelListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestCancelLista.data = action.payload
+            state.requestCancelLista.loading = false
+            state.requestCancelLista.error = false
+        },
+        setRequestCancelListaLoading: (state) => {
+            state.requestCancelLista.loading = true
+            state.requestCancelLista.error = false
+        },
+        setRequestCancelListaError: (state) => {
+            state.requestCancelLista.loading = false
+            state.requestCancelLista.error = true
+        },
+        setRequestCancelListaMessage: (state, action: PayloadAction<string>) => {
+            state.requestCancelLista.message = action.payload
+        },
+        resetRequestCancelLista: (state) => {
+            state.requestCancelLista = {...responseInitialValues}
+        },
+
         setRequestStartReceivingListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
             state.requestStartReceivingLista.data = action.payload
             state.requestStartReceivingLista.loading = false
@@ -84,6 +106,7 @@ const requestListaSlice = createSlice({
 export const {
     setRequestGetListaLoading, setRequestGetListaData, setRequestGetListaError, setRequestGetListaMessage, resetRequestGetLista,
     setRequestSaveListaLoading, setRequestSaveListaData, setRequestSaveListaError, setRequestSaveListaMessage, resetRequestSaveLista,
+    setRequestCancelListaLoading, setRequestCancelListaData, setRequestCancelListaError, setRequestCancelListaMessage, resetRequestCancelLista,
     setRequestStartReceivingListaLoading, setRequestStartReceivingListaData, setRequestStartReceivingListaError, setRequestStartReceivingListaMessage, resetRequestStartReceivingLista,
 } = requestListaSlice.actions
 export default requestListaSlice.reducer

@@ -8,23 +8,19 @@ import { setAcceptAllColetas, setRemoveAllColetas } from '../../reducers/coletas
 
 const ColetasSelect: React.FC = () => {
 
-    const [selectAll, setSelectAll] = React.useState('0')
-    const coletas = useAppSelector(s => s.coletas.coletas)
-
     const dispatch = useAppDispatch()
+    const coletas = useAppSelector(s => s.coletas.coletas)
+    const [selectAll, setSelectAll] = React.useState('2')
 
-    useEffect(() => {
-        if (selectAll === '0') {
-            dispatch(setRemoveAllColetas(coletas))
-        } else {
-            dispatch(setAcceptAllColetas(coletas))
-        }
-    }, [selectAll])
-
+    const handleSelect = (value: string) => {
+        setSelectAll(value)
+        if (value === '0') dispatch(setRemoveAllColetas(coletas))
+        else dispatch(setAcceptAllColetas(coletas))
+    }
 
     return (
 
-        <RadioButton.Group value={selectAll} onValueChange={setSelectAll}>
+        <RadioButton.Group value={selectAll} onValueChange={handleSelect}>
             <Section type="row" marginTop={30} marginBottom={30} between>
                 <ColetasSelectItem
                     color={themes.status.error.primary}

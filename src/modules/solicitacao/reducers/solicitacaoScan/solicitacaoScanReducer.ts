@@ -5,6 +5,7 @@ import { ScanModes } from "../../../../config/types"
 interface State {
     modalVisible: boolean
     scanMode: ScanModes
+    scanFlashlight: boolean
     scanLayout: LayoutRectangle | null
     isScanning: boolean
     scannedSolicitacoes: string[]
@@ -13,6 +14,7 @@ interface State {
 const initialState: State = {
     modalVisible: false,
     scanMode: 'CODE_39',
+    scanFlashlight: false,
     scanLayout: null,
     isScanning: false,
     scannedSolicitacoes: [],
@@ -27,6 +29,9 @@ const solicitacaoScanSlice = createSlice({
         },
         setScanMode: (state, action: PayloadAction<ScanModes>) => {
             state.scanMode = action.payload
+        },
+        setScanFlashlight: (state, action: PayloadAction<boolean>) => {
+            state.scanFlashlight = action.payload
         },
         setScanLayout: (state, action: PayloadAction<LayoutRectangle>) => {
             state.scanLayout = action.payload
@@ -45,5 +50,5 @@ const solicitacaoScanSlice = createSlice({
     }
 })
 
-export const { setModalVisible, setScanning, setScanMode, setScanLayout, addScannedSolicitacao, resetScannedSolicitacoes } = solicitacaoScanSlice.actions
+export const { setModalVisible, setScanning, setScanMode, setScanFlashlight, setScanLayout, addScannedSolicitacao, resetScannedSolicitacoes } = solicitacaoScanSlice.actions
 export default solicitacaoScanSlice.reducer

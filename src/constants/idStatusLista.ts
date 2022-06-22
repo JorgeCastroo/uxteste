@@ -4,4 +4,5 @@ export const idStatusLista = {
     COLETANDO: 3,
     REPROVADO: 4,
     FINALIZADO: 5,
+    CANCELADO: 6,
 }

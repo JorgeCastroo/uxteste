@@ -18,13 +18,27 @@ const SolicitacaoListSearchbar: React.FC = () => {
     }
 
     const handleSearch = (value: string) => {
-        const filteredLista = lista!.filter(f => f.situacao !== idStatusLista['FINALIZADO']).filter(f => f.cep.includes(value) || f.logradouro.includes(value) || f.numero.includes(value) || f.bairro.includes(value) || f.cidade.includes(value) || f.uf.includes(value))
-        dispatch(setFilteredLista(filteredLista ?? []))
+        if(value === '') handleClean()
+        else{
+            const filteredLista = lista!
+            .filter(f => f.situacao !== idStatusLista['FINALIZADO'])
+            .filter(f =>
+                f.cep.includes(value) || 
+                f.logradouro.toLowerCase().includes(value.toLowerCase()) || 
+                f.numero.includes(value) || 
+                f.bairro.toLowerCase().includes(value.toLowerCase()) || 
+                f.cidade.toLowerCase().includes(value.toLowerCase()) || 
+                f.uf.toLowerCase().includes(value.toLowerCase()) || 
+                f.nomeResponsavel.toLowerCase().includes(value.toLowerCase()) ||
+                f.nomeCliente.toLowerCase().includes(value.toLowerCase())
+            )
+            dispatch(setFilteredLista(filteredLista ?? []))
+        }
     }
 
     return(
 
-        <Section marginTop = {20} marginBottom = {20}>
+        <Section marginTop = {20}>
             <Searchbar
                 placeholder = "Pesquisar"
                 theme = {{

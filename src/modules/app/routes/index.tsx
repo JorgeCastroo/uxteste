@@ -6,6 +6,7 @@ import Home from '../../home/screens/Home'
 import Map from '../../map/screens/Map'
 import ColetasRoutes from '../../coletas/routes'
 import SolicitacaoRoutes from '../../solicitacao/routes'
+import About from '../../about/screens/About'
 
 const AppRoutes: React.FC = () => {
 
@@ -24,6 +25,7 @@ const AppRoutes: React.FC = () => {
             <Tab.Screen name = "map" component = {Map} />
             <Tab.Screen name = "solicitacaoRoutes" component = {SolicitacaoRoutes} />
             <Tab.Screen name = "coletasRoutes" component = {ColetasRoutes} />
+            <Tab.Screen name = "about" component = {About} />
         </Tab.Navigator>
 
     )
