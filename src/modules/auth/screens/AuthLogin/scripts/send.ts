@@ -1,5 +1,5 @@
 
-import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { UserData } from "../../../../../interfaces/UserData"
 import * as R from "../../../reducers/authLogin/requestAuthLoginReducer"
 import info from "../../../../../utils/info"
@@ -11,7 +11,7 @@ export default async function send(dispatch: Function, body: typeof loginFormVal
     try {
         dispatch(R.setRequestSendAuthLoginLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Permissao/Login`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Permissao/Login`
         const authorization = VVLOG_AUTHORIZATION
         const response = await request.post<UserData>({ endpoint, authorization, body })
 

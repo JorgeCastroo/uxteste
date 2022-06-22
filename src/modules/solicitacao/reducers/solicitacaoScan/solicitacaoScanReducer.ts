@@ -7,15 +7,17 @@ interface State {
     scanMode: ScanModes
     scanFlashlight: boolean
     scanLayout: LayoutRectangle | null
+    scanVisible: boolean
     isScanning: boolean
     scannedSolicitacoes: string[]
 }
 
 const initialState: State = {
     modalVisible: false,
-    scanMode: 'CODE_39',
+    scanMode: 'QR_CODE',
     scanFlashlight: false,
     scanLayout: null,
+    scanVisible: false,
     isScanning: false,
     scannedSolicitacoes: [],
 }
@@ -36,6 +38,9 @@ const solicitacaoScanSlice = createSlice({
         setScanLayout: (state, action: PayloadAction<LayoutRectangle>) => {
             state.scanLayout = action.payload
         },
+        setScanVisible: (state, action: PayloadAction<boolean>) => {
+            state.scanVisible = action.payload
+        },
         setScanning: (state, action: PayloadAction<boolean>) => {
             state.isScanning = action.payload
         },
@@ -50,5 +55,5 @@ const solicitacaoScanSlice = createSlice({
     }
 })
 
-export const { setModalVisible, setScanning, setScanMode, setScanFlashlight, setScanLayout, addScannedSolicitacao, resetScannedSolicitacoes } = solicitacaoScanSlice.actions
+export const { setModalVisible, setScanning, setScanMode, setScanFlashlight, setScanLayout, setScanVisible, addScannedSolicitacao, resetScannedSolicitacoes } = solicitacaoScanSlice.actions
 export default solicitacaoScanSlice.reducer

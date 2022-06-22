@@ -14,7 +14,7 @@ const SolicitacaoScanList: React.FC = () => {
 
         <>
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {20}>
-                <Header title = "Códigos scaneados" />
+                <Header title = "Códigos escaneados" />
                 <Section marginTop = {20}>
                     {scannedSolicitacoes.map((item, index) => (
                         <List.Item

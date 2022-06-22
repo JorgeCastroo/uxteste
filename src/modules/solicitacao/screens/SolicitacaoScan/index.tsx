@@ -3,25 +3,28 @@ import { RNCamera } from 'react-native-camera'
 import BarcodeMask from "react-native-barcode-mask"
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
+import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setScanFlashlight, setScanLayout } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { setScanFlashlight, setScanLayout, setScanVisible } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
 import Control from './components/Control'
+import checkIfInside from './scripts/checkBounds'
 import handleScan from './scripts/handleScan'
-import { checkIfInside } from './scripts/checkBounds'
+import checkFormat from './scripts/checkFormat'
 
 const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoScan'>> = ({ navigation }) => {
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
     const { currentVolumes } = useAppSelector(s => s.lista)
-    const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight, scanLayout } = useAppSelector(s => s.solicitacaoScan)
+    const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight, scanLayout, scanVisible } = useAppSelector(s => s.solicitacaoScan)
 
     useEffect(() => {
         return () => {
             dispatch(setScanFlashlight(false))
+            dispatch(setScanVisible(false))
         }
     }, [dispatch])
 
@@ -43,19 +46,22 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                         buttonNegative: 'Cancel',
                     }}
                     onGoogleVisionBarcodesDetected = {({ barcodes = [] }) => {
-                        if(!isScanning && !modalVisible && barcodes.length > 0){
+                        if(barcodes.length > 0 && !modalVisible){
                             const isInside = checkIfInside(scanLayout!, {
                                 ...barcodes[0].bounds.size, 
                                 ...barcodes[0].bounds.origin,
                             })
-                            const modeCheck = scanMode === 'QR_CODE' ? barcodes[0].format === 'QR_CODE' : true
-                            if(isInside && modeCheck) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
-                        }
+                            if(isInside && checkFormat(scanMode, barcodes[0].format ?? '')){
+                                dispatch(setScanVisible(true))
+                                if(!isScanning) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
+                            }else dispatch(setScanVisible(false))
+                        }else dispatch(setScanVisible(false))
                     }}
                 >
                     <BarcodeMask 
-                        width = {260}
+                        width = {scanMode === RNCamera.Constants.BarCodeType.qr ? 260 : '90%'}
                         height = {scanMode === RNCamera.Constants.BarCodeType.qr ? 260 : 100}
+                        edgeColor = {scanVisible ? themes.status.success.primary : '#fff'}
                         showAnimatedLine = {false}
                         onLayoutMeasured = {({ nativeEvent: { layout } }) => dispatch(setScanLayout(layout))}
                     />

@@ -10,6 +10,7 @@ import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
+import NoData from '../../../../components/NoData'
 import SolicitacaoListSearchbar from './components/Searchbar'
 import Loader from './components/Loader'
 import localGetLista from '../../scripts/local/localGetLista'
@@ -19,7 +20,6 @@ import closeLista from '../../scripts/closeLista'
 import FormError from '../../../../components/Form/Error'
 import orderLista from '../../scripts/orderLista'
 import findListaPosition from '../../scripts/findListaPosition'
-import NoData from '../../../../components/NoData'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -51,7 +51,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
 
     useEffect(() => {
         (async() => {
-            if(lista && lista.filter(f => f.situacao !== idStatusLista['FINALIZADO']).length === 0){
+            if(lista && lista.every(f => f.situacao === idStatusLista['FINALIZADO'] || f.situacao === idStatusLista['CANCELADO'])){
                 const syncStatus = await syncValuesLista()
                 setAllIsSync(syncStatus)
                 if(syncStatus) closeLista(dispatch)

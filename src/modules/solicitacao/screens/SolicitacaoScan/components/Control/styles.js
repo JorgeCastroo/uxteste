@@ -12,5 +12,5 @@ export const ScanControlsContainer = styled.View`
     padding: 20px;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
 `

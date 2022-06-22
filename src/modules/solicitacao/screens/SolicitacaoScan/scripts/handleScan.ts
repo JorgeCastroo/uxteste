@@ -47,8 +47,11 @@ export default async function handleScan(dispatch: Function, code: Barcode, scan
             beepError.play()
             flashMessage = { message: 'Código não encontrado!', type: 'danger' }
         }
-        showMessage({...flashMessage as any, statusBarHeight: StatusBar.currentHeight })
-        await sleep(3000)
+        showMessage({
+            ...flashMessage as any,
+            statusBarHeight: StatusBar.currentHeight
+        })
+        await sleep(2000)
     } catch (error) {
         info.error('handleScan',error)
     } finally {
