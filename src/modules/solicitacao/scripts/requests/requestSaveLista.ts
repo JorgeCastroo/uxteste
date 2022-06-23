@@ -15,7 +15,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
-            //idTransportadora: userData.idTransportadora,
+            idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
             listaVolumes,
         }
