@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { idStatusLista } from "../../../../constants/idStatusLista"
 import { Lista, ListaVolume } from "../../interfaces/Lista"
+import { idStatusLista } from "../../../../constants/idStatusLista"
 
 interface State {
     lista: Lista[] | null

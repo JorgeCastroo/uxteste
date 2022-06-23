@@ -53,7 +53,9 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             () => setOpenSuccessModal(true),
             userData!,
             currentSolicitacao!.idLista,
-            findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').map(item => { return item.idVolume }),
+            findLista(lista!, currentSolicitacao!.idLista).listaVolumes
+            .filter(f => f.dtLeituraFirstMile !== '')
+            .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
         )
     }
 
