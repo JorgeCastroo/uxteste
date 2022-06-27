@@ -1,3 +1,4 @@
+import { Volume } from "../../interfaces/Volume"
 import { Coordinates } from "../../../../interfaces/Coordinates"
 
 export interface SyncStartLista {
@@ -7,7 +8,7 @@ export interface SyncStartLista {
 
 export interface SyncSaveLista {
     idLista: number
-    volumes: number[]
+    volumes: Volume[]
 }
 
 export interface SyncCancelLista {
