@@ -36,7 +36,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
             </S.PositionIndicator>
             <List.Item
                 title = {lista.nomeCliente}
-                description = {`Quantidade ${lista.qtdeVolumes}`}
+                description = {`Quantidade ${lista.listaVolumes.length}`}
                 left = {props => <List.Icon {...props} icon = "office-building" color = {status.theme.primary} />}
             />
             <List.Item

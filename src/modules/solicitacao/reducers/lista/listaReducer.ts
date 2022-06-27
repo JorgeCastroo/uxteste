@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lista, ListaVolume } from "../../interfaces/Lista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
+import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
 
 interface State {
     lista: Lista[] | null
@@ -55,13 +56,16 @@ const listaSlice = createSlice({
         updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista ?? state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload.status]
             if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
-            
             state.lista = [...state.lista!]
         },
         updateVolume: (state, action: PayloadAction<string>) => {
             const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
             
             state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
+            state.lista = [...state.lista!]
+        },
+        updateListaVolumes: (state, action: PayloadAction<{idLista: number, volumes: ListaVolume[]}>) => {
+            state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes = [...state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes, ...action.payload.volumes]
             state.lista = [...state.lista!]
         },
 
@@ -82,7 +86,7 @@ const listaSlice = createSlice({
 export const { 
     setLista, setOldLista, setFilteredLista,
     setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
-    updateVolume, updateSituacao,
+    updateVolume, updateSituacao, updateListaVolumes,
     setLoadingNewLista,
     resetLista,
 } = listaSlice.actions

@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lista } from "../../interfaces/Lista"
 import { ResponseDefault, ResponsePattern } from "../../../../utils/response/types"
 import { responseInitialValues } from '../../../../utils/response'
+import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
 
 interface State {
     requestGetLista: ResponseDefault<Lista[]>
     requestSaveLista: ResponseDefault<any>
     requestCancelLista: ResponseDefault<any>
     requestStartReceivingLista: ResponseDefault<any>
+    requestUpdateLista: ResponseDefault<ListaAtualizada[]>
 }
 
 const initialState: State = {
@@ -15,6 +17,7 @@ const initialState: State = {
     requestSaveLista: responseInitialValues,
     requestCancelLista: responseInitialValues,
     requestStartReceivingLista: responseInitialValues,
+    requestUpdateLista: responseInitialValues,
 }
 
 const requestListaSlice = createSlice({
@@ -100,6 +103,26 @@ const requestListaSlice = createSlice({
         resetRequestStartReceivingLista: (state) => {
             state.requestStartReceivingLista = {...responseInitialValues}
         },
+
+        setRequestUpdateListaData: (state, action: PayloadAction<ResponsePattern<ListaAtualizada[]>>) => {
+            state.requestUpdateLista.data = action.payload
+            state.requestUpdateLista.loading = false
+            state.requestUpdateLista.error = false
+        },
+        setRequestUpdateListaLoading: (state) => {
+            state.requestUpdateLista.loading = true
+            state.requestUpdateLista.error = false
+        },
+        setRequestUpdateListaError: (state) => {
+            state.requestUpdateLista.loading = false
+            state.requestUpdateLista.error = true
+        },
+        setRequestUpdateListaMessage: (state, action: PayloadAction<string>) => {
+            state.requestUpdateLista.message = action.payload
+        },
+        resetRequestUpdateLista: (state) => {
+            state.requestUpdateLista = {...responseInitialValues}
+        },
     }
 })
 
@@ -108,5 +131,6 @@ export const {
     setRequestSaveListaLoading, setRequestSaveListaData, setRequestSaveListaError, setRequestSaveListaMessage, resetRequestSaveLista,
     setRequestCancelListaLoading, setRequestCancelListaData, setRequestCancelListaError, setRequestCancelListaMessage, resetRequestCancelLista,
     setRequestStartReceivingListaLoading, setRequestStartReceivingListaData, setRequestStartReceivingListaError, setRequestStartReceivingListaMessage, resetRequestStartReceivingLista,
+    setRequestUpdateListaLoading, setRequestUpdateListaData, setRequestUpdateListaError, setRequestUpdateListaMessage, resetRequestUpdateLista,
 } = requestListaSlice.actions
 export default requestListaSlice.reducer

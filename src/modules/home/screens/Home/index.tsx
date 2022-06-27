@@ -19,6 +19,7 @@ import { getGeolocation } from '../../../app/scripts/geolocationService'
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
 import getColetas from '../../../coletas/scripts/getColetas'
+import updateLista from '../../../solicitacao/scripts/requests/requestUpdateLista'
 
 const requestInterval = interval(1000)
 
@@ -49,7 +50,10 @@ const Home: React.FC = () => {
     }, [dispatch, isFocused, userData])
 
     useEffect(() => {
-        if(userData && seconds % 10 === 0) getGeolocation(dispatch)
+        if(userData){
+            if(seconds % 10 === 0) getGeolocation(dispatch)
+            if(seconds % 60 === 0) updateLista(dispatch, userData)
+        }
     }, [dispatch, userData, seconds])
 
     return(
