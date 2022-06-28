@@ -4,7 +4,7 @@ import { ResponseDefault, ResponsePattern } from "../../../utils/response/types"
 import { responseInitialValues } from "../../../utils/response"
 
 interface State {
-    requestGetRoteirizacao: ResponseDefault<RoteirizacaoResponse>
+    requestGetRoteirizacao: ResponseDefault<RoteirizacaoResponse[]>
 }
 
 const initialState: State = {
@@ -15,7 +15,7 @@ const requestRoteirizacaoSlice = createSlice({
     name: 'requestRoteirizacao',
     initialState,
     reducers: {
-        setRequestGetRoteirizacaoData: (state, action: PayloadAction<ResponsePattern<RoteirizacaoResponse>>) => {
+        setRequestGetRoteirizacaoData: (state, action: PayloadAction<ResponsePattern<RoteirizacaoResponse[]>>) => {
             state.requestGetRoteirizacao.data = action.payload
             state.requestGetRoteirizacao.loading = false
             state.requestGetRoteirizacao.error = false

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lista } from "../../interfaces/Lista"
+import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
 import { ResponseDefault, ResponsePattern } from "../../../../utils/response/types"
 import { responseInitialValues } from '../../../../utils/response'
-import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
 
 interface State {
     requestGetLista: ResponseDefault<Lista[]>
@@ -10,6 +10,7 @@ interface State {
     requestCancelLista: ResponseDefault<any>
     requestStartReceivingLista: ResponseDefault<any>
     requestUpdateLista: ResponseDefault<ListaAtualizada[]>
+    requestConfirmUpdateLista: ResponseDefault<any>
 }
 
 const initialState: State = {
@@ -18,6 +19,7 @@ const initialState: State = {
     requestCancelLista: responseInitialValues,
     requestStartReceivingLista: responseInitialValues,
     requestUpdateLista: responseInitialValues,
+    requestConfirmUpdateLista: responseInitialValues,
 }
 
 const requestListaSlice = createSlice({
@@ -123,6 +125,26 @@ const requestListaSlice = createSlice({
         resetRequestUpdateLista: (state) => {
             state.requestUpdateLista = {...responseInitialValues}
         },
+
+        setRequestConfirmUpdateListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestConfirmUpdateLista.data = action.payload
+            state.requestConfirmUpdateLista.loading = false
+            state.requestConfirmUpdateLista.error = false
+        },
+        setRequestConfirmUpdateListaLoading: (state) => {
+            state.requestConfirmUpdateLista.loading = true
+            state.requestConfirmUpdateLista.error = false
+        },
+        setRequestConfirmUpdateListaError: (state) => {
+            state.requestConfirmUpdateLista.loading = false
+            state.requestConfirmUpdateLista.error = true
+        },
+        setRequestConfirmUpdateListaMessage: (state, action: PayloadAction<string>) => {
+            state.requestConfirmUpdateLista.message = action.payload
+        },
+        resetRequestConfirmUpdateLista: (state) => {
+            state.requestConfirmUpdateLista = {...responseInitialValues}
+        },
     }
 })
 
@@ -132,5 +154,6 @@ export const {
     setRequestCancelListaLoading, setRequestCancelListaData, setRequestCancelListaError, setRequestCancelListaMessage, resetRequestCancelLista,
     setRequestStartReceivingListaLoading, setRequestStartReceivingListaData, setRequestStartReceivingListaError, setRequestStartReceivingListaMessage, resetRequestStartReceivingLista,
     setRequestUpdateListaLoading, setRequestUpdateListaData, setRequestUpdateListaError, setRequestUpdateListaMessage, resetRequestUpdateLista,
+    setRequestConfirmUpdateListaLoading, setRequestConfirmUpdateListaData, setRequestConfirmUpdateListaError, setRequestConfirmUpdateListaMessage, resetRequestConfirmUpdateLista,
 } = requestListaSlice.actions
 export default requestListaSlice.reducer

@@ -1,5 +1,5 @@
 import { ROTEIRIZACAO_ENDPOINT, ROTEIRIZACAO_KEY } from "@env"
-import { RoteirizacaoPayload } from "../../../../interfaces/Roteirizacao"
+import { RoteirizacaoPayload, RoteirizacaoResponse } from "../../../../interfaces/Roteirizacao"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/requestRoteirizacaoReducer"
 import localSetRoteirizacao from "../local/localSetRoteirizacao"
@@ -12,16 +12,19 @@ export default async function getRoteirizacao(dispatch: Function, body: Roteiriz
 
         const endpoint = ROTEIRIZACAO_ENDPOINT
         const authorization = ROTEIRIZACAO_KEY
-        const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
+        const response = await request.post<ResponsePattern<RoteirizacaoResponse[]>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestGetRoteirizacaoData(response))
-            if(!response.flagErro) await localSetRoteirizacao(dispatch, response.listaResultados[0])
-            else throw new Error(response.listaMensagens[0])
+            if(!response.flagErro){
+                await localSetRoteirizacao(dispatch, response.listaResultados[0])
+                return true
+            }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {
         info.error('getRoteirizacao',error)
         dispatch(R.setRequestGetRoteirizacaoMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestGetRoteirizacaoError())
+        return false
     }
 }

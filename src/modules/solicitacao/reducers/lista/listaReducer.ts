@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lista, ListaVolume } from "../../interfaces/Lista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
-import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
 
 interface State {
     lista: Lista[] | null
@@ -65,8 +64,17 @@ const listaSlice = createSlice({
             state.lista = [...state.lista!]
         },
         updateListaVolumes: (state, action: PayloadAction<{idLista: number, volumes: ListaVolume[]}>) => {
-            state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes = [...state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes, ...action.payload.volumes]
-            state.lista = [...state.lista!]
+            const currentLista = state.lista!.find(f => f.idLista === action.payload.idLista)!
+            const newVolumes: ListaVolume[] = []
+
+            action.payload.volumes.forEach(volume => {
+                if(!currentLista.listaVolumes.map(i => i.idVolume).includes(volume.idVolume)) newVolumes.push(volume)
+            })
+
+            if(newVolumes.length > 0){
+                state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes = [...currentLista.listaVolumes, ...newVolumes]
+                state.lista = [...state.lista!]
+            }
         },
 
         resetLista: (state) => {

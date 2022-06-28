@@ -21,10 +21,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
             text: 'Endereço copiado',
             duration: Snackbar.LENGTH_SHORT,
             fontFamily: 'Roboto-Regular',
-            action: {
-                text: 'Ok',
-                onPress: () => {},
-            },
+            action: { text: 'Ok' }
         })
     }
 

@@ -1,4 +1,4 @@
-import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -10,7 +10,7 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
     try {
         dispatch(R.setRequestCancelListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/CancelarRecebimento`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
@@ -20,7 +20,7 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestCancelListaData(response))
             if(!response.flagErro){
                 if(!sync){

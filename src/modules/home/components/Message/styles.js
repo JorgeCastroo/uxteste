@@ -7,6 +7,7 @@ export const Box = styled.TouchableOpacity`
     align-items: center;
     width: 100%;
     height: 84px;
+    margin-top: 12px;
     border-radius: 10px;
     background-color: #fff;
 `

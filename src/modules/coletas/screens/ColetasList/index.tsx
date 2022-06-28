@@ -36,10 +36,9 @@ const ColetasList: React.FC = () => {
     const handleAceitarColetas = async () => {
         dispatch(setLoadingColetasAprovadas(true))
 
-        let response
-
+        let responseAprovadas, responseReprovadas
         for (const coleta of coletasAprovadas) {
-            response = await acceptColeta(dispatch, {
+            responseAprovadas = await acceptColeta(dispatch, {
                 idLista: coleta.idLista,
                 idStatusLista: 2,
                 latitude: coleta.latitudeDestino,
@@ -47,10 +46,22 @@ const ColetasList: React.FC = () => {
             })
         }
 
+        const coletasNaoAprovadas = coletas!.filter(coleta => !coletasAprovadas.map(c => c.idLista).includes(coleta.idLista))
+        if(coletasNaoAprovadas && coletasNaoAprovadas.length > 0){
+            for (const coleta of coletasNaoAprovadas) {
+                responseReprovadas = await acceptColeta(dispatch, {
+                    idLista: coleta.idLista,
+                    idStatusLista: 3,
+                    latitude: coleta.latitudeDestino,
+                    longitude: coleta.latitudeDestino
+                })
+            }
+        }
+
         dispatch(setLoadingColetasAprovadas(false))
         
-        if (!!response) {
-            if (!response.flagErro){
+        if (!!responseAprovadas) {
+            if (!responseAprovadas.flagErro){
                 loadLista(dispatch, userData!, getCoords(location!), lista)
                 dispatch(setResetColetasAprovadas())
                 dispatch(setColetas(null))

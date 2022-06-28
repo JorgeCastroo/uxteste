@@ -3,6 +3,7 @@ export const SHOW_RESPONSE_LOG = {
     HEADER: false,
     BODY: false,
     RESPONSE: false,
+    ERROR: false,
 }
 
 export const SHOW_LOG = {

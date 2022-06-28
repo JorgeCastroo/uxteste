@@ -39,8 +39,10 @@ function responseLog(response: any, endpoint: string){
 }
 
 function errorLog(method: RequestMethods, endpoint: string, error: any){
-    console.log(`ERROR: ${method} ${endpoint}`)
-    console.log('ERROR:',error)
+    if(SHOW_RESPONSE_LOG.ERROR){
+        console.log(`ERROR: ${method} ${endpoint}`)
+        console.log('ERROR:',error)
+    }
 }
 
 export { requestLog, headerLog, bodyLog, responseLog, errorLog }

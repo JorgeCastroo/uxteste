@@ -1,17 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Lista } from "../../../solicitacao/interfaces/Lista";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { Lista } from "../../../solicitacao/interfaces/Lista"
 interface State {
     coletas: Lista[] | null,
     loadingColetasAprovadas: boolean,
     coletasAprovadas: Lista[],
     coletasReprovadas: Lista[],
-    idStatusColetas: {
-        ENVIADO: 1,
-        APROVADO: 2,
-        COLETANDO: 3,
-        REPROVADO: 4,
-        FINALIZADO: 5
-    }
 }
 
 const initialState: State = {
@@ -19,13 +12,6 @@ const initialState: State = {
     loadingColetasAprovadas: false,
     coletasAprovadas: [],
     coletasReprovadas: [],
-    idStatusColetas: {
-        ENVIADO: 1,
-        APROVADO: 2,
-        COLETANDO: 3,
-        REPROVADO: 4,
-        FINALIZADO: 5
-    }
 }
 
 const coletasSlice = createSlice({
@@ -69,8 +55,8 @@ const coletasSlice = createSlice({
 export const {
     setColetas,
     setLoadingColetasAprovadas,
-    setColetasAprovadas, setResetColetasAprovadas,
-    setColetasReprovadas,
-    setRemoveAllColetas,
-    setAcceptAllColetas } = coletasSlice.actions
+    setResetColetasAprovadas,
+    setColetasAprovadas, setColetasReprovadas,
+    setRemoveAllColetas, setAcceptAllColetas
+} = coletasSlice.actions
 export default coletasSlice.reducer

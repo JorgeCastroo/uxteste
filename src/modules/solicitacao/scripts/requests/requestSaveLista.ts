@@ -1,4 +1,4 @@
-import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { Volume } from "../../interfaces/Volume"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
@@ -11,7 +11,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
     try {
         dispatch(R.setRequestSaveListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
@@ -21,7 +21,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestSaveListaData(response))
             if(!response.flagErro){
                 if(!sync){

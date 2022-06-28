@@ -14,8 +14,8 @@ import findLista from '../../scripts/findLista'
 import start from './scripts/start'
 import cancel from './scripts/cancel'
 import send from './scripts/send'
-import { idStatusLista } from '../../../../constants/idStatusLista'
 import findListaPosition from '../../scripts/findListaPosition'
+import { idStatusLista } from '../../../../constants/idStatusLista'
 import Form from './components/Form'
 import SuccessModal from './components/SuccessModal'
 import StatusBox from './components/StatusBox'
@@ -34,7 +34,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const [openForm, setOpenForm] = useState(false)
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
     const [motivoCancelamento, setMotivoCancelamento] = useState('')
-
+    
     const SHOW_DATA = !!currentSolicitacao && !!roteirizacao
 
     const handleNavigate = () => {
@@ -80,16 +80,18 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 {SHOW_DATA && (
                     <>
                         <Section marginTop = {20}>
-                            <SolicitacaoBox {...currentSolicitacao!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />
+                            <SolicitacaoBox {...findLista(lista!, currentSolicitacao!.idLista)!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />
                         </Section>
                         <Section type = "row" marginTop = {8} between>
                             <StatusBox
                                 theme = {themes.status.success.primary}
+                                title = "Recebidos"
                                 text = {findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}
                             />
                             <View style = {{marginRight: 20}} />
                             <StatusBox
                                 theme = {themes.status.error.primary}
+                                title = "Pendentes"
                                 text = {findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}
                             />
                         </Section>
@@ -103,7 +105,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     disabled = {requestStartReceivingLista.loading}
                                     onPress = {() => {
                                         Alert.alert('Atenção', 'Deseja iniciar o recebimento da lista?', [
-                                            { text: 'Cancelar', style: 'cancel' },
+                                            { text: 'Não', style: 'cancel' },
                                             { text: 'Sim', onPress: () => handleStart() }	
                                         ])
                                     }}
@@ -128,7 +130,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         disabled = {requestCancelLista.loading}
                                         onPress = {() => {
                                             Alert.alert('Atenção', 'Deseja cancelar o recebimento da lista?', [
-                                                { text: 'Cancelar', style: 'cancel' },
+                                                { text: 'Não', style: 'cancel' },
                                                 { text: 'Sim', onPress: () => setOpenForm(true) }
                                             ])
                                         }}

@@ -1,5 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
-import { StatusBar } from "react-native"
+import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
@@ -7,14 +6,16 @@ import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import { updateListaVolumes } from "../../reducers/lista/listaReducer"
 import createVolume from "../createVolume"
-import info from "../../../../utils/info"
+import createListaConfirmada from "../createListaConfirmada"
+import confirmUpdateLista from "./requestConfirmUpdateLista"
 import request from "../../../../utils/request"
+import info from "../../../../utils/info"
 
 export default async function updateLista(dispatch: Function, userData: UserData){
     try {
         dispatch(R.setRequestUpdateListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
@@ -22,19 +23,23 @@ export default async function updateLista(dispatch: Function, userData: UserData
         }
         const response = await request.post<ResponsePattern<ListaAtualizada[]>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestUpdateListaData(response))
             if(!response.flagErro){
                 if(response.listaResultados.length > 0){
                     response.listaResultados.forEach(lista => {
-                        const volumes = lista.listaVolumes.map(volume => createVolume(volume.idVolume, lista.idLista, volume.etiqueta))
-                        dispatch(updateListaVolumes({idLista: lista.idLista, volumes}))
+                        dispatch(updateListaVolumes({
+                            idLista: lista.idLista, 
+                            volumes: lista.listaVolumes.map(volume => createVolume(volume.idVolume, lista.idLista, volume.etiqueta))
+                        }))
                     })                 
                     showMessage({
-                        message: "Novos volumes foram adicionados",
+                        message: "Novos volumes foram adicionados!",
                         type: "success",
-                        statusBarHeight: StatusBar.currentHeight,
+                        duration: 5000,
+                        floating: true,
                     })
+                    confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
                 }
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
