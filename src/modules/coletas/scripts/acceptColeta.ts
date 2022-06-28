@@ -1,9 +1,9 @@
 
 import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
-import info from "../../../utils/info"
-import request from "../../../utils/request"
 import { ResponsePattern } from "../../../utils/response/types"
 import { setRequestColetasAceitasData, setRequestAcceptColetasLoading } from "../reducers/coletas/requestColetasReducer"
+import info from "../../../utils/info"
+import request from "../../../utils/request"
 
 interface Body {
     idLista: number,

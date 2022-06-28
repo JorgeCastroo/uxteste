@@ -21,10 +21,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
             text: 'Endereço copiado',
             duration: Snackbar.LENGTH_SHORT,
             fontFamily: 'Roboto-Regular',
-            action: {
-                text: 'Ok',
-                onPress: () => {},
-            },
+            action: { text: 'Ok' }
         })
     }
 
@@ -36,7 +33,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
             </S.PositionIndicator>
             <List.Item
                 title = {lista.nomeCliente}
-                description = {`Quantidade ${lista.qtdeVolumes}`}
+                description = {`Quantidade ${lista.listaVolumes.length}`}
                 left = {props => <List.Icon {...props} icon = "office-building" color = {status.theme.primary} />}
             />
             <List.Item

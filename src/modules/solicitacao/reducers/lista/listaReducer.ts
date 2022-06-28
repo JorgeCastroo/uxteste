@@ -55,7 +55,6 @@ const listaSlice = createSlice({
         updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista ?? state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload.status]
             if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
-            
             state.lista = [...state.lista!]
         },
         updateVolume: (state, action: PayloadAction<string>) => {
@@ -63,6 +62,19 @@ const listaSlice = createSlice({
             
             state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
             state.lista = [...state.lista!]
+        },
+        updateListaVolumes: (state, action: PayloadAction<{idLista: number, volumes: ListaVolume[]}>) => {
+            const currentLista = state.lista!.find(f => f.idLista === action.payload.idLista)!
+            const newVolumes: ListaVolume[] = []
+
+            action.payload.volumes.forEach(volume => {
+                if(!currentLista.listaVolumes.map(i => i.idVolume).includes(volume.idVolume)) newVolumes.push(volume)
+            })
+
+            if(newVolumes.length > 0){
+                state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes = [...currentLista.listaVolumes, ...newVolumes]
+                state.lista = [...state.lista!]
+            }
         },
 
         resetLista: (state) => {
@@ -82,7 +94,7 @@ const listaSlice = createSlice({
 export const { 
     setLista, setOldLista, setFilteredLista,
     setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
-    updateVolume, updateSituacao,
+    updateVolume, updateSituacao, updateListaVolumes,
     setLoadingNewLista,
     resetLista,
 } = listaSlice.actions

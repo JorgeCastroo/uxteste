@@ -20,7 +20,6 @@ const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtit
             <Appbar.Content title = {title} subtitle = {subtitle} />
 
             {syncLoading && <Appbar.Action icon = "sync" />}
-            {/* <Appbar.Action icon = {network ? "cloud-check-outline" : "cloud-off-outline"} /> */}
             <HeaderMenu screenName = {screenName} />
         </Appbar.Header>
 

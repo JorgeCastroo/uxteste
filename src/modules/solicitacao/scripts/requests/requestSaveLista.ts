@@ -21,7 +21,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestSaveListaData(response))
             if(!response.flagErro){
                 if(!sync){

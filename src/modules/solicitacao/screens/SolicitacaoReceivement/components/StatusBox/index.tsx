@@ -4,12 +4,12 @@ import { StatusBoxProps } from './types'
 import * as S from './styles'
 import { elevation } from '../../../../../../styles/layout'
 
-const StatusBox: React.FC <StatusBoxProps> = ({ theme, text }) => {
+const StatusBox: React.FC <StatusBoxProps> = ({ theme, title, text }) => {
 
     return(
 
         <S.Box style = {elevation.elevation2}>
-            <Text style = {{color: '#333333', fontSize: 22}}>Pendentes</Text>
+            <Text style = {{color: '#333333', fontSize: 22}}>{title}</Text>
             <Text style = {{marginTop: 20, color: theme, fontSize: 32, fontWeight: 'bold'}}>{text}</Text>
         </S.Box>
 

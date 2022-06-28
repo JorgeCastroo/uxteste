@@ -13,7 +13,7 @@ export default async function getAppVersion(dispatch: Function){
         const endpoint = `https://mobile.ondetah.com.br/sistema/versao/${Platform.OS}`
         const response = await request.get<ResponsePattern<AppVersion>>({ endpoint })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestAppVersionData(response))
             if(!response.flagErro)dispatch(setAppVersion(response.listaResultados))
             else throw new Error(response.listaMensagens[0])

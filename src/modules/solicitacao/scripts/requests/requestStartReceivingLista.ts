@@ -21,7 +21,7 @@ export default async function startReceivingLista(dispatch: Function, redirect: 
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestStartReceivingListaData(response))
             if(!response.flagErro){
                 if(!sync){

@@ -27,7 +27,7 @@ const MapModal: React.FC = () => {
                         <S.ModalMain>
                             <List.Item
                                 title = {currentSolicitacao.nomeCliente}
-                                description = {`Quantidade ${currentSolicitacao.qtdeVolumes}`}
+                                description = {`Quantidade ${currentSolicitacao.listaVolumes.length}`}
                                 left = {props => <List.Icon {...props} icon = "office-building" color = {listaStatus.theme.primary} />}
                             />
                             <List.Item

@@ -14,11 +14,13 @@ import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import SkeletonHomeMessage from '../../components/Message/Skeleton'
 import Container from '../../../../components/Container'
-import dayMoment from '../../../../utils/dayMoment'
 import { getGeolocation } from '../../../app/scripts/geolocationService'
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
 import getColetas from '../../../coletas/scripts/getColetas'
+import updateLista from '../../../solicitacao/scripts/requests/requestUpdateLista'
+import dayMoment from '../../../../utils/dayMoment'
+import getRemainder from '../../../../utils/getRemainder'
 
 const requestInterval = interval(1000)
 
@@ -49,8 +51,11 @@ const Home: React.FC = () => {
     }, [dispatch, isFocused, userData])
 
     useEffect(() => {
-        if(userData && seconds % 10 === 0) getGeolocation(dispatch)
-    }, [dispatch, userData, seconds])
+        if(userData){
+            if(getRemainder(seconds, 10)) getGeolocation(dispatch)
+            if(getRemainder(seconds, 60) && SHOW_DATA) updateLista(dispatch, userData)
+        }
+    }, [dispatch, userData, seconds, SHOW_DATA])
 
     return(
 

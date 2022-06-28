@@ -7,6 +7,7 @@ import getRoteirizacao from "../../roteirizacao/scripts/request/getRoteirizacao"
 import createRoteirizacaoPayload from "../../roteirizacao/scripts/createRoteirizacaoPayload"
 import info from "../../../utils/info"
 import sleep from "../../../utils/sleep"
+import localSetLista from "./local/localSetLista"
 
 export default async function loadLista(dispatch: Function, userData: UserData, coords: Coordinates, oldListas: Lista[] | null){
     try {
@@ -20,7 +21,9 @@ export default async function loadLista(dispatch: Function, userData: UserData, 
             else newListas = reponseLista
 
             const roteirizacaoPayload = await createRoteirizacaoPayload(dispatch, newListas, coords)
-            await getRoteirizacao(dispatch, roteirizacaoPayload)
+            
+            const roteirizacaoResponse = await getRoteirizacao(dispatch, roteirizacaoPayload)
+            if(!!roteirizacaoResponse) await localSetLista(dispatch, reponseLista)
         }
         await sleep(3000)
 

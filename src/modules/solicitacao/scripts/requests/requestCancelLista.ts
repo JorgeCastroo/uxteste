@@ -20,7 +20,7 @@ export default async function cancelLista(dispatch: Function, redirect: () => vo
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
-        if(response){
+        if(response && 'flagErro' in response){
             dispatch(R.setRequestCancelListaData(response))
             if(!response.flagErro){
                 if(!sync){
