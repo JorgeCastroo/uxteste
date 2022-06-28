@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
 import { ListaConfirmada } from "../../interfaces/ListaConfirmada"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -9,7 +9,7 @@ export default async function confirmUpdateLista(dispatch: Function, listaAtuali
     try {
         dispatch(R.setRequestConfirmUpdateListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/ConfirmarRecebimento`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ConfirmarRecebimento`
         const authorization = VVLOG_AUTHORIZATION
         const body = { listaAtualizados }
         const response = await request.post<ResponsePattern<boolean>>({ endpoint, authorization, body })
