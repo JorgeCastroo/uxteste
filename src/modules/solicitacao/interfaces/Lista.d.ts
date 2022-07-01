@@ -10,6 +10,7 @@ export interface Lista {
 
 export interface Endereco {
     idLista:              number;
+    rota:                 string;
     idRemetente:          number;
     nomeCliente:          string;
     nomeResponsavel:      string;
@@ -23,6 +24,7 @@ export interface Endereco {
     telPrincipal:         string;
     latitudeDestino:      string;
     longitudeDestino:     string;
+    situacao?:            number;
     qtdeVolumes:          number;
     listaVolumes:         ListaVolume[];
 }

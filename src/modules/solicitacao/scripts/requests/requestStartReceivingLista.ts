@@ -2,7 +2,7 @@ import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
-import { updateSituacao } from "../../reducers/lista/listaReducer"
+import { updateListaSituacao } from "../../reducers/lista/listaReducer"
 import info from "../../../../utils/info"
 import request from "../../../../utils/request"
 import { idStatusLista } from "../../../../constants/idStatusLista"
@@ -25,7 +25,7 @@ export default async function startReceivingLista(dispatch: Function, redirect: 
             dispatch(R.setRequestStartReceivingListaData(response))
             if(!response.flagErro){
                 if(!sync){
-                    dispatch(updateSituacao({status: 'COLETANDO', idLista}))
+                    dispatch(updateListaSituacao({status: 'COLETANDO', idLista}))
                     redirect()
                 } 
                 return true

@@ -1,9 +1,10 @@
 import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { showMessage } from "react-native-flash-message"
 import { Volume } from "../../interfaces/Volume"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
-import { updateSituacao } from "../../reducers/lista/listaReducer"
+import { updateListaSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
@@ -25,7 +26,7 @@ export default async function saveLista(dispatch: Function, redirect: () => void
             dispatch(R.setRequestSaveListaData(response))
             if(!response.flagErro){
                 if(!sync){
-                    dispatch(updateSituacao({status: 'FINALIZADO', idLista}))
+                    dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}))
                     redirect()
                 }
                 return true
@@ -35,6 +36,15 @@ export default async function saveLista(dispatch: Function, redirect: () => void
         info.error('saveLista',error)
         dispatch(R.setRequestSaveListaMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestSaveListaError())
+        if(!sync){
+            showMessage({
+                message: "Erro ao finalizar lista!",
+                description: error.message ?? JSON.stringify(error),
+                type: "danger",
+                duration: 10000,
+                floating: true,
+            })
+        }
         return false
     }
 }

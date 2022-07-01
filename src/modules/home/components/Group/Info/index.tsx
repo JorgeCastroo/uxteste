@@ -15,7 +15,7 @@ const GroupInfo: React.FC = () => {
         <Section type = 'row' marginBottom = {20} between>
             <BoxInfo icon = 'navigation' color = {themes.colors.tertiary} text = {[roteirizacao!.formatedDistance, roteirizacao!.formatedDuration.slice(0,5)]} />
             <View style = {{marginRight: 20}} />
-            <BoxInfo icon = 'flag' color = {themes.colors.tertiary} text = {lista!.length.toString()} />
+            <BoxInfo icon = 'map-marker' color = {themes.colors.tertiary} text = {lista!.map(f => f.listaEnderecos.length).reduce((a, b) => a + b, 0).toString()} />
         </Section>
 
     )

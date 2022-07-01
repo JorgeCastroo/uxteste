@@ -4,16 +4,16 @@ import { List, Text } from 'react-native-paper'
 import Snackbar from 'react-native-snackbar'
 import Clipboard from '@react-native-community/clipboard'
 import { BoxContentProps, SolicitacaoBoxProps } from './types'
-import { Lista } from '../../interfaces/Lista'
+import { Endereco } from '../../interfaces/Lista'
 import * as S from './styles'
 import { elevation } from '../../../../styles/layout'
 import getFullAddress from '../../scripts/getFullAddress'
 import getStatus from '../../scripts/getStatus'
 
-const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
+const BoxContent: React.FC <BoxContentProps & Endereco> = endereco => {
 
-    const enderecoCompleto = getFullAddress(lista)
-    const status = getStatus(lista.situacao)
+    const enderecoCompleto = getFullAddress(endereco)
+    const status = getStatus(endereco.situacao)
 
     const handleCopyAddress = () => {
         Clipboard.setString(enderecoCompleto)
@@ -29,17 +29,13 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
 
         <>
             <S.PositionIndicator theme = {status.theme.tertiary}>
-                <Text style = {{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{lista.position}</Text>
+                <Text style = {{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{endereco.position}</Text>
             </S.PositionIndicator>
             <List.Item
-                title = {lista.nomeCliente}
-                description = {`Quantidade ${lista.listaVolumes.length}`}
-                left = {props => <List.Icon {...props} icon = "office-building" color = {status.theme.primary} />}
-            />
-            <List.Item
-                title = "Responsável"
-                description = {lista.nomeResponsavel}
-                left = {props => <List.Icon {...props} icon = "truck" color = {status.theme.primary} />}
+                title = {endereco.nomeCliente}
+                titleNumberOfLines = {3}
+                description = {`Volumes: ${endereco.listaVolumes.length}`}
+                left = {props => <List.Icon {...props} icon = "store" color = {status.theme.primary} />}
             />
             <List.Item
                 title = "Endereço"
@@ -56,7 +52,7 @@ const BoxContent: React.FC <BoxContentProps & Lista> = lista => {
 
 }
 
-const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Lista> = ({ position, onPress, ...props }) => {
+const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Endereco> = ({ position, onPress, ...props }) => {
 
     return (
 

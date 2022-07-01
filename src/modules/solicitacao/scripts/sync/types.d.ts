@@ -11,6 +11,11 @@ export interface SyncSaveLista {
     volumes: Volume[]
 }
 
+export interface SyncSendLista {
+    idLista: number
+    volumes: Volume[]
+}
+
 export interface SyncCancelLista {
     idLista: number
     motivoCancelamento: string

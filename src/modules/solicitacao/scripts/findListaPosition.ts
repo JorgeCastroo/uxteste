@@ -1,10 +1,10 @@
-import { Lista } from "../interfaces/Lista"
+import { Endereco } from "../interfaces/Lista"
 import { RoteirizacaoResponse } from "../../../interfaces/Roteirizacao"
 import info from "../../../utils/info"
 
-export default function findListaPosition(lista: Lista, roteirizacao: RoteirizacaoResponse){
+export default function findListaPosition(endereco: Endereco, roteirizacao: RoteirizacaoResponse){
     try {
-        return roteirizacao.ordenedAdresses.findIndex(i => i.id === lista.idLista)+1
+        return roteirizacao.ordenedAdresses.findIndex(i => i.id === endereco.idRemetente)+1
     } catch (error) {
         info.error('findPosition',error)
         return 0

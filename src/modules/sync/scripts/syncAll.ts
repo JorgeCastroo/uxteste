@@ -1,6 +1,6 @@
 import { UserData } from "../../../interfaces/UserData"
 import { setSyncLoading } from "../reducers/syncReducer"
-import { syncCancelLista, syncSaveLista, syncStartLista } from "../../solicitacao/scripts/sync"
+import { syncCancelLista, syncSaveLista, syncSendLista, syncStartLista } from "../../solicitacao/scripts/sync"
 import info from "../../../utils/info"
 
 export default async function syncAll(dispatch: Function, userData: UserData){
@@ -9,6 +9,7 @@ export default async function syncAll(dispatch: Function, userData: UserData){
         
         await syncStartLista(dispatch)
         await syncCancelLista(dispatch, userData)
+        await syncSendLista(dispatch, userData)
         await syncSaveLista(dispatch, userData)
 
         dispatch(setSyncLoading(false))

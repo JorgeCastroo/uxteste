@@ -1,20 +1,22 @@
-import { SyncCancelLista, SyncSaveLista, SyncStartLista } from "./types"
+import { SyncCancelLista, SyncSaveLista, SyncSendLista, SyncStartLista } from "./types"
 import { UserData } from "../../../../interfaces/UserData"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
+import getSyncStorage from "../../../sync/scripts/getSyncStorage"
 import getSyncStatus from "../../../sync/scripts/getSyncStatus"
-import info from "../../../../utils/info"
 import storage from "../../../../utils/storage"
-import startReceivingLista from "../requests/requestStartReceivingLista"
+import info from "../../../../utils/info"
 import saveLista from "../requests/requestSaveLista"
 import cancelLista from "../requests/requestCancelLista"
-import getSyncStorage from "../../../sync/scripts/getSyncStorage"
+import sendLeituraLista from "../requests/requestSendLeitura"
+import startReceivingLista from "../requests/requestStartReceivingLista"
 
 export async function syncValuesLista(){
     const synchronizedStartLista = await getSyncStatus('syncStartLista')
     const synchronizedSaveLista = await getSyncStatus('syncSaveLista')
     const synchronizedCancelLista = await getSyncStatus('syncCancelLista')
+    const synchronizedSendLista = await getSyncStatus('syncListaSend')
 
-    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista
+    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista && synchronizedSendLista
 }
 
 export async function syncStartLista(dispatch: Function){
@@ -46,6 +48,22 @@ export async function syncSaveLista(dispatch: Function, userData: UserData){
         }else await storage.removeItem(storageKey)
     } catch (error) {
         info.error('syncSaveLista',error)
+    }
+}
+
+export async function syncSendLista(dispatch: Function, userData: UserData){
+    try {
+        const storageKey = 'syncListaSend'
+        const storageItems = await getSyncStorage<SyncSendLista>(storageKey)
+
+        if(!!storageItems && storageItems.length > 0){
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
+                const response = await sendLeituraLista(dispatch, () => {}, false, userData, value.idLista, value.volumes)
+                if(response) await updateSyncValue(storageKey, storageItems, value)
+            })
+        }else await storage.removeItem(storageKey)
+    } catch (error) {
+        info.error('syncSendLista',error)
     }
 }
 

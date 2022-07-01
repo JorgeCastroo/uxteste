@@ -30,6 +30,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
                     response.listaResultados.forEach(lista => {
                         dispatch(updateListaVolumes({
                             idLista: lista.idLista, 
+                            idRemetente: lista.idRemetente,
                             volumes: lista.listaVolumes.map(volume => createVolume(volume.idVolume, lista.idLista, volume.etiqueta))
                         }))
                     })                 

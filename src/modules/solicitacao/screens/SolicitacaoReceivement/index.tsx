@@ -10,16 +10,19 @@ import Header from '../../../../components/Screen/Header'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import Button from '../../../../components/Button'
-import findLista from '../../scripts/findLista'
 import start from './scripts/start'
 import cancel from './scripts/cancel'
-import send from './scripts/send'
+import save from './scripts/save'
 import findListaPosition from '../../scripts/findListaPosition'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import Form from './components/Form'
 import SuccessModal from './components/SuccessModal'
 import StatusBox from './components/StatusBox'
 import { getCoords } from '../../../app/scripts/geolocationService'
+import findEndereco from '../../scripts/findEndereco'
+import { updateEnderecoSituacao } from '../../reducers/lista/listaReducer'
+import checkStatus from '../../scripts/checkStatus'
+import send from './scripts/send'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -27,15 +30,15 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { network, location } = useAppSelector(s => s.app)
     const { syncAddLoading } = useAppSelector(s => s.sync)
     const { userData } = useAppSelector(s => s.auth)
-    const { currentSolicitacao, lista } = useAppSelector(s => s.lista)
+    const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const { requestStartReceivingLista, requestSaveLista, requestCancelLista } = useAppSelector(s => s.requestLista)
+    const { requestStartReceivingLista, requestSaveLista, requestCancelLista, requestSendLeituraLista } = useAppSelector(s => s.requestLista)
 
     const [openForm, setOpenForm] = useState(false)
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
     const [motivoCancelamento, setMotivoCancelamento] = useState('')
     
-    const SHOW_DATA = !!currentSolicitacao && !!roteirizacao
+    const SHOW_DATA = !!currentSolicitacao && !!roteirizacao && !!lista
 
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
@@ -43,11 +46,18 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         navigation.navigate('solicitacaoScan')
     }
 
-    const handleStart = () => {
-        start(dispatch, !!network, handleNavigate, currentSolicitacao!.idLista, getCoords(location!))
+    const handleStart = async () => {
+        const { idLista, idRemetente } = currentSolicitacao!
+        if(lista!.find(f => f.idLista === idLista)!.situacao !== idStatusLista['COLETANDO']){
+            await start(dispatch, !!network, handleNavigate, idLista, getCoords(location!))
+        }
+        dispatch(updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}))
     }
 
     const handleCancel = () => {
+        const { idLista, idRemetente } = currentSolicitacao!
+        dispatch(updateEnderecoSituacao({status: 'CANCELADO', idLista, idRemetente}))
+        /*
         cancel(
             dispatch, 
             !!network, 
@@ -56,20 +66,42 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             currentSolicitacao!.idLista, 
             motivoCancelamento
         )
+        */
     }
 
-    const handleSend = () => {
-        send(
-            dispatch, 
-            !!network, 
-            () => navigation.navigate('solicitacaoList'),
-            () => setOpenSuccessModal(true),
-            userData!,
-            currentSolicitacao!.idLista,
-            findLista(lista!, currentSolicitacao!.idLista).listaVolumes
-            .filter(f => f.dtLeituraFirstMile !== '')
-            .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
-        )
+    const handleSend = async () => {
+        const { idLista, idRemetente } = currentSolicitacao!
+        if(checkStatus(lista!, idLista, idRemetente, 'FINALIZADO')){
+            await save(
+                dispatch, 
+                !!network, 
+                () => navigation.navigate('solicitacaoList'),
+                () => {
+                    setOpenSuccessModal(true)
+                    dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
+                },
+                userData!,
+                currentSolicitacao!.idLista,
+                findEndereco(lista!, currentSolicitacao!.idRemetente).listaVolumes
+                .filter(f => f.dtLeituraFirstMile !== '')
+                .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
+            )
+        }else{
+            await send(
+                dispatch, 
+                !!network, 
+                () => navigation.navigate('solicitacaoList'),
+                () => {
+                    setOpenSuccessModal(true)
+                    dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
+                },
+                userData!,
+                currentSolicitacao!.idLista,
+                findEndereco(lista!, currentSolicitacao!.idRemetente).listaVolumes
+                .filter(f => f.dtLeituraFirstMile !== '')
+                .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
+            )
+        }
     }
 
     return(
@@ -80,23 +112,23 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 {SHOW_DATA && (
                     <>
                         <Section marginTop = {20}>
-                            <SolicitacaoBox {...findLista(lista!, currentSolicitacao!.idLista)!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />
+                            <SolicitacaoBox {...findEndereco(lista, currentSolicitacao.idRemetente)!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />
                         </Section>
                         <Section type = "row" marginTop = {8} between>
                             <StatusBox
                                 theme = {themes.status.success.primary}
                                 title = "Recebidos"
-                                text = {findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}
+                                text = {findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}
                             />
                             <View style = {{marginRight: 20}} />
                             <StatusBox
                                 theme = {themes.status.error.primary}
                                 title = "Pendentes"
-                                text = {findLista(lista!, currentSolicitacao!.idLista).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}
+                                text = {findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}
                             />
                         </Section>
                         <Section marginTop = {40}>
-                            {[2].includes(currentSolicitacao.situacao) && (
+                            {[2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Iniciar Recebimento"
                                     marginHorizontal
@@ -111,7 +143,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     }}
                                 />
                             )}
-                            {[3].includes(currentSolicitacao.situacao) && (
+                            {([3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) || true) && (
                                 <Button
                                     label = "Receber"
                                     marginHorizontal
@@ -119,7 +151,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     onPress = {handleNavigate}
                                 />
                             )}
-                            {currentSolicitacao.situacao !== idStatusLista['CANCELADO'] && (
+                            {([2, 3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) || true) && (
                                 <>
                                     <Button
                                         label = "Cancelar Recebimento"
@@ -139,11 +171,10 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         label = "Finalizar Recebimento"
                                         color = {[themes.status.success.primary, themes.status.success.secondary]}
                                         marginHorizontal
-                                        loading = {requestSaveLista.loading || syncAddLoading}
-                                        disabled = {requestSaveLista.loading || syncAddLoading}
+                                        loading = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
+                                        disabled = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
                                         onPress = {() => {
-                                            const current = findLista(lista!, currentSolicitacao!.idLista)
-                                            if(!current.listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
+                                            if(!findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
                                                 Alert.alert('Atenção', 'Não é possível finalizar o recebimento da lista sem escanear todos os volumes!', [
                                                     { text: 'Ok' }
                                                 ])

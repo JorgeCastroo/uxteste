@@ -11,9 +11,10 @@ const GroupStatus: React.FC = () => {
     const { lista } = useAppSelector(s => s.lista)
 
     const { primary, secondary, tertiary } = themes.colors
-    const openListas = lista!.filter(i => [1, 2, 3].includes(i.situacao)).length.toString()
-    const canceledListas = lista!.filter(i => i.situacao === idStatusLista['CANCELADO']).length.toString()
-    const closedListas = lista!.filter(i => i.situacao === idStatusLista['FINALIZADO']).length.toString()
+
+    const openListas = lista!.map(l => l.listaEnderecos.filter(i => [1, 2, 3].includes(i.situacao ?? idStatusLista['APROVADO']))).flat(1).length.toString()
+    const canceledListas = lista!.map(l => l.listaEnderecos.filter(i => i.situacao === idStatusLista['CANCELADO'])).flat(1).length.toString()
+    const closedListas = lista!.map(l => l.listaEnderecos.filter(i => i.situacao === idStatusLista['FINALIZADO'])).flat(1).length.toString()
 
     return(
 

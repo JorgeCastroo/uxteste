@@ -6,6 +6,7 @@ export default async function clearAllSyncStacks(){
         await storage.removeItem('syncListaSave')
         await storage.removeItem('syncListaStart')
         await storage.removeItem('syncListaCancel')
+        await storage.removeItem('syncListaSend')
     } catch (error) {
         info.error('clearAllSyncStacks',error)
     }
