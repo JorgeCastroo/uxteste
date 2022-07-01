@@ -7,7 +7,7 @@ import storage from "../../../../utils/storage"
 import info from "../../../../utils/info"
 import saveLista from "../requests/requestSaveLista"
 import cancelLista from "../requests/requestCancelLista"
-import sendLeituraLista from "../requests/requestSendLeitura"
+import sendLeituraLista from "../requests/requestSendLeituraLista"
 import startReceivingLista from "../requests/requestStartReceivingLista"
 
 export async function syncValuesLista(){

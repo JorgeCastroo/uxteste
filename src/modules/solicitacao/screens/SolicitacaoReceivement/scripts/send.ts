@@ -4,7 +4,7 @@ import { UserData } from "../../../../../interfaces/UserData"
 import { updateListaSituacao } from "../../../reducers/lista/listaReducer"
 import addToSyncStack from "../../../../sync/scripts/addToSyncStack"
 import createValueToSync from "../../../../sync/scripts/createValueToSync"
-import sendLeituraLista from "../../../scripts/requests/requestSendLeitura"
+import sendLeituraLista from "../../../scripts/requests/requestSendLeituraLista"
 import info from "../../../../../utils/info"
 
 export default async function send(dispatch: Function, network: boolean, redirect: () => void, openSuccess: () => void, userData: UserData, idLista: number, volumes: Volume[]){
