@@ -10,6 +10,7 @@ export const Box = styled.View`
 
 export const SelectBox = styled.View`
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center; 
     width: 100%;

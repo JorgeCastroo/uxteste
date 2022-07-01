@@ -41,8 +41,8 @@ const ColetasList: React.FC = () => {
             responseAprovadas = await acceptColeta(dispatch, {
                 idLista: coleta.idLista,
                 idStatusLista: 2,
-                latitude: coleta.latitudeDestino,
-                longitude: coleta.latitudeDestino
+                latitude: (location?.coords.latitude ?? 0).toString(),
+                longitude: (location?.coords.longitude ?? 0).toString(),
             })
         }
 
@@ -52,8 +52,8 @@ const ColetasList: React.FC = () => {
                 responseReprovadas = await acceptColeta(dispatch, {
                     idLista: coleta.idLista,
                     idStatusLista: 3,
-                    latitude: coleta.latitudeDestino,
-                    longitude: coleta.latitudeDestino
+                    latitude: (location?.coords.latitude ?? 0).toString(),
+                    longitude: (location?.coords.longitude ?? 0).toString(),
                 })
             }
         }
@@ -79,6 +79,7 @@ const ColetasList: React.FC = () => {
                     backgroundColor: SHOW_LOADING ? '#F5F5F5' : themes.colors.primary,
                 }}
                 align = {SHOW_LOADING ? 'center' : 'flex-start'}
+                paddingBottom = {24}
                 onRefresh = {async () => !SHOW_LOADING && await getColetas(dispatch, userData!)}
             >
                 {SHOW_LOADING && <Loader />}
@@ -91,18 +92,9 @@ const ColetasList: React.FC = () => {
                                 <Section>
                                     {coletas.map((coleta, index) => (
                                         <ColetasBox
-                                            key={index}
-                                            selected={!!coletasAprovadas.find(f => f.idLista === coleta.idLista)}
-                                            id={coleta.idLista}
-                                            cliente={coleta.nomeCliente}
-                                            coleta={coleta}
-                                            quantidade={coleta.qtdeVolumes}
-                                            logradouro={coleta.logradouro}
-                                            numero={coleta.numero}
-                                            bairro={coleta.bairro}
-                                            cidade={coleta.cidade}
-                                            uf={coleta.uf}
-                                            cep={coleta.cep}
+                                            {...coleta}
+                                            key = {index}
+                                            selected = {!!coletasAprovadas.find(f => f.idLista === coleta.idLista)}
                                         />
                                     ))}
                                 </Section>

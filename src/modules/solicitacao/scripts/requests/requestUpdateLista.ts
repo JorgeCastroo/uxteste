@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
@@ -15,7 +15,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
     try {
         dispatch(R.setRequestUpdateListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,

@@ -1,13 +1,21 @@
 export interface Lista {
+    idLista:          number;
+    idUsuario:        number;
+    situacao:         number;
+    rota:             string;
+    dtCadastro:       Date;
+    qtdeTotalVolumes: number;
+    listaEnderecos:   Endereco[];
+}
+
+export interface Endereco {
     idLista:              number;
-    idUsuario:            number;
+    idRemetente:          number;
     nomeCliente:          string;
     nomeResponsavel:      string;
-    qtdeVolumes:          number;
     documentoResponsavel: string;
     logradouro:           string;
     numero:               string;
-    complemento:          string;
     bairro:               string;
     cidade:               string;
     uf:                   string;
@@ -15,8 +23,7 @@ export interface Lista {
     telPrincipal:         string;
     latitudeDestino:      string;
     longitudeDestino:     string;
-    situacao:             number;
-    dtCadastro:           Date;
+    qtdeVolumes:          number;
     listaVolumes:         ListaVolume[];
 }
 
