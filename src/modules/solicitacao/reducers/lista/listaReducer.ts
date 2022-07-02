@@ -61,10 +61,6 @@ const listaSlice = createSlice({
         updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
 
-            if(state.currentLista && state.currentLista.idLista === action.payload.idLista){
-                state.currentLista.situacao = idStatusLista[action.payload.status]
-            }
-
             state.lista = [...state.lista!]
         },
         updateEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
@@ -73,6 +69,17 @@ const listaSlice = createSlice({
             .find(f => f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
 
             if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
+
+            state.lista = [...state.lista!]
+        },
+        updateListaEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
+            state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
+            state.lista!
+            .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
+            .find(f => f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
+
+            if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
+
             state.lista = [...state.lista!]
         },
 
@@ -123,7 +130,7 @@ const listaSlice = createSlice({
 export const { 
     setLista, setOldLista, setFilteredEndereco,
     setCurrentLista, setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
-    updateEnderecoVolume, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes,
+    updateEnderecoVolume, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
     setLoadingNewLista,
     resetLista,
 } = listaSlice.actions

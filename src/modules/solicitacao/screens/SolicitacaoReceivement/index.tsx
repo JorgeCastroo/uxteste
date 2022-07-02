@@ -23,6 +23,7 @@ import findEndereco from '../../scripts/findEndereco'
 import { updateEnderecoSituacao } from '../../reducers/lista/listaReducer'
 import checkStatus from '../../scripts/checkStatus'
 import send from './scripts/send'
+import sleep from '../../../../utils/sleep'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -76,10 +77,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 dispatch, 
                 !!network, 
                 () => navigation.navigate('solicitacaoList'),
-                () => {
-                    setOpenSuccessModal(true)
-                    dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
-                },
+                () => setOpenSuccessModal(true),
                 userData!,
                 currentSolicitacao!.idLista,
                 findEndereco(lista!, currentSolicitacao!.idRemetente).listaVolumes
@@ -91,10 +89,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 dispatch, 
                 !!network, 
                 () => navigation.navigate('solicitacaoList'),
-                () => {
-                    setOpenSuccessModal(true)
-                    dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
-                },
+                () => setOpenSuccessModal(true),
                 userData!,
                 currentSolicitacao!.idLista,
                 findEndereco(lista!, currentSolicitacao!.idRemetente).listaVolumes
@@ -102,6 +97,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
             )
         }
+        await sleep(1000)
+        dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
     }
 
     return(
@@ -128,7 +125,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             />
                         </Section>
                         <Section marginTop = {40}>
-                            {[2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {([2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) || true) && (
                                 <Button
                                     label = "Iniciar Recebimento"
                                     marginHorizontal
@@ -143,7 +140,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     }}
                                 />
                             )}
-                            {([3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) || true) && (
+                            {[3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Receber"
                                     marginHorizontal

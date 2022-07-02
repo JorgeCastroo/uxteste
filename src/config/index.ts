@@ -1,8 +1,8 @@
 export const SHOW_RESPONSE_LOG = {
     REQUEST: false,
     HEADER: false,
-    BODY: false,
-    RESPONSE: false,
+    BODY: true,
+    RESPONSE: true,
     ERROR: false,
 }
 

@@ -16,7 +16,7 @@ export default async function getLista(dispatch: Function, userData: UserData){
         const body = {
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
-            idStatusLista: idStatusLista['APROVADO'],
+            idStatusLista: idStatusLista['COLETANDO'],
         }
         const response = await request.post<ResponsePattern<Lista[]>>({ endpoint, authorization, body })
 

@@ -25,10 +25,7 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
         if(response && 'flagErro' in response){
             dispatch(R.setRequestSendLeituraListaData(response))
             if(!response.flagErro){
-                if(!sync){
-                    dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}))
-                    redirect()
-                }
+                if(!sync) redirect()
                 return true
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')

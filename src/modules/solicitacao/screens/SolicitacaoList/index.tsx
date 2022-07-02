@@ -49,8 +49,8 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
         dispatch(setCurrentVolumes(item.listaVolumes))
         navigation.navigate('solicitacaoReceivement')
     }
-
-    useEffect(() => {
+    
+    /*useEffect(() => {
         (async() => {
             if(lista && lista.every(f => f.situacao === idStatusLista['FINALIZADO'] || f.situacao === idStatusLista['CANCELADO'])){
                 const syncStatus = await syncValuesLista()
@@ -58,7 +58,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 if(syncStatus) closeLista(dispatch)
             }
         })()
-    }, [lista])
+    }, [lista])*/
 
     return (
 
