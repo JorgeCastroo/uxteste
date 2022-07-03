@@ -72,7 +72,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
 
     const handleSend = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        if(checkStatus(lista!, idLista, idRemetente, 'FINALIZADO')){
+        if(!checkStatus(lista!, idLista, idRemetente, 'COLETANDO')){
             await save(
                 dispatch, 
                 !!network, 
@@ -135,7 +135,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     onPress = {() => {
                                         Alert.alert('Atenção', 'Deseja iniciar o recebimento da lista?', [
                                             { text: 'Não', style: 'cancel' },
-                                            { text: 'Sim', onPress: () => handleStart() }	
+                                            { text: 'Sim', onPress: handleStart }	
                                         ])
                                     }}
                                 />
@@ -172,7 +172,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         disabled = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
                                         onPress = {() => {
                                             if(!findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
-                                                Alert.alert('Atenção', 'Não é possível finalizar o recebimento da lista sem escanear todos os volumes!', [
+                                                Alert.alert('Atenção', 'Não é possível finalizar o recebimento sem escanear todos os volumes!', [
                                                     { text: 'Ok' }
                                                 ])
                                             }else handleSend()
