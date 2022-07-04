@@ -7,7 +7,7 @@ async function requestGet<T>({authorization, endpoint, params}: RequestPattern){
     const input = createRequestInput(endpoint, params)
     try {
         requestLog('GET', input)
-        //headerLog('GET', input, createRequestHeaders(headers))
+        //headerLog(input, createRequestHeaders(headers))
         const response = await fetch(input, {
             method: 'GET',
             headers: createRequestHeaders(authorization)
@@ -25,7 +25,7 @@ async function requestPost<T>({authorization, endpoint, params, body}: RequestPa
     const input = createRequestInput(endpoint, params)
     try {
         requestLog('POST', input)
-        //headerLog('POST', input, createRequestHeaders(headers))
+        //headerLog(input, createRequestHeaders(headers))
         bodyLog(body, input)
         const response = await fetch(input, {
             method: 'POST',
@@ -45,7 +45,7 @@ async function requestDelete<T>({authorization, endpoint, params, body}: Request
     const input = createRequestInput(endpoint, params)
     try {
         requestLog('DELETE', input)
-        //headerLog('DELETE', input, createRequestHeaders(headers))
+        //headerLog(input, createRequestHeaders(headers))
         bodyLog(body, input)
         const response = await fetch(input, {
             method: 'DELETE',
@@ -65,7 +65,7 @@ async function requestPut<T>({authorization, endpoint, params, body}: RequestPat
     const input = createRequestInput(endpoint, params)
     try {
         requestLog('PUT', input)
-        //headerLog('PUT', input, createRequestHeaders(headers))
+        //headerLog(input, createRequestHeaders(headers))
         bodyLog(body, input)
         const response = await fetch(input, {
             method: 'PUT',

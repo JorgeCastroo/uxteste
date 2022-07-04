@@ -35,8 +35,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
     const isFocused = useIsFocused()
 
     const LOAD_DATA = !!lista && !!route && !!roteirizacao && !!startCoords && !!endCoords
-    const SHOW_DATA = LOAD_DATA && renderMap 
-    console.log("🚀 ~ file: index.tsx ~ line 39 ~ SHOW_DATA", SHOW_DATA)
+    const SHOW_DATA = LOAD_DATA && renderMap
 
     useEffect(() => {
         (async() => {
