@@ -12,6 +12,7 @@ interface State {
     requestUpdateLista: ResponseDefault<ListaAtualizada[]>
     requestConfirmUpdateLista: ResponseDefault<any>
     requestSendLeituraLista: ResponseDefault<any>
+    requestCancelEnderecoLista: ResponseDefault<any>
 }
 
 const initialState: State = {
@@ -22,6 +23,7 @@ const initialState: State = {
     requestUpdateLista: responseInitialValues,
     requestConfirmUpdateLista: responseInitialValues,
     requestSendLeituraLista: responseInitialValues,
+    requestCancelEnderecoLista: responseInitialValues,
 }
 
 const requestListaSlice = createSlice({
@@ -167,6 +169,26 @@ const requestListaSlice = createSlice({
         resetRequestSendLeituraLista: (state) => {
             state.requestSendLeituraLista = {...responseInitialValues}
         },
+
+        setRequestCancelEnderecoListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestCancelEnderecoLista.data = action.payload
+            state.requestCancelEnderecoLista.loading = false
+            state.requestCancelEnderecoLista.error = false
+        },
+        setRequestCancelEnderecoListaLoading: (state) => {
+            state.requestCancelEnderecoLista.loading = true
+            state.requestCancelEnderecoLista.error = false
+        },
+        setRequestCancelEnderecoListaError: (state) => {
+            state.requestCancelEnderecoLista.loading = false
+            state.requestCancelEnderecoLista.error = true
+        },
+        setRequestCancelEnderecoListaMessage: (state, action: PayloadAction<string>) => {
+            state.requestCancelEnderecoLista.message = action.payload
+        },
+        resetRequestCancelEnderecoLista: (state) => {
+            state.requestCancelEnderecoLista = {...responseInitialValues}
+        },
     }
 })
 
@@ -178,5 +200,6 @@ export const {
     setRequestUpdateListaLoading, setRequestUpdateListaData, setRequestUpdateListaError, setRequestUpdateListaMessage, resetRequestUpdateLista,
     setRequestConfirmUpdateListaLoading, setRequestConfirmUpdateListaData, setRequestConfirmUpdateListaError, setRequestConfirmUpdateListaMessage, resetRequestConfirmUpdateLista,
     setRequestSendLeituraListaLoading, setRequestSendLeituraListaData, setRequestSendLeituraListaError, setRequestSendLeituraListaMessage, resetRequestSendLeituraLista,
+    setRequestCancelEnderecoListaLoading, setRequestCancelEnderecoListaData, setRequestCancelEnderecoListaError, setRequestCancelEnderecoListaMessage, resetRequestCancelEnderecoLista,
 } = requestListaSlice.actions
 export default requestListaSlice.reducer

@@ -1,4 +1,4 @@
-import { SyncCancelLista, SyncSaveLista, SyncSendLista, SyncStartLista } from "./types"
+import { SyncCancelLista, SyncCancelEnderecoLista, SyncSaveLista, SyncSendLista, SyncStartLista } from "./types"
 import { UserData } from "../../../../interfaces/UserData"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
 import getSyncStorage from "../../../sync/scripts/getSyncStorage"
@@ -9,6 +9,7 @@ import saveLista from "../requests/requestSaveLista"
 import cancelLista from "../requests/requestCancelLista"
 import sendLeituraLista from "../requests/requestSendLeituraLista"
 import startReceivingLista from "../requests/requestStartReceivingLista"
+import cancelEnderecoLista from "../requests/requestCancelEnderecoLista"
 
 export async function syncValuesLista(){
     const synchronizedStartLista = await getSyncStatus('syncStartLista')
@@ -80,5 +81,21 @@ export async function syncCancelLista(dispatch: Function, userData: UserData){
         }else await storage.removeItem(storageKey)
     } catch (error) {
         info.error('syncCancelLista',error)
+    }
+}
+
+export async function syncCancelEnderecoLista(dispatch: Function, userData: UserData){
+    try {
+        const storageKey = 'syncListaCancelEndereco'
+        const storageItems = await getSyncStorage<SyncCancelEnderecoLista>(storageKey)
+
+        if(!!storageItems && storageItems.length > 0){
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
+                const response = await cancelEnderecoLista(dispatch, () => {}, false, userData, value.idLista, value.idRemetente)
+                if(response) await updateSyncValue(storageKey, storageItems, value)
+            })
+        }else await storage.removeItem(storageKey)
+    } catch (error) {
+        info.error('syncCancelEnderecoLista',error)
     }
 }

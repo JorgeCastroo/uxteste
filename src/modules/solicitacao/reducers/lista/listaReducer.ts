@@ -61,6 +61,13 @@ const listaSlice = createSlice({
         updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
 
+            if(action.payload.status === 'CANCELADO'){
+                state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.map(endereco => {
+                    endereco.situacao = idStatusLista[action.payload.status]
+                    return endereco
+                })
+            }
+
             state.lista = [...state.lista!]
         },
         updateEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {

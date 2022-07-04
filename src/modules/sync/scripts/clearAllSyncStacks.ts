@@ -3,10 +3,8 @@ import storage from "../../../utils/storage"
 
 export default async function clearAllSyncStacks(){
     try {
-        await storage.removeItem('syncListaSave')
-        await storage.removeItem('syncListaStart')
-        await storage.removeItem('syncListaCancel')
-        await storage.removeItem('syncListaSend')
+        const syncKeys = ['syncListaSave', 'syncListaStart', 'syncListaCancel', 'syncListaSend', 'syncListaCancelEndereco']
+        syncKeys.forEach(async key => { await storage.removeItem(key) })
     } catch (error) {
         info.error('clearAllSyncStacks',error)
     }

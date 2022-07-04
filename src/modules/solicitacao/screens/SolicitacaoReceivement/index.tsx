@@ -24,6 +24,7 @@ import { updateEnderecoSituacao } from '../../reducers/lista/listaReducer'
 import checkStatus from '../../scripts/checkStatus'
 import send from './scripts/send'
 import sleep from '../../../../utils/sleep'
+import cancelEndereco from './scripts/cancelEndereco'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -33,7 +34,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { userData } = useAppSelector(s => s.auth)
     const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const { requestStartReceivingLista, requestSaveLista, requestCancelLista, requestSendLeituraLista } = useAppSelector(s => s.requestLista)
+    const { requestStartReceivingLista, requestSaveLista, requestCancelLista, requestSendLeituraLista, requestCancelEnderecoLista } = useAppSelector(s => s.requestLista)
 
     const [openForm, setOpenForm] = useState(false)
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
@@ -55,19 +56,14 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         dispatch(updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}))
     }
 
-    const handleCancel = () => {
+    const handleCancelAll = () => {
+        const { idLista } = currentSolicitacao!
+        cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!, idLista, motivoCancelamento)
+    }
+
+    const handleCancelOne = () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        dispatch(updateEnderecoSituacao({status: 'CANCELADO', idLista, idRemetente}))
-        /*
-        cancel(
-            dispatch, 
-            !!network, 
-            () => navigation.navigate('solicitacaoList'), 
-            userData!, 
-            currentSolicitacao!.idLista, 
-            motivoCancelamento
-        )
-        */
+        cancelEndereco(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!, idLista, idRemetente)
     }
 
     const handleSend = async () => {
@@ -97,7 +93,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
             )
         }
-        await sleep(1000)
+        await sleep(500)
         dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
     }
 
@@ -125,7 +121,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             />
                         </Section>
                         <Section marginTop = {40}>
-                            {([2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) || true) && (
+                            {[2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Iniciar Recebimento"
                                     marginHorizontal
@@ -142,25 +138,39 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             )}
                             {[3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
-                                    label = "Receber"
+                                    label = "Continuar Recebimento"
                                     marginHorizontal
                                     marginBottom = {8}
                                     onPress = {handleNavigate}
                                 />
                             )}
-                            {([2, 3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) || true) && (
+                            {[2, 3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <>
                                     <Button
-                                        label = "Cancelar Recebimento"
+                                        label = "Cancelar Lista"
                                         color = {[themes.status.error.primary, themes.status.error.secondary]}
                                         marginHorizontal
                                         marginBottom = {8}
                                         loading = {requestCancelLista.loading}
                                         disabled = {requestCancelLista.loading}
                                         onPress = {() => {
-                                            Alert.alert('Atenção', 'Deseja cancelar o recebimento da lista?', [
+                                            Alert.alert('Atenção', 'Deseja cancelar a lista?', [
                                                 { text: 'Não', style: 'cancel' },
                                                 { text: 'Sim', onPress: () => setOpenForm(true) }
+                                            ])
+                                        }}
+                                    />
+                                    <Button
+                                        label = "Cancelar Recebimento"
+                                        color = {[themes.status.error.primary, themes.status.error.secondary]}
+                                        marginHorizontal
+                                        marginBottom = {8}
+                                        loading = {requestCancelEnderecoLista.loading}
+                                        disabled = {requestCancelEnderecoLista.loading}
+                                        onPress = {() => {
+                                            Alert.alert('Atenção', 'Deseja cancelar o recebimento desse endereço?', [
+                                                { text: 'Não', style: 'cancel' },
+                                                { text: 'Sim', onPress: handleCancelOne }
                                             ])
                                         }}
                                     />
@@ -189,7 +199,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 setOpen = {setOpenForm} 
                 motivo = {motivoCancelamento} 
                 setMotivo = {setMotivoCancelamento} 
-                onSubmit = {handleCancel}
+                onSubmit = {handleCancelAll}
             />
             <SuccessModal open = {openSuccessModal} setOpen = {setOpenSuccessModal} redirect = {() => navigation.navigate('solicitacaoList')} />
         </>

@@ -20,3 +20,8 @@ export interface SyncCancelLista {
     idLista: number
     motivoCancelamento: string
 }
+
+export interface SyncCancelEnderecoLista {
+    idLista: number
+    idRemetente: number
+}
