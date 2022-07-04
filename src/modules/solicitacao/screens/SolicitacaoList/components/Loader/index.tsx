@@ -13,8 +13,8 @@ import FormError from '../../../../../../components/Form/Error'
 const Loader: React.FC <LoaderProps> = ({ percent }) => {
 
     const dispatch = useAppDispatch()
-    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
+    //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
     const { requestGetLista } = useAppSelector(s => s.requestLista)
     const [animationValue] = useState(new Animated.Value(0))
     const animationDuration = 2000
@@ -38,7 +38,7 @@ const Loader: React.FC <LoaderProps> = ({ percent }) => {
 
         <Section center>
             <Container padding = {false} center>
-                <Text style = {{color: '#787878', fontSize: 22, fontWeight: 'bold'}}>Roteirizando a melhor rota</Text>
+                <Text style = {{color: '#787878', fontSize: 22, fontWeight: 'bold'}}>Carregando listas</Text>
             </Container>
             <Container marginTop = {100} marginBottom = {100} padding = {false} center>
                 <S.LoadingBarContainer>
@@ -54,7 +54,7 @@ const Loader: React.FC <LoaderProps> = ({ percent }) => {
                 message = {requestGetLista.message}
                 marginBottom = {20}
             />
-            <FormError
+            {/* <FormError
                 visible = {requestGetRoteirizacao.error}
                 message = {requestGetRoteirizacao.message}
                 marginBottom = {20}
@@ -70,7 +70,7 @@ const Loader: React.FC <LoaderProps> = ({ percent }) => {
                         <Text style = {{color: themes.colors.primary, fontSize: 22, fontWeight: 'bold'}}>{roteirizacao.formatedDuration ?? '0'}</Text>
                     </Container>
                 </>
-            )}
+            )} */}
         </Section>
 
     )

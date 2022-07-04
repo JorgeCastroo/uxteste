@@ -1,6 +1,6 @@
 import { Lista } from "../../interfaces/Lista"
 export interface SolicitacaoBoxProps {
-    position: number,
+    position?: number,
     onPress?: () => void,
 }
 

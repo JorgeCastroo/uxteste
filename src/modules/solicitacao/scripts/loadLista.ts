@@ -15,17 +15,18 @@ export default async function loadLista(dispatch: Function, userData: UserData, 
 
         const reponseLista = await getLista(dispatch, userData)
         if(!!reponseLista){
-            let newListas: Lista[] = []
+            await localSetLista(dispatch, reponseLista)
+            // let newListas: Lista[] = []
 
-            if(oldListas) newListas = [...reponseLista.filter(f => !oldListas.map(item => item.idLista).includes(f.idLista)), ...oldListas]
-            else newListas = reponseLista
+            // if(oldListas) newListas = [...reponseLista.filter(f => !oldListas.map(item => item.idLista).includes(f.idLista)), ...oldListas]
+            // else newListas = reponseLista
 
-            const roteirizacaoPayload = await createRoteirizacaoPayload(dispatch, newListas, coords)
+            // const roteirizacaoPayload = await createRoteirizacaoPayload(dispatch, newListas, coords)
             
-            const roteirizacaoResponse = await getRoteirizacao(dispatch, roteirizacaoPayload)
-            if(!!roteirizacaoResponse) await localSetLista(dispatch, reponseLista)
+            // const roteirizacaoResponse = await getRoteirizacao(dispatch, roteirizacaoPayload)
+            // if(!!roteirizacaoResponse) await localSetLista(dispatch, reponseLista)
         }
-        await sleep(3000)
+        await sleep(2000)
 
         dispatch(setLoadingNewLista(false))
     } catch (error) {

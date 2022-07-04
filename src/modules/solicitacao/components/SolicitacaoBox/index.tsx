@@ -10,7 +10,7 @@ import { elevation } from '../../../../styles/layout'
 import getFullAddress from '../../scripts/getFullAddress'
 import getStatus from '../../scripts/getStatus'
 
-const BoxContent: React.FC <BoxContentProps & Endereco> = endereco => {
+const BoxContent: React.FC <Endereco> = endereco => {
 
     const enderecoCompleto = getFullAddress(endereco)
     const status = getStatus(endereco.situacao)
@@ -28,9 +28,9 @@ const BoxContent: React.FC <BoxContentProps & Endereco> = endereco => {
     return (
 
         <>
-            <S.PositionIndicator theme = {status.theme.tertiary}>
+            {/* <S.PositionIndicator theme = {status.theme.tertiary}>
                 <Text style = {{ color: status.theme.primary, fontSize: 16, fontWeight: 'bold' }}>{endereco.position}</Text>
-            </S.PositionIndicator>
+            </S.PositionIndicator> */}
             <List.Item
                 title = {endereco.nomeCliente}
                 titleNumberOfLines = {3}
@@ -59,11 +59,11 @@ const SolicitacaoBox: React.FC <SolicitacaoBoxProps & Endereco> = ({ position, o
         <>
             {(!!onPress && (
                 <TouchableOpacity style = {[S.styles.Box, elevation.elevation4]} onPress = {onPress}>
-                    <BoxContent {...props} position = {position} />
+                    <BoxContent {...props} /*position = {position}*/ />
                 </TouchableOpacity>
             )) || (
                 <View style = {[S.styles.Box, elevation.elevation4]}>
-                    <BoxContent {...props} position = {position} />
+                    <BoxContent {...props} /*position = {position}*/ />
                 </View>
             )}
         </>

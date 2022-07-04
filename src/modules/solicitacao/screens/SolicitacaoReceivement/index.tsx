@@ -33,14 +33,14 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { syncAddLoading } = useAppSelector(s => s.sync)
     const { userData } = useAppSelector(s => s.auth)
     const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
-    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestStartReceivingLista, requestSaveLista, requestCancelLista, requestSendLeituraLista, requestCancelEnderecoLista } = useAppSelector(s => s.requestLista)
 
     const [openForm, setOpenForm] = useState(false)
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
     const [motivoCancelamento, setMotivoCancelamento] = useState('')
     
-    const SHOW_DATA = !!currentSolicitacao && !!roteirizacao && !!lista
+    const SHOW_DATA = !!currentSolicitacao && !!lista
 
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
@@ -105,7 +105,10 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 {SHOW_DATA && (
                     <>
                         <Section marginTop = {20}>
-                            <SolicitacaoBox {...findEndereco(lista, currentSolicitacao.idRemetente)!} position = {findListaPosition(currentSolicitacao, roteirizacao)} />
+                            <SolicitacaoBox
+                                {...findEndereco(lista, currentSolicitacao.idRemetente)!} 
+                                /*position = {findListaPosition(currentSolicitacao, roteirizacao)}*/
+                            />
                         </Section>
                         <Section type = "row" marginTop = {8} between>
                             <StatusBox

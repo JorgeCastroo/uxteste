@@ -30,7 +30,7 @@ const Home: React.FC = () => {
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
     const { coletas } = useAppSelector(s => s.coletas)
-    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestColeta } = useAppSelector(s => s.requestColetas)
     const isFocused = useIsFocused()
 
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
 
     const SHOW_COLETAS_LOADING = requestColeta.loading
     const SHOW_COLETAS_DATA = !SHOW_COLETAS_LOADING && !!coletas && coletas.length > 0
-    const SHOW_DATA = !!lista && !!roteirizacao
+    const SHOW_DATA = !!lista
 
     useObservable(requestInterval, setSeconds as any)
 
@@ -79,7 +79,7 @@ const Home: React.FC = () => {
                     </Section>
                     {SHOW_DATA && (
                         <>
-                            <GroupInfo />
+                            {/* <GroupInfo /> */}
                             <GroupStatus />
                         </>
                     )}

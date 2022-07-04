@@ -21,19 +21,20 @@ import FormError from '../../../../components/Form/Error'
 import orderLista from '../../scripts/orderLista'
 import orderEndereco from '../../scripts/orderEndereco'
 import findListaPosition from '../../scripts/findListaPosition'
+import getAddresses from '../../scripts/getAddresses'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { lista, filteredEnderecos, loadingNewLista } = useAppSelector(s => s.lista)
-    const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
+    //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
+    //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
     const { requestGetLista } = useAppSelector(s => s.requestLista)
     const [allIsSync, setAllIsSync] = useState(true)
 
     const SHOW_LOADING = loadingNewLista
-    const SHOW_NO_LISTA = !SHOW_LOADING && (!lista || !roteirizacao)
-    const SHOW_DATA = !SHOW_LOADING && !!lista && lista.length > 0 && !!roteirizacao
+    const SHOW_NO_LISTA = !SHOW_LOADING && !lista
+    const SHOW_DATA = !SHOW_LOADING && !!lista && lista.length > 0
 
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredEnderecos
     const SHOW_FILTERED_LISTA_NO_DATA = !SHOW_LOADING && !!filteredEnderecos && filteredEnderecos.length === 0
@@ -41,7 +42,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const SHOW_LISTA_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista
     const SHOW_LISTA_NO_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista && lista.length === 0
 
-    const loaderPercent = requestGetLista.data && requestGetRoteirizacao.data ? 100 : requestGetLista.data ? 50 : 0
+    const loaderPercent = requestGetLista.data ? 100 : 0
 
     const handleNavigate = (item: Endereco) => {
         dispatch(resetScannedSolicitacoes())
@@ -77,21 +78,21 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                         {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
                         <Section marginTop = {20}>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum item encontrado!']} />}
-                            {SHOW_FILTERED_LISTA_DATA && orderEndereco(filteredEnderecos, roteirizacao).map((item, index) => (
+                            {SHOW_FILTERED_LISTA_DATA && filteredEnderecos.map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
-                                    position = {findListaPosition(item, roteirizacao)}
+                                    //position = {findListaPosition(item, roteirizacao)}
                                     onPress = {() => handleNavigate(item)} 
                                 />
                             ))} 
 
                             {SHOW_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhuma lista aberta!']} />}
-                            {SHOW_LISTA_DATA && orderLista(lista, roteirizacao).map((item, index) => (
+                            {SHOW_LISTA_DATA && getAddresses(lista).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
                                     key = {index} 
-                                    position = {findListaPosition(item, roteirizacao)}
+                                    //position = {findListaPosition(item, roteirizacao)}
                                     onPress = {() => handleNavigate(item)} 
                                 />
                             ))}
