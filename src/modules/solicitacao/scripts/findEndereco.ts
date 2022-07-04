@@ -1,5 +1,7 @@
 import { Endereco, Lista } from "../interfaces/Lista"
 
-export default function findEndereco(listas: Lista[], idRemetente: number): Endereco {
-    return listas.find(lista => lista.listaEnderecos.find(endereco => endereco.idRemetente === idRemetente))!.listaEnderecos.find(endereco => endereco.idRemetente === idRemetente)!
+export default function findEndereco(listas: Lista[], endereco: Endereco): Endereco {
+    const { idLista, idRemetente } = endereco
+
+    return listas.find(lista => lista.listaEnderecos.find(endereco => endereco.idRemetente === idRemetente && idLista === idLista))!.listaEnderecos.find(endereco => endereco.idRemetente === idRemetente)!
 }

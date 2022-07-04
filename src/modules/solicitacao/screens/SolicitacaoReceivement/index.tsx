@@ -32,7 +32,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { network, location } = useAppSelector(s => s.app)
     const { syncAddLoading } = useAppSelector(s => s.sync)
     const { userData } = useAppSelector(s => s.auth)
-    const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
+    const { lista, currentLista, currentSolicitacao } = useAppSelector(s => s.lista)
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestStartReceivingLista, requestSaveLista, requestCancelLista, requestSendLeituraLista, requestCancelEnderecoLista } = useAppSelector(s => s.requestLista)
 
@@ -68,7 +68,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
 
     const handleSend = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        if(!checkStatus(lista!, idLista, idRemetente, 'COLETANDO')){
+        if(checkStatus(lista!, idLista, idRemetente, 'COLETANDO')){
             await save(
                 dispatch, 
                 !!network, 
@@ -76,7 +76,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 () => setOpenSuccessModal(true),
                 userData!,
                 currentSolicitacao!.idLista,
-                findEndereco(lista!, currentSolicitacao!.idRemetente).listaVolumes
+                findEndereco(lista!, currentSolicitacao!).listaVolumes
                 .filter(f => f.dtLeituraFirstMile !== '')
                 .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
             )
@@ -88,13 +88,12 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 () => setOpenSuccessModal(true),
                 userData!,
                 currentSolicitacao!.idLista,
-                findEndereco(lista!, currentSolicitacao!.idRemetente).listaVolumes
+                findEndereco(lista!, currentSolicitacao!).listaVolumes
                 .filter(f => f.dtLeituraFirstMile !== '')
                 .map(item => { return { idVolume: item.idVolume, dtLeitura: item.dtLeituraFirstMile } }),
             )
+            dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
         }
-        await sleep(500)
-        dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
     }
 
     return(
@@ -106,7 +105,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                     <>
                         <Section marginTop = {20}>
                             <SolicitacaoBox
-                                {...findEndereco(lista, currentSolicitacao.idRemetente)!} 
+                                {...findEndereco(lista, currentSolicitacao)} 
                                 /*position = {findListaPosition(currentSolicitacao, roteirizacao)}*/
                             />
                         </Section>
@@ -114,13 +113,13 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             <StatusBox
                                 theme = {themes.status.success.primary}
                                 title = "Recebidos"
-                                text = {findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}
+                                text = {findEndereco(lista, currentSolicitacao).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}
                             />
                             <View style = {{marginRight: 20}} />
                             <StatusBox
                                 theme = {themes.status.error.primary}
                                 title = "Pendentes"
-                                text = {findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}
+                                text = {findEndereco(lista, currentSolicitacao).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}
                             />
                         </Section>
                         <Section marginTop = {40}>
@@ -184,7 +183,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                         loading = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
                                         disabled = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
                                         onPress = {() => {
-                                            if(!findEndereco(lista, currentSolicitacao.idRemetente).listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
+                                            if(!findEndereco(lista, currentSolicitacao).listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
                                                 Alert.alert('Atenção', 'Não é possível finalizar o recebimento sem escanear todos os volumes!', [
                                                     { text: 'Ok' }
                                                 ])
@@ -204,7 +203,11 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 setMotivo = {setMotivoCancelamento} 
                 onSubmit = {handleCancelAll}
             />
-            <SuccessModal open = {openSuccessModal} setOpen = {setOpenSuccessModal} redirect = {() => navigation.navigate('solicitacaoList')} />
+            <SuccessModal
+                open = {openSuccessModal}
+                setOpen = {setOpenSuccessModal}
+                redirect = {() => navigation.navigate('solicitacaoList')}
+            />
         </>
 
     )

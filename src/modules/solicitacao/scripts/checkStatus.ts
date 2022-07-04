@@ -6,6 +6,6 @@ export default function checkStatus(listas: Lista[], idLista: number, idRemetent
     const currentEnderecos = currentLista.listaEnderecos
     const enderecosToCheck = currentEnderecos.filter(endereco => endereco.idRemetente !== idRemetente)
 
-    if(enderecosToCheck.length > 0) return enderecosToCheck.some(endereco => endereco.situacao === idStatusLista[status])
+    if(enderecosToCheck.length > 0) return !enderecosToCheck.some(endereco => endereco.situacao === idStatusLista[status])
     else return true
 }

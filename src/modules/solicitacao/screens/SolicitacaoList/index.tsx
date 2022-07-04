@@ -4,7 +4,7 @@ import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParam
 import { Endereco } from '../../interfaces/Lista'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
+import { setCurrentLista, setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
@@ -22,6 +22,7 @@ import orderLista from '../../scripts/orderLista'
 import orderEndereco from '../../scripts/orderEndereco'
 import findListaPosition from '../../scripts/findListaPosition'
 import getAddresses from '../../scripts/getAddresses'
+import findLista from '../../scripts/findLista'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -45,9 +46,10 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const loaderPercent = requestGetLista.data ? 100 : 0
 
     const handleNavigate = (item: Endereco) => {
-        dispatch(resetScannedSolicitacoes())
+        dispatch(setCurrentLista(findLista(lista!, item.idLista)))
         dispatch(setCurrentSolicitacao(item))
         dispatch(setCurrentVolumes(item.listaVolumes))
+        dispatch(resetScannedSolicitacoes())
         navigation.navigate('solicitacaoReceivement')
     }
     
