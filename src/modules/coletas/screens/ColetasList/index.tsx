@@ -17,6 +17,7 @@ import loadLista from '../../../solicitacao/scripts/loadLista'
 import getColetas from '../../scripts/getColetas'
 import Container from '../../../../components/Container'
 import { getCoords } from '../../../app/scripts/geolocationService'
+import { idStatusLista } from '../../../../constants/idStatusLista'
 
 const ColetasList: React.FC = () => {
 
@@ -40,7 +41,7 @@ const ColetasList: React.FC = () => {
         for (const coleta of coletasAprovadas) {
             responseAprovadas = await acceptColeta(dispatch, {
                 idLista: coleta.idLista,
-                idStatusLista: 2,
+                idStatusLista: idStatusLista['APROVADO'],
                 latitude: (location?.coords.latitude ?? 0).toString(),
                 longitude: (location?.coords.longitude ?? 0).toString(),
             })
@@ -51,7 +52,7 @@ const ColetasList: React.FC = () => {
             for (const coleta of coletasNaoAprovadas) {
                 responseReprovadas = await acceptColeta(dispatch, {
                     idLista: coleta.idLista,
-                    idStatusLista: 3,
+                    idStatusLista: idStatusLista['REPROVADO'],
                     latitude: (location?.coords.latitude ?? 0).toString(),
                     longitude: (location?.coords.longitude ?? 0).toString(),
                 })

@@ -10,9 +10,9 @@ import Render from '../../../../components/Screen/Render'
 import Form from './components/Form'
 import Header from './components/Header'
 import Control from './components/Control'
-import checkIfInside from './scripts/checkBounds'
 import handleScan from './scripts/handleScan'
 import checkFormat from './scripts/checkFormat'
+import checkIfInside from './scripts/checkBounds'
 
 const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoScan'>> = ({ navigation }) => {
 

@@ -31,10 +31,11 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
     const { requestGetLista } = useAppSelector(s => s.requestLista)
+
     const [allIsSync, setAllIsSync] = useState(true)
 
     const SHOW_LOADING = loadingNewLista
-    const SHOW_NO_LISTA = !SHOW_LOADING && !lista
+    const SHOW_NO_DATA = !SHOW_LOADING && !lista
     const SHOW_DATA = !SHOW_LOADING && !!lista && lista.length > 0
 
     const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredEnderecos
@@ -74,12 +75,12 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
             >
                 <Header title = "Listas" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
-                {SHOW_NO_LISTA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
+                {SHOW_NO_DATA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
                 {SHOW_DATA && (
                     <>
                         {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
                         <Section marginTop = {20}>
-                            {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum item encontrado!']} />}
+                            {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhuma lista encontrada!']} />}
                             {SHOW_FILTERED_LISTA_DATA && filteredEnderecos.map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
@@ -101,7 +102,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                         </Section>
                         <FormError
                             visible = {!allIsSync}
-                            marginTop = {20}
+                            marginTop = {24}
                             message = "Ainda faltam dados para sincronizar!"
                         />
                     </>

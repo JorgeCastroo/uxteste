@@ -16,8 +16,9 @@ export async function syncValuesLista(){
     const synchronizedSaveLista = await getSyncStatus('syncSaveLista')
     const synchronizedCancelLista = await getSyncStatus('syncCancelLista')
     const synchronizedSendLista = await getSyncStatus('syncListaSend')
+    const synchronizedCancelEnderecoLista = await getSyncStatus('syncListaCancelEndereco')
 
-    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista && synchronizedSendLista
+    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista && synchronizedSendLista && synchronizedCancelEnderecoLista
 }
 
 export async function syncStartLista(dispatch: Function){
@@ -59,7 +60,7 @@ export async function syncSendLista(dispatch: Function, userData: UserData){
 
         if(!!storageItems && storageItems.length > 0){
             storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
-                const response = await sendLeituraLista(dispatch, () => {}, false, userData, value.idLista, value.volumes)
+                const response = await sendLeituraLista(dispatch, () => {}, false, userData, value.idLista, value.idRemetente, value.volumes)
                 if(response) await updateSyncValue(storageKey, storageItems, value)
             })
         }else await storage.removeItem(storageKey)

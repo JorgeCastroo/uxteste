@@ -13,6 +13,7 @@ export interface SyncSaveLista {
 
 export interface SyncSendLista {
     idLista: number
+    idRemetente: number
     volumes: Volume[]
 }
 

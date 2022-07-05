@@ -4,6 +4,7 @@ import themes from '../../../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
 import { setFilteredEndereco } from '../../../../reducers/lista/listaReducer'
 import Section from '../../../../../../components/Screen/Section'
+import filterSearch from '../../../../scripts/filterSearch'
 
 const SolicitacaoListSearchbar: React.FC = () => {
 
@@ -18,20 +19,7 @@ const SolicitacaoListSearchbar: React.FC = () => {
 
     const handleSearch = (value: string) => {
         if(value === '') handleClean()
-        else{
-            const filteredEnderecos = lista!
-            .filter(f => ![5, 6].includes(f.situacao))
-            .map(lista => lista.listaEnderecos.filter(f =>
-                f.cep.includes(value) || 
-                f.logradouro.toLowerCase().includes(value.toLowerCase()) || 
-                f.numero.includes(value) || 
-                f.bairro.toLowerCase().includes(value.toLowerCase()) || 
-                f.cidade.toLowerCase().includes(value.toLowerCase()) || 
-                f.uf.toLowerCase().includes(value.toLowerCase()) || 
-                f.nomeCliente.toLowerCase().includes(value.toLowerCase())
-            )).flat(1)
-            dispatch(setFilteredEndereco(filteredEnderecos ?? []))
-        }
+        else dispatch(setFilteredEndereco(filterSearch(lista!, value) ?? []))
     }
 
     return(

@@ -4,10 +4,11 @@ import { Volume } from "../../interfaces/Volume"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
+import { updateEnderecoSituacao } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function sendLeituraLista(dispatch: Function, redirect: () => void, sync: boolean, userData: UserData, idLista: number, listaVolumes: Volume[]){
+export default async function sendLeituraLista(dispatch: Function, redirect: () => void, sync: boolean, userData: UserData, idLista: number, idRemetente: number, listaVolumes: Volume[]){
     try {
         dispatch(R.setRequestSendLeituraListaLoading())
 
@@ -24,7 +25,10 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
         if(response && 'flagErro' in response){
             dispatch(R.setRequestSendLeituraListaData(response))
             if(!response.flagErro){
-                if(!sync) redirect()
+                if(!sync){
+                    redirect()
+                    dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
+                }
                 return true
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
