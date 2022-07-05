@@ -71,8 +71,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
 
     const handleSend = () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        const openModal = () => setOpenSuccessModal(true)
         const checkSituacao = checkStatus(findLista(lista!, idLista), idRemetente, [2, 3])
+        const openModal = () => setOpenSuccessModal(true)
         
         if(checkSituacao) send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
         else save(dispatch, !!network, redirect, openModal, userData!, idLista, getVolumes(lista!, currentSolicitacao!))
@@ -190,7 +190,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
             <SuccessModal
                 open = {openSuccessModal}
                 setOpen = {setOpenSuccessModal}
-                redirect = {() => navigation.navigate('solicitacaoList')}
+                redirect = {redirect}
             />
         </>
 

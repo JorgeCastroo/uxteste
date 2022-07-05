@@ -56,7 +56,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     
     useEffect(() => {
         (async() => {
-            if(lista && lista.every(f => f.situacao === idStatusLista['FINALIZADO'] || f.situacao === idStatusLista['CANCELADO'])){
+            if(lista && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))){
                 const syncStatus = await syncValuesLista()
                 setAllIsSync(syncStatus)
                 if(syncStatus) closeLista(dispatch)
