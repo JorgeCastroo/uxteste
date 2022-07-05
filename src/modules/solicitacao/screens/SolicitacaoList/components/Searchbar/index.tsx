@@ -19,7 +19,7 @@ const SolicitacaoListSearchbar: React.FC = () => {
 
     const handleSearch = (value: string) => {
         if(value === '') handleClean()
-        else dispatch(setFilteredEndereco(filterSearch(lista!, value) ?? []))
+        else dispatch(setFilteredEndereco(filterSearch(lista!, value.toLowerCase()) ?? []))
     }
 
     return(

@@ -63,7 +63,7 @@ const Home: React.FC = () => {
             <Render
                 statusBarOptions = {{ barStyle: 'light-content', backgroundColor: themes.colors.primary }}
                 align = "space-between"
-                paddingBottom = {32}
+                paddingBottom = {24}
                 onRefresh = {async () => await getColetas(dispatch, userData!)}
             >
                 <Container padding = {false}>

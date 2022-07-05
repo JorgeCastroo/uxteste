@@ -47,10 +47,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                     }}
                     onGoogleVisionBarcodesDetected = {({ barcodes = [] }) => {
                         if(barcodes.length > 0 && !modalVisible){
-                            const isInside = checkIfInside(scanLayout!, {
-                                ...barcodes[0].bounds.size, 
-                                ...barcodes[0].bounds.origin,
-                            })
+                            const isInside = checkIfInside(scanLayout!, {...barcodes[0].bounds.size, ...barcodes[0].bounds.origin})
                             if(isInside && checkFormat(scanMode, barcodes[0].format ?? '')){
                                 dispatch(setScanVisible(true))
                                 if(!isScanning) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
