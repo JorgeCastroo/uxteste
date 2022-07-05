@@ -73,7 +73,7 @@ const listaSlice = createSlice({
         updateEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
             state.lista!
             .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
-            .find(f => f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
+            .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
 
             if(state.currentSolicitacao && state.currentSolicitacao.idLista === action.payload.idLista && state.currentSolicitacao.idRemetente === action.payload.idRemetente) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
 
@@ -83,7 +83,7 @@ const listaSlice = createSlice({
             state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
             state.lista!
             .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
-            .find(f => f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
+            .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
 
             if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
 
@@ -97,12 +97,12 @@ const listaSlice = createSlice({
 
             state.lista!
             .find(f => f.idLista === current.idLista)!.listaEnderecos
-            .find(f => f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = updateDate
+            .find(f => f.idLista === current.idLista && f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = updateDate
 
             state.lista = [...state.lista!]
         },
         updateListaVolumes: (state, action: PayloadAction<{idLista: number, idRemetente: number, volumes: ListaVolume[]}>) => {
-            const enderecoToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.find(f => f.idRemetente === action.payload.idRemetente)!
+            const enderecoToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!
             const newVolumes: ListaVolume[] = []
 
             action.payload.volumes.forEach(volume => {
@@ -112,7 +112,7 @@ const listaSlice = createSlice({
             if(newVolumes.length > 0){
                 state.lista!
                 .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
-                .find(f => f.idRemetente === action.payload.idRemetente)!.listaVolumes = [...enderecoToUpdate.listaVolumes, ...newVolumes]  
+                .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.listaVolumes = [...enderecoToUpdate.listaVolumes, ...newVolumes]  
                 
                 state.lista = [...state.lista!]
             }

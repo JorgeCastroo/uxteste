@@ -93,7 +93,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                 /*position = {findListaPosition(currentSolicitacao, roteirizacao)}*/
                             />
                         </Section>
-                        <Section type = "row" marginTop = {8} between>
+                        <Section type = "row" marginTop = {8} marginBottom = {40} between>
                             <StatusBox
                                 theme = {themes.status.success.primary}
                                 title = "Recebidos"
@@ -106,7 +106,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                 text = {findEndereco(lista, currentSolicitacao).listaVolumes.filter(f => f.dtLeituraFirstMile === '').length}
                             />
                         </Section>
-                        <Section marginTop = {40}>
+                        <Section>
                             {[2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Iniciar Recebimento"

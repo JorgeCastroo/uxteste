@@ -80,7 +80,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                     <>
                         {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
                         <Section marginTop = {20}>
-                            {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhuma lista encontrada!']} />}
+                            {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum endereço encontrado!']} />}
                             {SHOW_FILTERED_LISTA_DATA && filteredEnderecos.map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
@@ -90,7 +90,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                                 />
                             ))} 
 
-                            {SHOW_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhuma lista aberta!']} />}
+                            {SHOW_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum endereço em aberto!']} />}
                             {SHOW_LISTA_DATA && getAddresses(lista).map((item, index) => (
                                 <SolicitacaoBox 
                                     {...item} 
@@ -103,7 +103,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                         <FormError
                             visible = {!allIsSync}
                             marginTop = {24}
-                            message = "Ainda faltam dados para sincronizar!"
+                            message = "Ainda faltam listas para sincronizar!"
                         />
                     </>
                 )}
