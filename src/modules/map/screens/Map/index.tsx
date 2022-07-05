@@ -19,6 +19,7 @@ import sleep from '../../../../utils/sleep'
 import fitMap from '../../scripts/fitMap'
 import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
 import getStatus from '../../../solicitacao/scripts/getStatus'
+import getAddresses from '../../../solicitacao/scripts/getAddresses'
 import { setCurrentSolicitacao, setCurrentVolumes } from '../../../solicitacao/reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../../solicitacao/reducers/solicitacaoScan/solicitacaoScanReducer'
 import { elevation } from '../../../../styles/layout'
@@ -34,7 +35,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
     const isFocused = useIsFocused()
 
     const LOAD_DATA = !!lista && !!route && !!roteirizacao && !!startCoords && !!endCoords
-    const SHOW_DATA = LOAD_DATA && renderMap 
+    const SHOW_DATA = LOAD_DATA && renderMap
 
     useEffect(() => {
         (async() => {
@@ -43,7 +44,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                 createRoute(dispatch, roteirizacao.geometry)
                 await sleep(200)
                 dispatch(setRenderMap(true))
-                fitMap(mapRef.current!, lista, startCoords!, endCoords!)
+                fitMap(mapRef.current!, getAddresses(lista), startCoords!, endCoords!)
             }
         })()
     }, [roteirizacao, lista, startCoords, endCoords])
@@ -84,7 +85,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                             </Marker>
                             */}
 
-                            {lista.map((item, index) => {
+                            {getAddresses(lista).map((item, index) => {
                                 const statusLista = getStatus(item.situacao)
                                 return(
                                     <Marker
@@ -126,7 +127,7 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                             icon = "map-marker-multiple"
                             color = {themes.colors.primary}
                             style = {{position: 'absolute', bottom: 20, right: 20, backgroundColor: '#fff'}}
-                            onPress = {() => fitMap(mapRef.current!, lista, startCoords!, endCoords!)}
+                            onPress = {() => fitMap(mapRef.current!, getAddresses(lista), startCoords!, endCoords!)}
                         />
                     </>
                 )}

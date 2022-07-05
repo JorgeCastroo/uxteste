@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Lista, ListaVolume } from "../../interfaces/Lista"
+import { Endereco, Lista, ListaVolume } from "../../interfaces/Lista"
 import { idStatusLista } from "../../../../constants/idStatusLista"
+import isoDateTime from "../../../../utils/isoDateTime"
 
 interface State {
     lista: Lista[] | null
     oldLista: Lista[] | null
 
-    filteredLista: Lista[] | null
+    filteredEnderecos: Endereco[] | null
 
-    currentSolicitacao: Lista | null
+    currentLista: Lista | null
+    currentSolicitacao: Endereco | null
     currentVolumes: ListaVolume[] | null
     currentPosition: number | null
 
@@ -19,8 +21,9 @@ const initialState: State = {
     lista: null,
     oldLista: null,
 
-    filteredLista: null,
+    filteredEnderecos: null,
 
+    currentLista: null,
     currentSolicitacao: null,
     currentVolumes: null,
     currentPosition: null,
@@ -38,11 +41,14 @@ const listaSlice = createSlice({
         setOldLista: (state, action: PayloadAction<Lista[]>) => {
             state.oldLista = action.payload
         },
-        setFilteredLista: (state, action: PayloadAction<Lista[] | null>) => {
-            state.filteredLista = action.payload
+        setFilteredEndereco: (state, action: PayloadAction<Endereco[] | null>) => {
+            state.filteredEnderecos = action.payload
         },
 
-        setCurrentSolicitacao: (state, action: PayloadAction<Lista>) => {
+        setCurrentLista: (state, action: PayloadAction<Lista | null>) => {
+            state.currentLista = action.payload
+        },
+        setCurrentSolicitacao: (state, action: PayloadAction<Endereco>) => {
             state.currentSolicitacao = action.payload
         },
         setCurrentVolumes: (state, action: PayloadAction<ListaVolume[]>) => {
@@ -52,27 +58,64 @@ const listaSlice = createSlice({
             state.currentPosition = action.payload
         },
 
-        updateSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
-            state.lista!.find(f => f.idLista === action.payload.idLista ?? state.currentSolicitacao!.idLista)!.situacao = idStatusLista[action.payload.status]
+        updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
+            state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
+
+            if(['CANCELADO', 'FINALIZADO'].includes(action.payload.status)){
+                state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.map(endereco => {
+                    endereco.situacao = idStatusLista[action.payload.status]
+                    return endereco
+                })
+            }
+
+            state.lista = [...state.lista!]
+        },
+        updateEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
+            state.lista!
+            .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
+            .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
+
             if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
+
+            state.currentSolicitacao = {...state.currentSolicitacao!}
             state.lista = [...state.lista!]
         },
-        updateVolume: (state, action: PayloadAction<string>) => {
-            const volumeIndex = state.lista?.find(lista => lista.idLista === state.currentSolicitacao!.idLista)!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
-            
-            state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaVolumes[volumeIndex].dtLeituraFirstMile = new Date().toISOString()
+        updateListaEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
+            state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
+            state.lista!
+            .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
+            .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
+
+            if(state.currentSolicitacao) state.currentSolicitacao.situacao = idStatusLista[action.payload.status]
+
+            state.currentSolicitacao = {...state.currentSolicitacao!}
             state.lista = [...state.lista!]
         },
-        updateListaVolumes: (state, action: PayloadAction<{idLista: number, volumes: ListaVolume[]}>) => {
-            const currentLista = state.lista!.find(f => f.idLista === action.payload.idLista)!
+
+        updateEnderecoVolume: (state, action: PayloadAction<string>) => {
+            const current = state.currentSolicitacao!
+            const volumeIndex = state.currentSolicitacao!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
+            const updateDate = isoDateTime()
+
+            state.lista!
+            .find(f => f.idLista === current.idLista)!.listaEnderecos
+            .find(f => f.idLista === current.idLista && f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = updateDate
+
+            state.lista = [...state.lista!]
+        },
+        updateListaVolumes: (state, action: PayloadAction<{idLista: number, idRemetente: number, volumes: ListaVolume[]}>) => {
+            const enderecoToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!
             const newVolumes: ListaVolume[] = []
 
             action.payload.volumes.forEach(volume => {
-                if(!currentLista.listaVolumes.map(i => i.idVolume).includes(volume.idVolume)) newVolumes.push(volume)
+                if(!enderecoToUpdate.listaVolumes.map(i => i.idVolume).includes(volume.idVolume)) newVolumes.push(volume)
             })
 
             if(newVolumes.length > 0){
-                state.lista!.find(f => f.idLista === action.payload.idLista)!.listaVolumes = [...currentLista.listaVolumes, ...newVolumes]
+                state.lista!
+                .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
+                .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.listaVolumes = [...enderecoToUpdate.listaVolumes, ...newVolumes]  
+                
                 state.lista = [...state.lista!]
             }
         },
@@ -80,9 +123,11 @@ const listaSlice = createSlice({
         resetLista: (state) => {
             state.lista = null
             state.oldLista = null
-            state.filteredLista = null
+            state.filteredEnderecos = null
+            state.currentLista = null
             state.currentSolicitacao = null
             state.currentVolumes = null
+            state.currentPosition = null
         },
 
         setLoadingNewLista: (state, action: PayloadAction<boolean>) => {
@@ -92,9 +137,9 @@ const listaSlice = createSlice({
 })
 
 export const { 
-    setLista, setOldLista, setFilteredLista,
-    setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
-    updateVolume, updateSituacao, updateListaVolumes,
+    setLista, setOldLista, setFilteredEndereco,
+    setCurrentLista, setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
+    updateEnderecoVolume, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
     setLoadingNewLista,
     resetLista,
 } = listaSlice.actions

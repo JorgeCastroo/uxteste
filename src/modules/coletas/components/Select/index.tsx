@@ -1,27 +1,27 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { RadioButton } from 'react-native-paper'
 import themes from '../../../../styles/themes'
-import Section from '../../../../components/Screen/Section'
-import ColetasSelectItem from './Item'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { setAcceptAllColetas, setRemoveAllColetas } from '../../reducers/coletas/coletas'
+import Container from '../../../../components/Container'
+import ColetasSelectItem from './Item'
 
 const ColetasSelect: React.FC = () => {
 
     const dispatch = useAppDispatch()
-    const coletas = useAppSelector(s => s.coletas.coletas)
+    const { coletas } = useAppSelector(s => s.coletas)
     const [selectAll, setSelectAll] = React.useState('2')
 
     const handleSelect = (value: string) => {
         setSelectAll(value)
-        if (value === '0') dispatch(setRemoveAllColetas(coletas))
-        else dispatch(setAcceptAllColetas(coletas))
+        if (value === '0') dispatch(setRemoveAllColetas(coletas!))
+        else dispatch(setAcceptAllColetas(coletas!))
     }
 
     return (
 
         <RadioButton.Group value={selectAll} onValueChange={handleSelect}>
-            <Section type="row" marginTop={30} marginBottom={30} between>
+            <Container type="row" marginTop={24} marginBottom={24} between>
                 <ColetasSelectItem
                     color={themes.status.error.primary}
                     value="0"
@@ -32,7 +32,7 @@ const ColetasSelect: React.FC = () => {
                     value="1"
                     label="Aceitar todos"
                 />
-            </Section>
+            </Container>
         </RadioButton.Group>
 
     )

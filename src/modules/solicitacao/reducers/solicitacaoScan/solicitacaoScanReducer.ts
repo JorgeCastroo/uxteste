@@ -29,6 +29,7 @@ const solicitacaoScanSlice = createSlice({
         setModalVisible: (state, action: PayloadAction<boolean>) => {
             state.modalVisible = action.payload
         },
+
         setScanMode: (state, action: PayloadAction<ScanModes>) => {
             state.scanMode = action.payload
         },
@@ -41,19 +42,30 @@ const solicitacaoScanSlice = createSlice({
         setScanVisible: (state, action: PayloadAction<boolean>) => {
             state.scanVisible = action.payload
         },
+        
         setScanning: (state, action: PayloadAction<boolean>) => {
             state.isScanning = action.payload
         },
+
         addScannedSolicitacao: (state, action: PayloadAction<string>) => {
             if(!state.scannedSolicitacoes.includes(action.payload)){
                 state.scannedSolicitacoes.push(action.payload)
             }
         },
+        setScannedSolicitacoes: (state, action: PayloadAction<string[]>) => {
+            state.scannedSolicitacoes = action.payload
+        },
+
         resetScannedSolicitacoes: (state) => {
             state.scannedSolicitacoes = []
         },
     }
 })
 
-export const { setModalVisible, setScanning, setScanMode, setScanFlashlight, setScanLayout, setScanVisible, addScannedSolicitacao, resetScannedSolicitacoes } = solicitacaoScanSlice.actions
+export const {
+    setModalVisible, 
+    setScanning, setScanMode, setScanFlashlight, setScanLayout, setScanVisible, 
+    setScannedSolicitacoes, addScannedSolicitacao, 
+    resetScannedSolicitacoes
+} = solicitacaoScanSlice.actions
 export default solicitacaoScanSlice.reducer

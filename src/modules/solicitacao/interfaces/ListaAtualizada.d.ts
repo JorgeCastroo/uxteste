@@ -1,5 +1,6 @@
 export interface ListaAtualizada {
     idLista:      number;
+    idRemetente:  number;
     listaVolumes: ListaVolume[];
 }
 

@@ -1,6 +1,7 @@
 import { ValueToSync } from "../interfaces/ValueToSync"
 import info from "../../../utils/info"
 import storage from "../../../utils/storage"
+import isoDateTime from "../../../utils/isoDateTime"
 
 export default async function updateSyncValue<T>(key: string, localValues: ValueToSync<T>[], changedValue: T){
     try {
@@ -8,7 +9,7 @@ export default async function updateSyncValue<T>(key: string, localValues: Value
             const newLocalSync = localValues.map(f => {
                 if((f.value as any).toString() === (changedValue as any).toString()){
                     f.sync = true
-                    f.dtSync = new Date().toISOString()
+                    f.dtSync = isoDateTime()
                 }
                 return f
             })

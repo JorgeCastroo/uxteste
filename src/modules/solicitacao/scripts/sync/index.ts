@@ -1,20 +1,24 @@
-import { SyncCancelLista, SyncSaveLista, SyncStartLista } from "./types"
+import { SyncCancelLista, SyncCancelEnderecoLista, SyncSaveLista, SyncSendLista, SyncStartLista } from "./types"
 import { UserData } from "../../../../interfaces/UserData"
 import updateSyncValue from "../../../sync/scripts/updateSyncValue"
+import getSyncStorage from "../../../sync/scripts/getSyncStorage"
 import getSyncStatus from "../../../sync/scripts/getSyncStatus"
-import info from "../../../../utils/info"
 import storage from "../../../../utils/storage"
-import startReceivingLista from "../requests/requestStartReceivingLista"
+import info from "../../../../utils/info"
 import saveLista from "../requests/requestSaveLista"
 import cancelLista from "../requests/requestCancelLista"
-import getSyncStorage from "../../../sync/scripts/getSyncStorage"
+import sendLeituraLista from "../requests/requestSendLeituraLista"
+import startReceivingLista from "../requests/requestStartReceivingLista"
+import cancelEnderecoLista from "../requests/requestCancelEnderecoLista"
 
 export async function syncValuesLista(){
     const synchronizedStartLista = await getSyncStatus('syncStartLista')
     const synchronizedSaveLista = await getSyncStatus('syncSaveLista')
     const synchronizedCancelLista = await getSyncStatus('syncCancelLista')
+    const synchronizedSendLista = await getSyncStatus('syncListaSend')
+    const synchronizedCancelEnderecoLista = await getSyncStatus('syncListaCancelEndereco')
 
-    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista
+    return synchronizedStartLista && synchronizedSaveLista && synchronizedCancelLista && synchronizedSendLista && synchronizedCancelEnderecoLista
 }
 
 export async function syncStartLista(dispatch: Function){
@@ -49,6 +53,22 @@ export async function syncSaveLista(dispatch: Function, userData: UserData){
     }
 }
 
+export async function syncSendLista(dispatch: Function, userData: UserData){
+    try {
+        const storageKey = 'syncListaSend'
+        const storageItems = await getSyncStorage<SyncSendLista>(storageKey)
+
+        if(!!storageItems && storageItems.length > 0){
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
+                const response = await sendLeituraLista(dispatch, () => {}, false, userData, value.idLista, value.idRemetente, value.volumes)
+                if(response) await updateSyncValue(storageKey, storageItems, value)
+            })
+        }else await storage.removeItem(storageKey)
+    } catch (error) {
+        info.error('syncSendLista',error)
+    }
+}
+
 export async function syncCancelLista(dispatch: Function, userData: UserData){
     try {
         const storageKey = 'syncListaCancel'
@@ -62,5 +82,21 @@ export async function syncCancelLista(dispatch: Function, userData: UserData){
         }else await storage.removeItem(storageKey)
     } catch (error) {
         info.error('syncCancelLista',error)
+    }
+}
+
+export async function syncCancelEnderecoLista(dispatch: Function, userData: UserData){
+    try {
+        const storageKey = 'syncListaCancelEndereco'
+        const storageItems = await getSyncStorage<SyncCancelEnderecoLista>(storageKey)
+
+        if(!!storageItems && storageItems.length > 0){
+            storageItems.filter(f => !f.sync).forEach(async ({ value }) => {
+                const response = await cancelEnderecoLista(dispatch, () => {}, false, userData, value.idLista, value.idRemetente)
+                if(response) await updateSyncValue(storageKey, storageItems, value)
+            })
+        }else await storage.removeItem(storageKey)
+    } catch (error) {
+        info.error('syncCancelEnderecoLista',error)
     }
 }

@@ -19,7 +19,7 @@ const Button: React.FC <ButtonProps> = ({ color, label, marginHorizontal, margin
                 angleCenter = {{ x: 0.5, y: 0.5 }}
                 angle = {90}
             >
-                <TouchableRipple style = {buttonStyles.touchable} disabled = {disabled} onPress = {() => onPress && onPress()}>
+                <TouchableRipple style = {buttonStyles.touchable} borderless = {true} disabled = {disabled} onPress = {() => onPress && onPress()}>
                     <>
                         {loading && <ActivityIndicator color = "#ffffff" size = {14} style = {{marginRight: 12}} />}
                         <Text style = {buttonStyles.label}>{label}</Text>

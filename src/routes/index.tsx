@@ -24,7 +24,7 @@ const Routes: React.FC = () => {
 
     useEffect(() => {
         (async() => {
-            getAppVersion(dispatch)
+            //getAppVersion(dispatch)
 
             await getUserData(dispatch)
             await localGetLista(dispatch)

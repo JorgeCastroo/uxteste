@@ -1,84 +1,92 @@
 const MOCK_LISTA = [
     {
-        "idLista": 333025,
+        "idLista": 234042,
         "idUsuario": 1,
-        "nomeCliente": "ESTRELA10",
-        "nomeResponsavel": "ESTRELA10",
-        "qtdeVolumes": 3,
-        "documentoResponsavel": "10368118000120",
-        "logradouro": "RODOVIA JORGE LACERDA",
-        "numero": "122",
-        "complemento": "",
-        "bairro": "ESPINHEIROS",
-        "cidade": "ITAJAI",
-        "uf": "SC",
-        "cep": "88317100",
-        "telPrincipal": "4532545388",
-        "latitudeDestino": "",
-        "longitudeDestino": "",
         "situacao": 1,
-        "dtCadastro": "2022-05-23T10:24:00",
-        "listaVolumes": [
+        "rota": "TESTE_FIRST_MILE",
+        "dtCadastro": "2022-07-05T11:40:00",
+        "qtdeTotalVolumes": 1,
+        "listaEnderecos": [
             {
-                "idVolume": 7401177,
-                "idLista": 333025,
-                "etiqueta": "UR001438040BR",
-                "dtLeituraFirstMile": ""
+                "idLista": 234042,
+                "rota": "TESTE_FIRST_MILE",
+                "idRemetente": 182,
+                "nomeCliente": "0005 - SELLER - CASA DAS SERRAS",
+                "nomeResponsavel": "0005 - SELLER - CASA DAS SERRAS",
+                "documentoResponsavel": "02967761000908",
+                "logradouro": "AVENIDA HENRY FORD",
+                "numero": "204",
+                "bairro": "PARQUE DA MOOCA",
+                "cidade": "São Paulo",
+                "uf": "SP",
+                "cep": "03109000",
+                "telPrincipal": "11953308288",
+                "latitudeDestino": "-23.5369456",
+                "longitudeDestino": "-46.4080245",
+                "qtdeVolumes": 1,
+                "listaVolumes": [
+                    {
+                        "idVolume": 2830647,
+                        "idLista": 234042,
+                        "etiqueta": "DQ672006287AI",
+                        "dtLeituraFirstMile": "05/07/2022"
+                    }
+                ]
             },
             {
-                "idVolume": 7180625,
-                "idLista": 333025,
-                "etiqueta": "UR001271923BR",
-                "dtLeituraFirstMile": ""
+                "idLista": 234042,
+                "rota": "TESTE_FIRST_MILE",
+                "idRemetente": 123,
+                "nomeCliente": "0006 - Teste MOCK",
+                "nomeResponsavel": "0006 - Teste MOCK",
+                "documentoResponsavel": "02967761000908",
+                "logradouro": "AVENIDA HENRY FORD",
+                "numero": "204",
+                "bairro": "PARQUE DA MOOCA",
+                "cidade": "São Paulo",
+                "uf": "SP",
+                "cep": "03109000",
+                "telPrincipal": "11953308288",
+                "latitudeDestino": "-23.5369456",
+                "longitudeDestino": "-46.4080245",
+                "qtdeVolumes": 1,
+                "listaVolumes": [
+                    {
+                        "idVolume": 2830647,
+                        "idLista": 234042,
+                        "etiqueta": "DQ672006287AI",
+                        "dtLeituraFirstMile": "05/07/2022"
+                    }
+                ]
             },
             {
-                "idVolume": 7015429,
-                "idLista": 333025,
-                "etiqueta": "UR001153515BR",
-                "dtLeituraFirstMile": ""
+                "idLista": 234042,
+                "rota": "TESTE_FIRST_MILE",
+                "idRemetente": 321,
+                "nomeCliente": "0007 - Teste MOCK",
+                "nomeResponsavel": "0007 - Teste MOCK",
+                "documentoResponsavel": "02967761000908",
+                "logradouro": "AVENIDA HENRY FORD",
+                "numero": "204",
+                "bairro": "PARQUE DA MOOCA",
+                "cidade": "São Paulo",
+                "uf": "SP",
+                "cep": "03109000",
+                "telPrincipal": "11953308288",
+                "latitudeDestino": "-23.5369456",
+                "longitudeDestino": "-46.4080245",
+                "qtdeVolumes": 1,
+                "listaVolumes": [
+                    {
+                        "idVolume": 2830647,
+                        "idLista": 234042,
+                        "etiqueta": "DQ672006287AI",
+                        "dtLeituraFirstMile": "05/07/2022"
+                    }
+                ]
             }
         ]
     },
-    {
-        "idLista": 333026,
-        "idUsuario": 1,
-        "nomeCliente": "ESTRELA10",
-        "nomeResponsavel": "ESTRELA10",
-        "qtdeVolumes": 3,
-        "documentoResponsavel": "10368118000120",
-        "logradouro": "RODOVIA JORGE LACERDA",
-        "numero": "122",
-        "complemento": "",
-        "bairro": "ESPINHEIROS",
-        "cidade": "ITAJAI",
-        "uf": "SC",
-        "cep": "88317100",
-        "telPrincipal": "4532545388",
-        "latitudeDestino": "",
-        "longitudeDestino": "",
-        "situacao": 1,
-        "dtCadastro": "2022-05-23T10:31:00",
-        "listaVolumes": [
-            {
-                "idVolume": 7015429,
-                "idLista": 333026,
-                "etiqueta": "UR001153515BR",
-                "dtLeituraFirstMile": ""
-            },
-            {
-                "idVolume": 7401177,
-                "idLista": 333026,
-                "etiqueta": "UR001438040BR",
-                "dtLeituraFirstMile": ""
-            },
-            {
-                "idVolume": 7180625,
-                "idLista": 333026,
-                "etiqueta": "UR001271923BR",
-                "dtLeituraFirstMile": ""
-            }
-        ]
-    }
 ]
 
 export default MOCK_LISTA

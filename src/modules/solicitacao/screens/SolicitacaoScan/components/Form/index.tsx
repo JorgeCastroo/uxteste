@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native'
 import themes from '../../../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
 import { addScannedSolicitacao, setModalVisible } from '../../../../reducers/solicitacaoScan/solicitacaoScanReducer'
-import { updateVolume } from '../../../../reducers/lista/listaReducer'
+import { updateEnderecoVolume } from '../../../../reducers/lista/listaReducer'
 import FormError from '../../../../../../components/Form/Error'
 
 const Form: React.FC = () => {
@@ -29,7 +29,7 @@ const Form: React.FC = () => {
         if(currentVolumes!.map(item => item.etiqueta).includes(cod)){
             if(!scannedSolicitacoes.includes(cod)){
                 dispatch(addScannedSolicitacao(cod))
-                dispatch(updateVolume(cod))
+                dispatch(updateEnderecoVolume(cod))
                 onClose()
                 flashMessage = { message: 'Código lido com sucesso!', type: 'success' }
             }else{

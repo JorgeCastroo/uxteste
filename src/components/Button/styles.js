@@ -11,6 +11,7 @@ export const buttonStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 12,
+        borderRadius: 8,
     },
     label: {
         paddingVertical: 14,

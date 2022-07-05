@@ -6,8 +6,7 @@ import themes from '../../../../styles/themes'
 import { elevation } from '../../../../styles/layout'
 import { useAppSelector } from '../../../../redux/hooks'
 import Section from '../../../../components/Screen/Section'
-import orderLista from '../../../solicitacao/scripts/orderLista'
-import { idStatusLista } from '../../../../constants/idStatusLista'
+import getNextEndereco from '../../../solicitacao/scripts/getNextEndereco'
 
 const TopBox: React.FC = () => {
 
@@ -15,8 +14,7 @@ const TopBox: React.FC = () => {
     const { roteirizacao } = useAppSelector(s => s.roteirizacao)
 
     const SHOW_DATA = !!lista && !!roteirizacao
-
-    const message = SHOW_DATA ? orderLista(lista, roteirizacao).find(f => f.situacao !== idStatusLista['FINALIZADO'])?.logradouro ?? 'Sem destinatário' : 'Sem rota'
+    const message = SHOW_DATA ? getNextEndereco(lista, roteirizacao) ?? 'Sem destinatário' : 'Sem rota'
 
     return(
 

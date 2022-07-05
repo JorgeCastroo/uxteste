@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { FormProps } from './types'
 import themes from '../../../../../../styles/themes'
 
-const Form: React.FC <FormProps> = ({ open, setOpen, motivo, setMotivo, onSubmit }) => {
+const FormModal: React.FC <FormProps> = ({ open, setOpen, motivo, setMotivo, onSubmit }) => {
 
     const isFocused = useIsFocused()
 
@@ -56,4 +56,4 @@ const Form: React.FC <FormProps> = ({ open, setOpen, motivo, setMotivo, onSubmit
 
 }
 
-export default Form
+export default FormModal

@@ -11,11 +11,11 @@ function requestLog(method: RequestMethods, endpoint: string){
     }
 }
 
-function headerLog(method: RequestMethods, endpoint: string, header: HeadersInit_){
+function headerLog(endpoint: string, header: HeadersInit_){
     if(SHOW_RESPONSE_LOG.HEADER){
         line()
-        console.log(`HEADER: ${method} ${endpoint}`)
-        console.log(header)
+        console.log('INIT:',endpoint)
+        console.log('HEADER:',header)
         line()
     }
 }
