@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../../../redux/hooks'
 import { setColetasAprovadas, setColetasReprovadas } from '../../reducers/coletas/coletas'
 import Container from '../../../../components/Container'
 import ColetaBoxSelect from './Select'
+import copyAddress from '../../../solicitacao/scripts/copyAddress'
 
 const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, ...coleta }) => {
 
@@ -40,6 +41,7 @@ const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, ...coleta }) 
                         description = {`${endereco.logradouro}, ${endereco.bairro}, ${endereco.numero}, ${endereco.cidade}, ${endereco.uf}, ${endereco.cep}`}
                         descriptionNumberOfLines = {4}
                         left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
+                        onPress = {() => copyAddress(endereco)}
                     />
                 ))}
             </List.Accordion>

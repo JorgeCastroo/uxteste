@@ -1,29 +1,18 @@
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { List, Text } from 'react-native-paper'
-import Snackbar from 'react-native-snackbar'
-import Clipboard from '@react-native-community/clipboard'
 import { BoxContentProps, SolicitacaoBoxProps } from './types'
 import { Endereco } from '../../interfaces/Lista'
 import * as S from './styles'
 import { elevation } from '../../../../styles/layout'
 import getFullAddress from '../../scripts/getFullAddress'
 import getStatus from '../../scripts/getStatus'
+import copyAddress from '../../scripts/copyAddress'
 
 const BoxContent: React.FC <Endereco> = endereco => {
 
     const enderecoCompleto = getFullAddress(endereco)
     const status = getStatus(endereco.situacao)
-
-    const handleCopyAddress = () => {
-        Clipboard.setString(enderecoCompleto)
-        Snackbar.show({
-            text: 'Endereço copiado',
-            duration: Snackbar.LENGTH_SHORT,
-            fontFamily: 'Roboto-Regular',
-            action: { text: 'Ok' }
-        })
-    }
 
     return (
 
@@ -41,7 +30,7 @@ const BoxContent: React.FC <Endereco> = endereco => {
                 title = "Endereço"
                 description = {enderecoCompleto}
                 left = {props => <List.Icon {...props} icon = "map-marker" color = {status.theme.primary} />}
-                onPress = {handleCopyAddress}
+                onPress = {() => copyAddress(endereco)}
             />
             <S.StatusContainer theme = {status.theme.tertiary}>
                 <Text style = {{color: status.theme.primary, fontSize: 18, fontWeight: 'bold'}}>{status.label.toUpperCase()}</Text>

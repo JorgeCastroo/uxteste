@@ -8,18 +8,18 @@ import { setScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitac
 import { updateEnderecoSituacao } from '../../reducers/lista/listaReducer'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
+import Button from '../../../../components/Button'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
-import Button from '../../../../components/Button'
-import start from './scripts/start'
 import cancel from './scripts/cancel'
+import start from './scripts/start'
 import save from './scripts/save'
 import send from './scripts/send'
 import findListaPosition from '../../scripts/findListaPosition'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import FormModal from './components/FormModal'
-import SuccessModal from './components/SuccessModal'
 import StatusBox from './components/StatusBox'
+import SuccessModal from './components/SuccessModal'
 import { getCoords } from '../../../app/scripts/geolocationService'
 import findEndereco from '../../scripts/findEndereco'
 import checkStatus from '../../scripts/checkStatus'
@@ -51,12 +51,12 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         navigation.navigate('solicitacaoScan') 
     }
 
-    const handleStart = async () => {
+    const handleStart = () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        if(findLista(lista!, idLista).situacao !== idStatusLista['COLETANDO']){
-            await start(dispatch, !!network, handleNavigate, idLista, getCoords(location!))
-        }
+
         dispatch(updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}))
+        if(findLista(lista!, idLista).situacao !== idStatusLista['COLETANDO']) start(dispatch, !!network, handleNavigate, idLista, getCoords(location!))
+        else handleNavigate()
     }
 
     const handleCancel = () => {
@@ -72,12 +72,10 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const handleSend = () => {
         const { idLista, idRemetente } = currentSolicitacao!
         const openModal = () => setOpenSuccessModal(true)
-
-        if(checkStatus(lista!, idLista, idRemetente, 'COLETANDO')){
-            save(dispatch, !!network, redirect, openModal, userData!, idLista, getVolumes(lista!, currentSolicitacao!))
-        }else{
-            send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
-        }
+        const checkSituacao = checkStatus(findLista(lista!, idLista), idRemetente, [2, 3])
+        
+        if(checkSituacao) send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
+        else save(dispatch, !!network, redirect, openModal, userData!, idLista, getVolumes(lista!, currentSolicitacao!))
     }
 
     return(
@@ -127,6 +125,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     label = "Continuar Recebimento"
                                     marginHorizontal
                                     marginBottom = {8}
+                                    loading = {requestStartReceivingLista.loading}
+                                    disabled = {requestStartReceivingLista.loading}
                                     onPress = {handleNavigate}
                                 />
                             )}
@@ -171,9 +171,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     disabled = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
                                     onPress = {() => {
                                         if(!findEndereco(lista, currentSolicitacao).listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
-                                            Alert.alert('Atenção', 'Não é possível finalizar o recebimento sem escanear todos os volumes!', [
-                                                { text: 'Ok' }
-                                            ])
+                                            Alert.alert('Atenção', 'Não é possível finalizar o recebimento sem escanear todos os volumes!', [{ text: 'Ok' }])
                                         }else handleSend()
                                     }}
                                 />

@@ -13,4 +13,4 @@ export const SHOW_LOG = {
     WARN: false,
 }
 
-export const APP_VERSION = '6.1.3'
+export const APP_VERSION = '6.2.0'
