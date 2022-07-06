@@ -2,9 +2,9 @@ import React from 'react'
 import { Button, Dialog, Portal, TextInput } from 'react-native-paper'
 import { useIsFocused } from '@react-navigation/native'
 import { FormProps } from './types'
-import themes from '../../../../../../styles/themes'
+import themes from '../../../../styles/themes'
 
-const FormModal: React.FC <FormProps> = ({ open, setOpen, motivo, setMotivo, onSubmit }) => {
+const CancelModal: React.FC <FormProps> = ({ open, setOpen, motivo, setMotivo, onSubmit }) => {
 
     const isFocused = useIsFocused()
 
@@ -56,4 +56,4 @@ const FormModal: React.FC <FormProps> = ({ open, setOpen, motivo, setMotivo, onS
 
 }
 
-export default FormModal
+export default CancelModal

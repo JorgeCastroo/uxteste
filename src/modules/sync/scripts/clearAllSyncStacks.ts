@@ -1,10 +1,13 @@
-import info from "../../../utils/info"
+import { syncListaStorageKeys } from "../../solicitacao/scripts/sync"
 import storage from "../../../utils/storage"
+import info from "../../../utils/info"
 
 export default async function clearAllSyncStacks(){
     try {
-        const syncKeys = ['syncListaSave', 'syncListaStart', 'syncListaCancel', 'syncListaSend', 'syncListaCancelEndereco']
-        syncKeys.forEach(async key => { await storage.removeItem(key) })
+        const syncKeys = [...syncListaStorageKeys]
+        syncKeys.forEach(async key => {
+            await storage.removeItem(key)
+        })
     } catch (error) {
         info.error('clearAllSyncStacks',error)
     }

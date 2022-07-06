@@ -6,6 +6,12 @@ export interface SyncStartLista {
     coords: Coordinates
 }
 
+export interface SyncStartEndereco {
+    idLista: number
+    idRemetente: number
+    coords: Coordinates
+}
+
 export interface SyncSaveLista {
     idLista: number
     volumes: Volume[]

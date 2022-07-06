@@ -58,7 +58,7 @@ const listaSlice = createSlice({
             state.currentPosition = action.payload
         },
 
-        updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista?: number}>) => {
+        updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
 
             if(['CANCELADO', 'FINALIZADO'].includes(action.payload.status)){
