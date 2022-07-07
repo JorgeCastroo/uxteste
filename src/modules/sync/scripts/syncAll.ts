@@ -9,10 +9,10 @@ export default async function syncAll(dispatch: Function, userData: UserData){
         
         await syncStartLista(dispatch)
         await syncStartEndereco(dispatch)
-        await syncSaveLista(dispatch, userData)
         await syncSendLista(dispatch, userData)
-        await syncCancelLista(dispatch, userData)
+        await syncSaveLista(dispatch, userData)
         await syncCancelEnderecoLista(dispatch, userData)
+        await syncCancelLista(dispatch, userData)
 
         dispatch(setSyncLoading(false))
     } catch (error) {

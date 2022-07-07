@@ -6,13 +6,12 @@ import createValueToSync from "../../../../sync/scripts/createValueToSync"
 import startReceivingLista from "../../../scripts/requests/requestStartReceivingLista"
 import info from "../../../../../utils/info"
 
-export default async function start(dispatch: Function, network: boolean, redirect: () => void, idLista: number, coords: Coordinates){
+export default async function start(dispatch: Function, network: boolean, idLista: number, coords: Coordinates){
     try {
-        if(network) startReceivingLista(dispatch, redirect, false, idLista, coords)
+        if(network) startReceivingLista(dispatch, false, idLista, coords)
         else{
             await addToSyncStack('syncListaStart', createValueToSync({idLista, coords} as SyncStartLista))
             dispatch(updateListaSituacao({status: 'COLETANDO', idLista}))
-            redirect()
         }
     } catch (error) {
         info.error('start',error)

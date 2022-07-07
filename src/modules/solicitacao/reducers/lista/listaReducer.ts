@@ -6,28 +6,22 @@ import isoDateTime from "../../../../utils/isoDateTime"
 interface State {
     lista: Lista[] | null
     oldLista: Lista[] | null
-
     filteredEnderecos: Endereco[] | null
-
     currentLista: Lista | null
     currentSolicitacao: Endereco | null
     currentVolumes: ListaVolume[] | null
     currentPosition: number | null
-
     loadingNewLista: boolean
 }
 
 const initialState: State = {
     lista: null,
     oldLista: null,
-
     filteredEnderecos: null,
-
     currentLista: null,
     currentSolicitacao: null,
     currentVolumes: null,
     currentPosition: null,
-
     loadingNewLista: false,
 }
 
@@ -91,18 +85,6 @@ const listaSlice = createSlice({
             state.currentSolicitacao = {...state.currentSolicitacao!}
             state.lista = [...state.lista!]
         },
-
-        updateEnderecoVolume: (state, action: PayloadAction<string>) => {
-            const current = state.currentSolicitacao!
-            const volumeIndex = state.currentSolicitacao!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
-            const updateDate = isoDateTime()
-
-            state.lista!
-            .find(f => f.idLista === current.idLista)!.listaEnderecos
-            .find(f => f.idLista === current.idLista && f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = updateDate
-
-            state.lista = [...state.lista!]
-        },
         updateListaVolumes: (state, action: PayloadAction<{idLista: number, idRemetente: number, volumes: ListaVolume[]}>) => {
             const enderecoToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!
             const newVolumes: ListaVolume[] = []
@@ -118,6 +100,28 @@ const listaSlice = createSlice({
                 
                 state.lista = [...state.lista!]
             }
+        },
+        updateLista: (state, action: PayloadAction<Lista[]>) => {
+            state.lista = [...state.lista!, ...action.payload]
+        },
+        updateListaEndereco: (state, action: PayloadAction<{idLista: number, enderecos: Endereco[]}>) => {
+            const listaToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!
+
+            state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos = [...listaToUpdate.listaEnderecos, ...action.payload.enderecos]
+
+            state.lista = [...state.lista!]
+        },
+
+        scanEnderecoVolume: (state, action: PayloadAction<string>) => {
+            const current = state.currentSolicitacao!
+            const volumeIndex = state.currentSolicitacao!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
+            const updateDate = isoDateTime()
+
+            state.lista!
+            .find(f => f.idLista === current.idLista)!.listaEnderecos
+            .find(f => f.idLista === current.idLista && f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = updateDate
+
+            state.lista = [...state.lista!]
         },
 
         resetLista: (state) => {
@@ -139,7 +143,8 @@ const listaSlice = createSlice({
 export const { 
     setLista, setOldLista, setFilteredEndereco,
     setCurrentLista, setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
-    updateEnderecoVolume, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
+    scanEnderecoVolume, 
+    updateLista, updateListaEndereco, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
     setLoadingNewLista,
     resetLista,
 } = listaSlice.actions

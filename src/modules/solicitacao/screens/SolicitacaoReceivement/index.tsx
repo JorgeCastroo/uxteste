@@ -11,6 +11,7 @@ import Header from '../../../../components/Screen/Header'
 import Button from '../../../../components/Button'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
+import startEndereco from './scripts/startEndereco'
 import start from './scripts/start'
 import save from './scripts/save'
 import send from './scripts/send'
@@ -50,10 +51,11 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const handleStart = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
 
+        if(findLista(lista!, idLista).situacao !== idStatusLista['COLETANDO']) await start(dispatch, !!network, idLista, getCoords(location!))
+        //await startEndereco(dispatch, !!network, handleNavigate, idLista, idRemetente, getCoords(location!))
+
         dispatch(updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}))
-        if(findLista(lista!, idLista).situacao !== idStatusLista['COLETANDO']){
-            await start(dispatch, !!network, handleNavigate, idLista, getCoords(location!))
-        }else handleNavigate()
+        handleNavigate()
     }
 
     const handleCancelEndereco = () => {

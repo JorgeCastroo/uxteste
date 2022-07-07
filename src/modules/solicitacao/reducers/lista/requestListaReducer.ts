@@ -1,19 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Lista } from "../../interfaces/Lista"
 import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
+import { VolumeAtualizado } from "../../interfaces/VolumeAtualizado"
 import { ResponseDefault, ResponsePattern } from "../../../../utils/response/types"
 import { responseInitialValues } from '../../../../utils/response'
 
 interface State {
     requestGetLista: ResponseDefault<Lista[]>
     requestSaveLista: ResponseDefault<any>
+    requestSendLeituraLista: ResponseDefault<any>
     requestCancelLista: ResponseDefault<any>
+    requestCancelEnderecoLista: ResponseDefault<any>
     requestStartReceivingLista: ResponseDefault<any>
+    requestStartReceivingEndereco: ResponseDefault<any>
+    
     requestUpdateLista: ResponseDefault<ListaAtualizada[]>
     requestConfirmUpdateLista: ResponseDefault<any>
-    requestSendLeituraLista: ResponseDefault<any>
-    requestCancelEnderecoLista: ResponseDefault<any>
-    requestStartReceivingEndereco: ResponseDefault<any>
+
+    requestUpdateVolume: ResponseDefault<VolumeAtualizado[]>
+    requestConfirmUpdateVolume: ResponseDefault<any>
 }
 
 const initialState: State = {
@@ -21,11 +26,15 @@ const initialState: State = {
     requestSaveLista: responseInitialValues,
     requestCancelLista: responseInitialValues,
     requestStartReceivingLista: responseInitialValues,
-    requestUpdateLista: responseInitialValues,
-    requestConfirmUpdateLista: responseInitialValues,
     requestSendLeituraLista: responseInitialValues,
     requestCancelEnderecoLista: responseInitialValues,
     requestStartReceivingEndereco: responseInitialValues,
+    
+    requestUpdateLista: responseInitialValues,
+    requestConfirmUpdateLista: responseInitialValues,
+    
+    requestUpdateVolume: responseInitialValues,
+    requestConfirmUpdateVolume: responseInitialValues,
 }
 
 const requestListaSlice = createSlice({
@@ -132,6 +141,26 @@ const requestListaSlice = createSlice({
             state.requestUpdateLista = {...responseInitialValues}
         },
 
+        setRequestUpdateVolumeData: (state, action: PayloadAction<ResponsePattern<VolumeAtualizado[]>>) => {
+            state.requestUpdateVolume.data = action.payload
+            state.requestUpdateVolume.loading = false
+            state.requestUpdateVolume.error = false
+        },
+        setRequestUpdateVolumeLoading: (state) => {
+            state.requestUpdateVolume.loading = true
+            state.requestUpdateVolume.error = false
+        },
+        setRequestUpdateVolumeError: (state) => {
+            state.requestUpdateVolume.loading = false
+            state.requestUpdateVolume.error = true
+        },
+        setRequestUpdateVolumeMessage: (state, action: PayloadAction<string>) => {
+            state.requestUpdateVolume.message = action.payload
+        },
+        resetRequestUpdateVolume: (state) => {
+            state.requestUpdateVolume = {...responseInitialValues}
+        },
+
         setRequestConfirmUpdateListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
             state.requestConfirmUpdateLista.data = action.payload
             state.requestConfirmUpdateLista.loading = false
@@ -150,6 +179,26 @@ const requestListaSlice = createSlice({
         },
         resetRequestConfirmUpdateLista: (state) => {
             state.requestConfirmUpdateLista = {...responseInitialValues}
+        },
+
+        setRequestConfirmUpdateVolumeData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestConfirmUpdateVolume.data = action.payload
+            state.requestConfirmUpdateVolume.loading = false
+            state.requestConfirmUpdateVolume.error = false
+        },
+        setRequestConfirmUpdateVolumeLoading: (state) => {
+            state.requestConfirmUpdateVolume.loading = true
+            state.requestConfirmUpdateVolume.error = false
+        },
+        setRequestConfirmUpdateVolumeError: (state) => {
+            state.requestConfirmUpdateVolume.loading = false
+            state.requestConfirmUpdateVolume.error = true
+        },
+        setRequestConfirmUpdateVolumeMessage: (state, action: PayloadAction<string>) => {
+            state.requestConfirmUpdateVolume.message = action.payload
+        },
+        resetRequestConfirmUpdateVolume: (state) => {
+            state.requestConfirmUpdateVolume = {...responseInitialValues}
         },
 
         setRequestSendLeituraListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
@@ -220,7 +269,9 @@ export const {
     setRequestCancelListaLoading, setRequestCancelListaData, setRequestCancelListaError, setRequestCancelListaMessage, resetRequestCancelLista,
     setRequestStartReceivingListaLoading, setRequestStartReceivingListaData, setRequestStartReceivingListaError, setRequestStartReceivingListaMessage, resetRequestStartReceivingLista,
     setRequestUpdateListaLoading, setRequestUpdateListaData, setRequestUpdateListaError, setRequestUpdateListaMessage, resetRequestUpdateLista,
+    setRequestUpdateVolumeLoading, setRequestUpdateVolumeData, setRequestUpdateVolumeError, setRequestUpdateVolumeMessage, resetRequestUpdateVolume,
     setRequestConfirmUpdateListaLoading, setRequestConfirmUpdateListaData, setRequestConfirmUpdateListaError, setRequestConfirmUpdateListaMessage, resetRequestConfirmUpdateLista,
+    setRequestConfirmUpdateVolumeLoading, setRequestConfirmUpdateVolumeData, setRequestConfirmUpdateVolumeError, setRequestConfirmUpdateVolumeMessage, resetRequestConfirmUpdateVolume,
     setRequestSendLeituraListaLoading, setRequestSendLeituraListaData, setRequestSendLeituraListaError, setRequestSendLeituraListaMessage, resetRequestSendLeituraLista,
     setRequestCancelEnderecoListaLoading, setRequestCancelEnderecoListaData, setRequestCancelEnderecoListaError, setRequestCancelEnderecoListaMessage, resetRequestCancelEnderecoLista,
     setRequestStartReceivingEnderecoLoading, setRequestStartReceivingEnderecoData, setRequestStartReceivingEnderecoError, setRequestStartReceivingEnderecoMessage, resetRequestStartReceivingEndereco,

@@ -7,7 +7,7 @@ import info from "../../../../utils/info"
 import request from "../../../../utils/request"
 import { idStatusLista } from "../../../../constants/idStatusLista"
 
-export default async function startReceivingLista(dispatch: Function, redirect: () => void, sync: boolean, idLista: number, coords: Coordinates){
+export default async function startReceivingLista(dispatch: Function, sync: boolean, idLista: number, coords: Coordinates){
     try {
         dispatch(R.setRequestStartReceivingListaLoading())
 
@@ -24,10 +24,7 @@ export default async function startReceivingLista(dispatch: Function, redirect: 
         if(response && 'flagErro' in response){
             dispatch(R.setRequestStartReceivingListaData(response))
             if(!response.flagErro){
-                if(!sync){
-                    dispatch(updateListaSituacao({status: 'COLETANDO', idLista}))
-                    redirect()
-                } 
+                if(!sync) dispatch(updateListaSituacao({status: 'COLETANDO', idLista}))
                 return true
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')

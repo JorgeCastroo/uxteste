@@ -3,7 +3,7 @@ import { Coordinates } from "../../../../../interfaces/Coordinates"
 import { updateEnderecoSituacao } from "../../../reducers/lista/listaReducer"
 import addToSyncStack from "../../../../sync/scripts/addToSyncStack"
 import createValueToSync from "../../../../sync/scripts/createValueToSync"
-import startReceivingEndereco from "../../../scripts/requests/requestStartReceinvingEndereco"
+import startReceivingEndereco from "../../../scripts/requests/requestStartReceivingEndereco"
 import info from "../../../../../utils/info"
 
 export default async function startEndereco(dispatch: Function, network: boolean, redirect: () => void, idLista: number, idRemetente: number, coords: Coordinates){
