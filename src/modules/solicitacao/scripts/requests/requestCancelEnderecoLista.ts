@@ -15,6 +15,7 @@ export default async function cancelEnderecoLista(dispatch: Function, redirect: 
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
+            idRemetente,
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
             listaVolumes: [],

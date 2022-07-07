@@ -5,7 +5,7 @@ import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParam
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { setScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
-import { updateEnderecoSituacao } from '../../reducers/lista/listaReducer'
+import { updateEnderecoSituacao, updateListaSituacao } from '../../reducers/lista/listaReducer'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
 import Button from '../../../../components/Button'
@@ -21,16 +21,15 @@ import StatusBox from './components/StatusBox'
 import SuccessModal from './components/SuccessModal'
 import { getCoords } from '../../../app/scripts/geolocationService'
 import findEndereco from '../../scripts/findEndereco'
-import checkStatus from '../../scripts/checkStatus'
 import cancelEndereco from './scripts/cancelEndereco'
 import getVolumes from '../../scripts/getVolumes'
 import findLista from '../../scripts/findLista'
+import checkStatus from '../../scripts/checkStatus'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
     const { network, location } = useAppSelector(s => s.app)
-    const { syncAddLoading } = useAppSelector(s => s.sync)
     const { userData } = useAppSelector(s => s.auth)
     const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
@@ -41,6 +40,11 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const SHOW_DATA = !!currentSolicitacao && !!lista
 
     const redirect = () => navigation.navigate('solicitacaoList')
+
+    const checkSaveLista = () => {
+        const { idLista, idRemetente } = currentSolicitacao!
+        return checkStatus(findLista(lista!, idLista), idRemetente, ['APROVADO', 'COLETANDO'])
+    }
 
     const handleNavigate = () => {
         const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
@@ -58,18 +62,19 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         handleNavigate()
     }
 
-    const handleCancelEndereco = () => {
+    const handleCancelEndereco = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        cancelEndereco(dispatch, !!network, redirect, userData!, idLista, idRemetente)
+        await cancelEndereco(dispatch, !!network, redirect, userData!, idLista, idRemetente)
+
+        if(!checkSaveLista()) console.log('finalizar lista')
     }
 
-    const handleSend = () => {
-        const { idLista, idRemetente } = currentSolicitacao!
-        const checkSituacao = checkStatus(findLista(lista!, idLista), idRemetente, ['APROVADO', 'COLETANDO'])
+    const handleSend = async () => {
+        const { idLista, idRemetente } = currentSolicitacao! 
         const openModal = () => setOpenSuccessModal(true)
-        
-        if(checkSituacao) send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
-        else save(dispatch, !!network, redirect, openModal, userData!, idLista, getVolumes(lista!, currentSolicitacao!))
+        await send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
+
+        if(!checkSaveLista()) console.log('finalizar lista')
     }
 
     return(
@@ -145,8 +150,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     label = "Finalizar Recebimento"
                                     color = {[themes.status.success.primary, themes.status.success.secondary]}
                                     marginHorizontal
-                                    loading = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
-                                    disabled = {requestSaveLista.loading || requestSendLeituraLista.loading || syncAddLoading}
+                                    loading = {requestSaveLista.loading || requestSendLeituraLista.loading}
+                                    disabled = {requestSaveLista.loading || requestSendLeituraLista.loading}
                                     onPress = {() => {
                                         if(!findEndereco(lista, currentSolicitacao).listaVolumes.some(f => f.dtLeituraFirstMile.length > 1)){
                                             Alert.alert('Atenção', 'Não é possível finalizar o recebimento sem escanear todos os volumes!', [{ text: 'Ok' }])
