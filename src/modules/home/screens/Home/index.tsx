@@ -20,7 +20,7 @@ import AppVersion from '../../../app/components/AppVersion'
 import getColetas from '../../../coletas/scripts/getColetas'
 import dayMoment from '../../../../utils/dayMoment'
 import getRemainder from '../../../../utils/getRemainder'
-import updateVolume from '../../../solicitacao/scripts/requests/requestUpdateVolumes'
+import checkListaUpdate from '../../../solicitacao/scripts/checkListaUpdate'
 
 const requestInterval = interval(1000)
 
@@ -48,12 +48,12 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if(isFocused && userData) getColetas(dispatch, userData)
-    }, [dispatch, isFocused, userData])
+    }, [dispatch, userData, isFocused])
 
     useEffect(() => {
         if(userData){
             if(getRemainder(seconds, 10)) getGeolocation(dispatch)
-            if(getRemainder(seconds, 60) && SHOW_DATA) updateVolume(dispatch, userData)
+            if(getRemainder(seconds, 60) && SHOW_DATA) checkListaUpdate(dispatch, userData)
         }
     }, [dispatch, userData, seconds, SHOW_DATA])
 

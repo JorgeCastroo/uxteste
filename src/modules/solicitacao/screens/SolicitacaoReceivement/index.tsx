@@ -34,7 +34,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { userData } = useAppSelector(s => s.auth)
     const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-    const { requestStartReceivingLista, requestSaveLista, requestSendLeituraLista, requestCancelEnderecoLista } = useAppSelector(s => s.requestLista)
+    const { requestStartReceivingLista, requestSaveLista, requestSendLeituraLista, requestCancelEnderecoLista, requestStartReceivingEndereco } = useAppSelector(s => s.requestLista)
 
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
     
@@ -119,8 +119,8 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     label = "Continuar Recebimento"
                                     marginHorizontal
                                     marginBottom = {8}
-                                    loading = {requestStartReceivingLista.loading}
-                                    disabled = {requestStartReceivingLista.loading}
+                                    loading = {requestStartReceivingEndereco.loading}
+                                    disabled = {requestStartReceivingEndereco.loading}
                                     onPress = {handleNavigate}
                                 />
                             )}

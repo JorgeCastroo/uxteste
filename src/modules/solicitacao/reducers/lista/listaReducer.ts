@@ -55,7 +55,7 @@ const listaSlice = createSlice({
         updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
 
-            if(['CANCELADO', 'FINALIZADO'].includes(action.payload.status)){
+            if(['CANCELADO'].includes(action.payload.status)){
                 state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos.map(endereco => {
                     endereco.situacao = idStatusLista[action.payload.status]
                     return endereco
@@ -115,11 +115,10 @@ const listaSlice = createSlice({
         scanEnderecoVolume: (state, action: PayloadAction<string>) => {
             const current = state.currentSolicitacao!
             const volumeIndex = state.currentSolicitacao!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
-            const updateDate = isoDateTime()
 
             state.lista!
             .find(f => f.idLista === current.idLista)!.listaEnderecos
-            .find(f => f.idLista === current.idLista && f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = updateDate
+            .find(f => f.idLista === current.idLista && f.idRemetente === current.idRemetente)!.listaVolumes[volumeIndex].dtLeituraFirstMile = isoDateTime()
 
             state.lista = [...state.lista!]
         },
