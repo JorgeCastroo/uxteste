@@ -3,6 +3,6 @@ import updateLista from "./requests/requestUpdateLista"
 import updateVolume from "./requests/requestUpdateVolumes"
 
 export default async function checkListaUpdate(dispatch: Function, userData: UserData){
-    //await updateLista(dispatch, userData)
+    await updateLista(dispatch, userData)
     await updateVolume(dispatch, userData)
 }
