@@ -65,6 +65,11 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const handleCancelEndereco = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
         await cancelEndereco(dispatch, !!network, redirect, userData!, idLista, idRemetente)
+
+        if(!checkSaveLista()){
+            await sleep(500)
+            dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}))
+        }
     }
 
     const handleSend = async () => {

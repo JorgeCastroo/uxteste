@@ -1,4 +1,4 @@
-import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { UserData } from "../../../interfaces/UserData"
 import { setColetas } from "../reducers/coletas/coletas"
 import { Lista } from "../../solicitacao/interfaces/Lista"
@@ -12,7 +12,7 @@ export default async function getColetas(dispatch: Function, userData: UserData)
         dispatch(setRequestColetasLoading())
         dispatch(setColetas(null))
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ListarRomaneio`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
