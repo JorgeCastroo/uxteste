@@ -78,7 +78,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 {SHOW_NO_DATA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
                 {SHOW_DATA && (
                     <>
-                        {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
+                        <SolicitacaoListSearchbar />
                         <Section marginTop = {20}>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum endereço encontrado!']} />}
                             {SHOW_FILTERED_LISTA_DATA && filteredEnderecos.map((item, index) => (

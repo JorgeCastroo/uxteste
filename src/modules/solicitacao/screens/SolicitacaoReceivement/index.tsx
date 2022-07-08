@@ -13,7 +13,6 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import startEndereco from './scripts/startEndereco'
 import start from './scripts/start'
-import save from './scripts/save'
 import send from './scripts/send'
 import findListaPosition from '../../scripts/findListaPosition'
 import { idStatusLista } from '../../../../constants/idStatusLista'
@@ -25,6 +24,7 @@ import cancelEndereco from './scripts/cancelEndereco'
 import getVolumes from '../../scripts/getVolumes'
 import findLista from '../../scripts/findLista'
 import checkStatus from '../../scripts/checkStatus'
+import sleep from '../../../../utils/sleep'
 
 const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>> = ({ navigation }) => {
 
@@ -65,16 +65,18 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const handleCancelEndereco = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
         await cancelEndereco(dispatch, !!network, redirect, userData!, idLista, idRemetente)
-
-        if(!checkSaveLista()) console.log('finalizar lista')
     }
 
     const handleSend = async () => {
         const { idLista, idRemetente } = currentSolicitacao! 
         const openModal = () => setOpenSuccessModal(true)
+
         await send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
 
-        if(!checkSaveLista()) console.log('finalizar lista')
+        if(!checkSaveLista()){
+            await sleep(500)
+            dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}))
+        }
     }
 
     return(
