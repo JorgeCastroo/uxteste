@@ -104,10 +104,12 @@ const listaSlice = createSlice({
         updateLista: (state, action: PayloadAction<Lista[]>) => {
             state.lista = [...state.lista!, ...action.payload]
         },
-        updateListaEndereco: (state, action: PayloadAction<{idLista: number, enderecos: Endereco[]}>) => {
+        updateListaEndereco: (state, action: PayloadAction<Endereco>) => {
             const listaToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!
-
-            state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos = [...listaToUpdate.listaEnderecos, ...action.payload.enderecos]
+            
+            if(!listaToUpdate.listaEnderecos.map(i => i.idRemetente).includes(action.payload.idRemetente)){
+                state.lista!.find(f => f.idLista === action.payload.idLista)!.listaEnderecos = [...listaToUpdate.listaEnderecos, action.payload]
+            }
 
             state.lista = [...state.lista!]
         },

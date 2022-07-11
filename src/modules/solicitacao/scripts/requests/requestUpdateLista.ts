@@ -1,9 +1,10 @@
 import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
-import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
+import { Endereco } from "../../interfaces/Lista"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
+import { updateListaEndereco } from "../../reducers/lista/listaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
@@ -17,15 +18,13 @@ export default async function updateLista(dispatch: Function, userData: UserData
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
         }
-        const response = await request.post<ResponsePattern<ListaAtualizada[]>>({ endpoint, authorization, body })
+        const response = await request.post<ResponsePattern<Endereco[]>>({ endpoint, authorization, body })
 
         if(response && 'flagErro' in response){
             dispatch(R.setRequestUpdateListaData(response))
             if(!response.flagErro){
                 if(response.listaResultados.length > 0){
-                    response.listaResultados.forEach(lista => {
-                        
-                    })               
+                    response.listaResultados.forEach(endereco => dispatch(updateListaEndereco(endereco)))               
                     showMessage({
                         message: "Novos endereços foram adicionados!",
                         type: "success",
