@@ -39,7 +39,7 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
         dispatch(R.setRequestSendLeituraListaError())
         if(!sync){
             showMessage({
-                message: "Erro ao finalizar lista!",
+                message: "Erro ao marcar leitura da lista!",
                 description: error.message ?? JSON.stringify(error),
                 type: "danger",
                 duration: 10000,
