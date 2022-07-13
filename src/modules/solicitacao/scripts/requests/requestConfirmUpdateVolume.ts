@@ -1,11 +1,11 @@
 import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
-import { ListaConfirmada } from "../../interfaces/ListaConfirmada"
+import { VolumeConfirmado } from "../../interfaces/VolumeConfirmado"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function confirmUpdateVolume(dispatch: Function, listaAtualizados: ListaConfirmada[]){
+export default async function confirmUpdateVolume(dispatch: Function, listaAtualizados: VolumeConfirmado[]){
     try {
         dispatch(R.setRequestConfirmUpdateVolumeLoading())
 

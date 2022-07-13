@@ -1,9 +1,9 @@
-import { VolumeAtualizado } from "../interfaces/VolumeAtualizado"
-import { ListaConfirmada } from "../interfaces/ListaConfirmada"
+import { Endereco } from "../interfaces/Lista"
+import { ListaConfirmado } from "../interfaces/ListaConfirmado"
 
-export default function createListaConfirmada(lista: VolumeAtualizado[]): ListaConfirmada[] {
-    return lista.map(lista => ({
-        idLista: lista.idLista,
-        listaVolumes: lista.listaVolumes.map(volume => volume.idVolume)
+export default function createListaConfirmada(enderecos: Endereco[]): ListaConfirmado[] {
+    return enderecos.map(endereco => ({
+        idLista: endereco.idLista,
+        listaVolumes: endereco.listaVolumes.map(volume => volume.idVolume)
     }))
 }

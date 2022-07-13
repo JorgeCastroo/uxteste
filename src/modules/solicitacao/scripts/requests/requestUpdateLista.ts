@@ -5,8 +5,10 @@ import { Endereco } from "../../interfaces/Lista"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import { updateListaEndereco } from "../../reducers/lista/listaReducer"
+import createListaConfirmada from "../createListaConfirmada"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
+import confirmUpdateLista from "./requestConfirmUpdateLista"
 
 export default async function updateLista(dispatch: Function, userData: UserData){
     try {
@@ -31,6 +33,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
                         duration: 5000,
                         floating: true,
                     })
+                    confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
                 }
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')

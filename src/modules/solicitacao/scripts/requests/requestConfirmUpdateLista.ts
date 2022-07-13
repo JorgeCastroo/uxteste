@@ -1,11 +1,11 @@
 import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
-import { ListaConfirmada } from "../../interfaces/ListaConfirmada"
+import { ListaConfirmado } from "../../interfaces/ListaConfirmado"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 
-export default async function confirmUpdateLista(dispatch: Function, listaAtualizados: ListaConfirmada[]){
+export default async function confirmUpdateLista(dispatch: Function, listaAtualizados: ListaConfirmado[]){
     try {
         dispatch(R.setRequestConfirmUpdateListaLoading())
 

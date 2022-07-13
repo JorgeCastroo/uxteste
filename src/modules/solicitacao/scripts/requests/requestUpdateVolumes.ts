@@ -6,7 +6,7 @@ import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import { updateListaVolumes } from "../../reducers/lista/listaReducer"
 import createVolume from "../createVolume"
-import createListaConfirmada from "../createListaConfirmada"
+import createVolumeConfirmado from "../createVolumeConfirmado"
 import confirmUpdateVolume from "./requestConfirmUpdateVolume"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
@@ -40,7 +40,7 @@ export default async function updateVolume(dispatch: Function, userData: UserDat
                         duration: 5000,
                         floating: true,
                     })
-                    confirmUpdateVolume(dispatch, createListaConfirmada(response.listaResultados))
+                    confirmUpdateVolume(dispatch, createVolumeConfirmado(response.listaResultados))
                 }
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
