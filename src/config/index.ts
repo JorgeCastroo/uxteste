@@ -1,15 +1,15 @@
 export const SHOW_RESPONSE_LOG = {
     REQUEST: false,
     HEADER: false,
-    BODY: true,
-    RESPONSE: true,
+    BODY: false,
+    RESPONSE: false,
     ERROR: false,
 }
 
 export const SHOW_LOG = {
     LOG: false,
     DATA: false,
-    ERROR: true,
+    ERROR: false,
     WARN: false,
 }
 
