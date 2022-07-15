@@ -1,6 +1,6 @@
 import { setAuthLogout } from "../reducers/authReducer"
 import clearAllSyncStacks from "../../sync/scripts/clearAllSyncStacks"
-import closeLista from "../../solicitacao/scripts/closeLista"
+import closeLista from "../../solicitacao/scripts/removeLista"
 import closePushNotifications from "../../app/scripts/pushNotification/closePushNotifications"
 import info from "../../../utils/info"
 import storage from "../../../utils/storage"

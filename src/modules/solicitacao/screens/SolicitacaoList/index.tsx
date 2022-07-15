@@ -16,13 +16,14 @@ import Loader from './components/Loader'
 import localGetLista from '../../scripts/local/localGetLista'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import { syncValuesLista } from '../../scripts/sync'
-import closeLista from '../../scripts/closeLista'
 import FormError from '../../../../components/Form/Error'
 import orderLista from '../../scripts/orderLista'
 import orderEndereco from '../../scripts/orderEndereco'
 import findListaPosition from '../../scripts/findListaPosition'
 import getAddresses from '../../scripts/getAddresses'
 import findLista from '../../scripts/findLista'
+import Button from '../../../../components/Button'
+import closeLista from '../../scripts/requests/requestCloseLista'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -30,7 +31,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const { lista, filteredEnderecos, loadingNewLista } = useAppSelector(s => s.lista)
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
-    const { requestGetLista } = useAppSelector(s => s.requestLista)
+    const { requestGetLista, requestCloseLista } = useAppSelector(s => s.requestLista)
 
     const [allIsSync, setAllIsSync] = useState(true)
 
@@ -59,7 +60,6 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
             if(lista && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))){
                 const syncStatus = await syncValuesLista()
                 setAllIsSync(syncStatus)
-                if(syncStatus) closeLista(dispatch)
             }
         })()
     }, [dispatch, lista])
@@ -105,6 +105,15 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                             marginTop = {24}
                             message = "Ainda faltam listas para sincronizar!"
                         />
+                        {allIsSync && (
+                            <Button
+                                label = "Finalizar rota"
+                                color = {themes.gradient.success}
+                                disabled = {requestCloseLista.loading}
+                                loading = {requestCloseLista.loading}
+                                onPress = {closeLista}
+                            />
+                        )}
                     </>
                 )}
                 <Section />

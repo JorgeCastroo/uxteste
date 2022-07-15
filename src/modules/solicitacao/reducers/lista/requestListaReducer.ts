@@ -9,6 +9,7 @@ interface State {
     requestGetLista: ResponseDefault<Lista[]>
     requestSaveLista: ResponseDefault<any>
     requestSendLeituraLista: ResponseDefault<any>
+    requestCloseLista: ResponseDefault<any>
     requestCancelLista: ResponseDefault<any>
     requestCancelEnderecoLista: ResponseDefault<any>
     requestStartReceivingLista: ResponseDefault<any>
@@ -29,6 +30,7 @@ const initialState: State = {
     requestSendLeituraLista: responseInitialValues,
     requestCancelEnderecoLista: responseInitialValues,
     requestStartReceivingEndereco: responseInitialValues,
+    requestCloseLista: responseInitialValues,
     
     requestUpdateLista: responseInitialValues,
     requestConfirmUpdateLista: responseInitialValues,
@@ -260,6 +262,26 @@ const requestListaSlice = createSlice({
         resetRequestStartReceivingEndereco: (state) => {
             state.requestStartReceivingEndereco = {...responseInitialValues}
         },
+
+        setRequestCloseListaData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestCloseLista.data = action.payload
+            state.requestCloseLista.loading = false
+            state.requestCloseLista.error = false
+        },
+        setRequestCloseListaLoading: (state) => {
+            state.requestCloseLista.loading = true
+            state.requestCloseLista.error = false
+        },
+        setRequestCloseListaError: (state) => {
+            state.requestCloseLista.loading = false
+            state.requestCloseLista.error = true
+        },
+        setRequestCloseListaMessage: (state, action: PayloadAction<string>) => {
+            state.requestCloseLista.message = action.payload
+        },
+        resetRequestCloseLista: (state) => {
+            state.requestCloseLista = {...responseInitialValues}
+        },
     }
 })
 
@@ -275,5 +297,6 @@ export const {
     setRequestSendLeituraListaLoading, setRequestSendLeituraListaData, setRequestSendLeituraListaError, setRequestSendLeituraListaMessage, resetRequestSendLeituraLista,
     setRequestCancelEnderecoListaLoading, setRequestCancelEnderecoListaData, setRequestCancelEnderecoListaError, setRequestCancelEnderecoListaMessage, resetRequestCancelEnderecoLista,
     setRequestStartReceivingEnderecoLoading, setRequestStartReceivingEnderecoData, setRequestStartReceivingEnderecoError, setRequestStartReceivingEnderecoMessage, resetRequestStartReceivingEndereco,
+    setRequestCloseListaData, setRequestCloseListaLoading, setRequestCloseListaError, setRequestCloseListaMessage, resetRequestCloseLista,
 } = requestListaSlice.actions
 export default requestListaSlice.reducer
