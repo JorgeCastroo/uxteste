@@ -108,7 +108,7 @@ const listaSlice = createSlice({
             action.payload.forEach(endereco => {
                 const currentLista = state.lista!.find(f => f.idLista === endereco.idLista)!
                 if(currentLista.listaEnderecos.find(f => f.idRemetente === endereco.idRemetente)){
-                    const currentVolumes = currentLista.listaEnderecos.find(f => f.idRemetente === endereco.idRemetente)!.listaVolumes
+                    const currentVolumes = currentLista.listaEnderecos.find(f => f.idLista === endereco.idLista && f.idRemetente === endereco.idRemetente)!.listaVolumes
                     const volumesToAdd = endereco.listaVolumes.filter(f => !currentVolumes.map(i => i.idVolume).includes(f.idVolume))
 
                     state.lista!

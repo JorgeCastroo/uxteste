@@ -33,7 +33,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
                         duration: 5000,
                         floating: true,
                     })
-                    //confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
+                    confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
                 }
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
