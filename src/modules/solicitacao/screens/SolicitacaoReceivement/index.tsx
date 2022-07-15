@@ -101,7 +101,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             <StatusBox
                                 theme = {themes.status.success.primary}
                                 title = "Recebidos"
-                                text = {findEndereco(lista, currentSolicitacao).listaVolumes.filter(f => f.dtLeituraFirstMile.length > 1).length}
+                                text = {findEndereco(lista, currentSolicitacao).listaVolumes.filter(f => f.dtLeituraFirstMile !== '').length}
                             />
                             <View style = {{marginRight: 20}} />
                             <StatusBox

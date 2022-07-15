@@ -1,11 +1,10 @@
-import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { VolumeAtualizado } from "../../interfaces/VolumeAtualizado"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
-import { updateListaVolumes } from "../../reducers/lista/listaReducer"
-import createVolume from "../createVolume"
+import { addListaVolumes } from "../../reducers/lista/listaReducer"
 import createVolumeConfirmado from "../createVolumeConfirmado"
 import confirmUpdateVolume from "./requestConfirmUpdateVolume"
 import request from "../../../../utils/request"
@@ -15,7 +14,7 @@ export default async function updateVolume(dispatch: Function, userData: UserDat
     try {
         dispatch(R.setRequestUpdateVolumeLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
@@ -27,13 +26,7 @@ export default async function updateVolume(dispatch: Function, userData: UserDat
             dispatch(R.setRequestUpdateVolumeData(response))
             if(!response.flagErro){
                 if(response.listaResultados.length > 0){
-                    response.listaResultados.forEach(lista => {
-                        dispatch(updateListaVolumes({
-                            idLista: lista.idLista, 
-                            idRemetente: lista.idRemetente,
-                            volumes: lista.listaVolumes.map(volume => createVolume(volume.idVolume, lista.idLista, volume.etiqueta))
-                        }))
-                    })                 
+                    dispatch(addListaVolumes(response.listaResultados))                
                     showMessage({
                         message: "Novos volumes foram adicionados!",
                         type: "success",

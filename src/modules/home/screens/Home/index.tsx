@@ -53,7 +53,7 @@ const Home: React.FC = () => {
     useEffect(() => {
         if(userData){
             if(getRemainder(seconds, 10)) getGeolocation(dispatch)
-            if(getRemainder(seconds, 60) && SHOW_DATA) checkListaUpdate(dispatch, userData)
+            if(getRemainder(seconds, 30) && SHOW_DATA) checkListaUpdate(dispatch, userData)
         }
     }, [dispatch, userData, seconds, SHOW_DATA])
 

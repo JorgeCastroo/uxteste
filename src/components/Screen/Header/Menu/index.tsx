@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native'
 import { HeaderMenuProps } from './types'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
-import clearAllSyncStacks from '../../../../modules/sync/scripts/clearAllSyncStacks'
 import CancelModal from '../../../../modules/solicitacao/components/CancelModal'
 import cancel from '../../../../modules/solicitacao/screens/SolicitacaoReceivement/scripts/cancel'
 import { APP_VERSION } from '../../../../config'
@@ -23,7 +22,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
     const navigation = useNavigation<any>()
 
-    const SHOW_LISTA_DATA = screenName === 'solicitacaoReceivement' && !!lista && !!currentSolicitacao
+    const SHOW_LISTA_DATA = screenName === 'solicitacaoList' && !!lista && !!currentSolicitacao
 
     const handleOnPress = (onPress: () => void) => {
         onPress()
@@ -43,13 +42,6 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                 onDismiss = {() => setMenuVisible(false)}
                 anchor = {<Appbar.Action icon = "dots-vertical" color = "#FFF" onPress = {() => setMenuVisible(!menuVisible)} />}
             >
-                {screenName === 'solicitacaoList' && (
-                    <Menu.Item
-                        icon = "sync-off"
-                        title = "Limpar Sync"
-                        onPress = {() => clearAllSyncStacks()}
-                    />
-                )}
                 {SHOW_LISTA_DATA && (
                     <Menu.Item
                         icon = "text-box-remove"

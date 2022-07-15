@@ -1,10 +1,7 @@
-export interface VolumeAtualizado {
-    idLista:      number;
-    idRemetente:  number;
-    listaVolumes: ListaVolume[];
-}
+import { ListaVolume } from "./Lista"
 
-export interface ListaVolume {
-    idVolume: number;
-    etiqueta: string;
+export interface VolumeAtualizado {
+    idLista:      number
+    idRemetente:  number
+    listaVolumes: ListaVolume[]
 }

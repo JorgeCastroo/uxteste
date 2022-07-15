@@ -73,7 +73,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 align = {SHOW_LOADING ? 'space-between' : undefined}
                 onRefresh = {async () => await localGetLista(dispatch)}
             >
-                <Header title = "Listas" goBack = {false} />
+                <Header title = "Listas" screenName = "solicitacaoList" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 {SHOW_NO_DATA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
                 {SHOW_DATA && (

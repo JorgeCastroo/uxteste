@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Endereco, Lista, ListaVolume } from "../../interfaces/Lista"
+import { VolumeAtualizado } from "../../interfaces/VolumeAtualizado"
 import { idStatusLista } from "../../../../constants/idStatusLista"
 import isoDateTime from "../../../../utils/isoDateTime"
+import createVolume from "../../scripts/createVolume"
 
 interface State {
     lista: Lista[] | null
@@ -101,9 +103,26 @@ const listaSlice = createSlice({
                 state.lista = [...state.lista!]
             }
         },
-        updateLista: (state, action: PayloadAction<Lista[]>) => {
-            state.lista = [...state.lista!, ...action.payload]
+
+        updateListas: (state, action: PayloadAction<Endereco[]>) => {
+            action.payload.forEach(endereco => {
+                const currentLista = state.lista!.find(f => f.idLista === endereco.idLista)!
+                if(currentLista.listaEnderecos.find(f => f.idRemetente === endereco.idRemetente)){
+                    const currentVolumes = currentLista.listaEnderecos.find(f => f.idRemetente === endereco.idRemetente)!.listaVolumes
+                    const volumesToAdd = endereco.listaVolumes.filter(f => !currentVolumes.map(i => i.idVolume).includes(f.idVolume))
+
+                    state.lista!
+                    .find(f => f.idLista === endereco.idLista)!.listaEnderecos
+                    .find(f => f.idRemetente === endereco.idRemetente)!.listaVolumes = [...currentVolumes, ...volumesToAdd]
+                }else{
+                    state.lista!
+                    .find(f => f.idLista === endereco.idLista)!.listaEnderecos = [...currentLista.listaEnderecos, endereco]
+                }
+            })
+
+            state.lista = [...state.lista!]
         },
+
         updateListaEndereco: (state, action: PayloadAction<Endereco>) => {
             const listaToUpdate = state.lista!.find(f => f.idLista === action.payload.idLista)!
             
@@ -113,7 +132,33 @@ const listaSlice = createSlice({
 
             state.lista = [...state.lista!]
         },
+        
+        addListaEnderecos: (state, action: PayloadAction<Endereco[]>) => {
+            const listaToUpdate = state.lista!.find(f => f.idLista === action.payload[0].idLista)!
+            const enderecosToAdd = action.payload.filter(f => !listaToUpdate.listaEnderecos.map(i => i.idRemetente).includes(f.idRemetente))
 
+            if(enderecosToAdd && enderecosToAdd.length > 0){
+                state.lista!.find(f => f.idLista === action.payload[0].idLista)!.listaEnderecos = [...listaToUpdate.listaEnderecos, ...enderecosToAdd]
+            }
+
+            state.lista = [...state.lista!]
+        },
+        addListaVolumes: (state, action: PayloadAction<VolumeAtualizado[]>) => {
+            action.payload.forEach(lista => {
+                const enderecoToUpdate = state.lista!.find(f => f.idLista === lista.idLista)!.listaEnderecos.find(f => f.idRemetente === lista.idRemetente)!
+                const volumesToAdd = lista.listaVolumes.filter(f => !enderecoToUpdate.listaVolumes.map(i => i.idVolume).includes(f.idVolume))
+                const formatedVolumes = volumesToAdd.map(volume => createVolume(volume.idVolume, lista.idLista, volume.etiqueta))
+
+                if(volumesToAdd && volumesToAdd.length > 0){
+                    state.lista!
+                    .find(f => f.idLista === lista.idLista)!.listaEnderecos
+                    .find(f => f.idRemetente === lista.idRemetente)!.listaVolumes = [...enderecoToUpdate.listaVolumes, ...formatedVolumes]
+                }
+            })
+            
+            state.lista = [...state.lista!]
+        },
+        
         scanEnderecoVolume: (state, action: PayloadAction<string>) => {
             const current = state.currentSolicitacao!
             const volumeIndex = state.currentSolicitacao!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
@@ -145,7 +190,8 @@ export const {
     setLista, setOldLista, setFilteredEndereco,
     setCurrentLista, setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
     scanEnderecoVolume, 
-    updateLista, updateListaEndereco, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
+    updateListas, updateListaEndereco, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
+    addListaEnderecos, addListaVolumes,
     setLoadingNewLista,
     resetLista,
 } = listaSlice.actions
