@@ -1,8 +1,8 @@
 export const SHOW_RESPONSE_LOG = {
     REQUEST: false,
     HEADER: false,
-    BODY: true,
-    RESPONSE: true,
+    BODY: false,
+    RESPONSE: false,
     ERROR: false,
 }
 
@@ -13,4 +13,4 @@ export const SHOW_LOG = {
     WARN: false,
 }
 
-export const APP_VERSION = '6.2.1'
+export const APP_VERSION = '6.2.2'

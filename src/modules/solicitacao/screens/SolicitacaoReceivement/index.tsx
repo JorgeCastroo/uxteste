@@ -159,7 +159,13 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     marginHorizontal
                                     loading = {requestSaveLista.loading || requestSendLeituraLista.loading}
                                     disabled = {requestSaveLista.loading || requestSendLeituraLista.loading}
-                                    onPress = {handleSend}
+                                    onPress = {() => {
+                                        if(findEndereco(lista, currentSolicitacao).listaVolumes.some(f => f.dtLeituraFirstMile !== '')){
+                                            handleSend()
+                                        }else{
+                                            Alert.alert('Atenção', 'Não é possível finalizar o recebimento sem escanear todos os volumes!', [{ text: 'Ok' }])
+                                        }
+                                    }}
                                 />
                             )}
                         </Section>

@@ -662,6 +662,38 @@ const MOCK_LISTA = [
                         "dtLeituraFirstMile": ""
                     }
                 ]
+            },
+            {
+                "idLista": 234046,
+                "rota": "TESTE_FIRST_MILE",
+                "idRemetente": 123,
+                "nomeCliente": "0006 - SELLER - MOCK",
+                "nomeResponsavel": "0006 - SELLER - MOCK",
+                "documentoResponsavel": "02967761000908",
+                "logradouro": "AVENIDA HENRY FORD",
+                "numero": "204",
+                "bairro": "PARQUE DA MOOCA",
+                "cidade": "São Paulo",
+                "uf": "SP",
+                "cep": "03109000",
+                "telPrincipal": "11953308288",
+                "latitudeDestino": "-23.5369456",
+                "longitudeDestino": "-46.4080245",
+                "qtdeVolumes": 106,
+                "listaVolumes": [
+                    {
+                        "idVolume": 2830638,
+                        "idLista": 234046,
+                        "etiqueta": "DQ669005304AI",
+                        "dtLeituraFirstMile": ""
+                    },
+                    {
+                        "idVolume": 2830639,
+                        "idLista": 234046,
+                        "etiqueta": "DQ669005304BI",
+                        "dtLeituraFirstMile": "saddsa"
+                    },
+                ]
             }
         ]
     }
