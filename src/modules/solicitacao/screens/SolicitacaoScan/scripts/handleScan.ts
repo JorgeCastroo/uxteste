@@ -2,8 +2,8 @@ import { StatusBar } from "react-native"
 import { Barcode } from "react-native-camera"
 import { showMessage } from "react-native-flash-message"
 import Sound from "react-native-sound"
-import { ListaVolume } from "../../../interfaces/Lista"
-import { addScannedSolicitacao, setScanning } from "../../../reducers/solicitacaoScan/solicitacaoScanReducer"
+import { Endereco } from "../../../interfaces/Lista"
+import { setScanning } from "../../../reducers/solicitacaoScan/solicitacaoScanReducer"
 import { scanEnderecoVolume } from "../../../reducers/lista/listaReducer"
 import info from "../../../../../utils/info"
 import sleep from "../../../../../utils/sleep"
@@ -11,6 +11,7 @@ import sleep from "../../../../../utils/sleep"
 import BeepSuccessAudio from '../../../../../assets/audio/beep_success.mp3'
 //@ts-ignore
 import BeepErrorAudio from '../../../../../assets/audio/beep_error.mp3'
+import getScannedVolumes from "../../../scripts/getScannedVolumes"
 
 Sound.setCategory('Playback')
 
@@ -28,13 +29,14 @@ const beepError = new Sound(BeepErrorAudio, error => {
     }
 })
 
-export default async function handleScan(dispatch: Function, code: Barcode, scanList: string[], currentVolumes: ListaVolume[]){
+export default async function handleScan(dispatch: Function, code: Barcode, currentSolicitacao: Endereco){
     try {
         dispatch(setScanning(true))
+        
         let flashMessage = { message: '', type: '' }
-        if(currentVolumes.map(item => item.etiqueta).includes(code.data)){
-            if(!scanList.includes(code.data)){
-                dispatch(addScannedSolicitacao(code.data))
+
+        if(currentSolicitacao.listaVolumes.map(item => item.etiqueta).includes(code.data)){
+            if(!getScannedVolumes(currentSolicitacao).includes(code.data)){
                 dispatch(scanEnderecoVolume(code.data))
 
                 beepSuccess.play()

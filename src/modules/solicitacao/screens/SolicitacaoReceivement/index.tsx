@@ -46,11 +46,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         return checkStatus(findLista(lista!, idLista), idRemetente, ['APROVADO', 'COLETANDO'])
     }
 
-    const handleNavigate = () => {
-        const scannedVolumes = currentSolicitacao!.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
-        if(scannedVolumes.length > 0) dispatch(setScannedSolicitacoes(scannedVolumes.map(item => item.etiqueta)))
-        navigation.navigate('solicitacaoScan') 
-    }
+    const handleNavigate = () => navigation.navigate('solicitacaoScan')
 
     const handleStart = async () => {
         const { idLista, idRemetente } = currentSolicitacao!

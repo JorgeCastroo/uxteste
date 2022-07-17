@@ -5,10 +5,11 @@ import { useAppSelector } from '../../../../redux/hooks'
 import Render from '../../../../components/Screen/Render'
 import Header from '../../../../components/Screen/Header'
 import Section from '../../../../components/Screen/Section'
+import getScannedVolumes from '../../scripts/getScannedVolumes'
 
 const SolicitacaoScanList: React.FC = () => {
 
-    const { scannedSolicitacoes } = useAppSelector(s => s.solicitacaoScan)
+    const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
 
     return(
 
@@ -16,7 +17,7 @@ const SolicitacaoScanList: React.FC = () => {
             <Render statusBarOptions = {{barStyle: 'light-content', backgroundColor: themes.colors.primary}} paddingBottom = {20}>
                 <Header title = "Códigos escaneados" />
                 <Section marginTop = {20}>
-                    {scannedSolicitacoes.map((item, index) => (
+                    {getScannedVolumes(lista!, currentSolicitacao!).map((item, index) => (
                         <List.Item
                             key = {index}
                             title = {item}

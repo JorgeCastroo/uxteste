@@ -13,13 +13,14 @@ import Control from './components/Control'
 import handleScan from './scripts/handleScan'
 import checkFormat from './scripts/checkFormat'
 import checkIfInside from './scripts/checkBounds'
+import findEndereco from '../../scripts/findEndereco'
 
 const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoScan'>> = ({ navigation }) => {
 
     const cameraRef = useRef<RNCamera>(null)
     const dispatch = useAppDispatch()
-    const { currentVolumes } = useAppSelector(s => s.lista)
-    const { isScanning, modalVisible, scannedSolicitacoes, scanMode, scanFlashlight, scanLayout, scanVisible } = useAppSelector(s => s.solicitacaoScan)
+    const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
+    const { isScanning, modalVisible, scanMode, scanFlashlight, scanLayout, scanVisible } = useAppSelector(s => s.solicitacaoScan)
 
     useEffect(() => {
         return () => {
@@ -50,7 +51,7 @@ const SolicitacaoScan: React.FC <StackScreenProps<SolicitacaoRoutesParams, 'soli
                             const isInside = checkIfInside(scanLayout!, {...barcodes[0].bounds.size, ...barcodes[0].bounds.origin})
                             if(isInside && checkFormat(scanMode, barcodes[0].format ?? '')){
                                 dispatch(setScanVisible(true))
-                                if(!isScanning) handleScan(dispatch, barcodes[0], scannedSolicitacoes, currentVolumes!)
+                                if(!isScanning) handleScan(dispatch, barcodes[0], findEndereco(lista!, currentSolicitacao!))
                             }else dispatch(setScanVisible(false))
                         }else dispatch(setScanVisible(false))
                     }}
