@@ -12,17 +12,16 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import NoData from '../../../../components/NoData'
 import SolicitacaoListSearchbar from './components/Searchbar'
+import FormError from '../../../../components/Form/Error'
+import Button from '../../../../components/Button'
 import Loader from './components/Loader'
 import localGetLista from '../../scripts/local/localGetLista'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import { syncValuesLista } from '../../scripts/sync'
-import closeLista from '../../scripts/closeLista'
-import FormError from '../../../../components/Form/Error'
-import orderLista from '../../scripts/orderLista'
-import orderEndereco from '../../scripts/orderEndereco'
-import findListaPosition from '../../scripts/findListaPosition'
 import getAddresses from '../../scripts/getAddresses'
 import findLista from '../../scripts/findLista'
+import closeLista from '../../scripts/requests/requestCloseLista'
+import { Alert } from 'react-native'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -30,7 +29,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const { lista, filteredEnderecos, loadingNewLista } = useAppSelector(s => s.lista)
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
-    const { requestGetLista } = useAppSelector(s => s.requestLista)
+    const { requestGetLista, requestCloseLista } = useAppSelector(s => s.requestLista)
 
     const [allIsSync, setAllIsSync] = useState(true)
 
@@ -56,10 +55,9 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     
     useEffect(() => {
         (async() => {
-            if(lista && lista.every(f => f.situacao === idStatusLista['FINALIZADO'] || f.situacao === idStatusLista['CANCELADO'])){
+            if(lista && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))){
                 const syncStatus = await syncValuesLista()
                 setAllIsSync(syncStatus)
-                if(syncStatus) closeLista(dispatch)
             }
         })()
     }, [dispatch, lista])
@@ -73,12 +71,12 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 align = {SHOW_LOADING ? 'space-between' : undefined}
                 onRefresh = {async () => await localGetLista(dispatch)}
             >
-                <Header title = "Listas" goBack = {false} />
+                <Header title = "Listas" screenName = "solicitacaoList" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 {SHOW_NO_DATA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
                 {SHOW_DATA && (
                     <>
-                        {lista.some(f => f.situacao !== idStatusLista['FINALIZADO']) && <SolicitacaoListSearchbar />}
+                        <SolicitacaoListSearchbar />
                         <Section marginTop = {20}>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum endereço encontrado!']} />}
                             {SHOW_FILTERED_LISTA_DATA && filteredEnderecos.map((item, index) => (
@@ -105,6 +103,23 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                             marginTop = {24}
                             message = "Ainda faltam listas para sincronizar!"
                         />
+                        {(allIsSync && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))) && (
+                            <Section>
+                                <Button
+                                    label = "Finalizar Rota"
+                                    color = {themes.gradient.success}
+                                    marginHorizontal
+                                    disabled = {requestCloseLista.loading}
+                                    loading = {requestCloseLista.loading}
+                                    onPress = {() => {
+                                        Alert.alert('Atenção', 'Deseja finalizar a rota?', [
+                                            {text: 'Não', style: 'cancel'},
+                                            {text: 'Sim', onPress: () => closeLista(dispatch, lista.map(f => f.idLista))}
+                                        ])
+                                    }}
+                                />
+                            </Section>
+                        )}
                     </>
                 )}
                 <Section />

@@ -6,7 +6,7 @@ import { resetMap } from "../../map/reducers/mapReducer"
 import info from "../../../utils/info"
 import storage from "../../../utils/storage"
 
-export default async function closeLista(dispatch: Function){
+export default async function removeLista(dispatch: Function){
     try {
         await storage.removeItem('roteirizacao')
         dispatch(resetRoteirizacao())
@@ -19,6 +19,6 @@ export default async function closeLista(dispatch: Function){
         dispatch(resetRequestGetLista())
         dispatch(resetRequestSaveLista())
     } catch (error: any) {
-        info.error('closeLista',error)
+        info.error('removeLista',error)
     }
 }

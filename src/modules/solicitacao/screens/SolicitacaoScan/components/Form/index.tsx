@@ -5,9 +5,11 @@ import FlashMessage from 'react-native-flash-message'
 import { useIsFocused } from '@react-navigation/native'
 import themes from '../../../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
-import { addScannedSolicitacao, setModalVisible } from '../../../../reducers/solicitacaoScan/solicitacaoScanReducer'
-import { updateEnderecoVolume } from '../../../../reducers/lista/listaReducer'
+import { setModalVisible } from '../../../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import { scanEnderecoVolume } from '../../../../reducers/lista/listaReducer'
 import FormError from '../../../../../../components/Form/Error'
+import findEndereco from '../../../../scripts/findEndereco'
+import getScannedVolumes from '../../../../scripts/getScannedVolumes'
 
 const Form: React.FC = () => {
 
@@ -15,8 +17,8 @@ const Form: React.FC = () => {
     const isFocused = useIsFocused()
 
     const dispatch = useAppDispatch()
-    const { currentVolumes } = useAppSelector(s => s.lista)
-    const { modalVisible, scannedSolicitacoes } = useAppSelector(s => s.solicitacaoScan)
+    const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
+    const { modalVisible } = useAppSelector(s => s.solicitacaoScan)
     const [code, setCode] = useState('')
 
     const onClose = () => {
@@ -26,11 +28,12 @@ const Form: React.FC = () => {
 
     const handleCode = useCallback((cod: string) => {
         let flashMessage = { message: '', type: '' }
-        if(currentVolumes!.map(item => item.etiqueta).includes(cod)){
-            if(!scannedSolicitacoes.includes(cod)){
-                dispatch(addScannedSolicitacao(cod))
-                dispatch(updateEnderecoVolume(cod))
+
+        if(findEndereco(lista!, currentSolicitacao!).listaVolumes!.map(item => item.etiqueta).includes(cod)){
+            if(!getScannedVolumes(findEndereco(lista!, currentSolicitacao!)).includes(cod)){
+                dispatch(scanEnderecoVolume(cod))
                 onClose()
+
                 flashMessage = { message: 'Código lido com sucesso!', type: 'success' }
             }else{
                 flashMessage = { message: 'Código já lido!', type: 'danger' }
@@ -58,7 +61,6 @@ const Form: React.FC = () => {
                         <TextInput
                             mode = "flat"
                             label = "Código"
-                            autoCapitalize = "characters"
                             theme = {{
                                 colors: {
                                     primary: themes.colors.tertiary,
@@ -70,7 +72,7 @@ const Form: React.FC = () => {
                         />
                         <FormError
                             marginTop = {16}
-                            visible = {scannedSolicitacoes.includes(code.toUpperCase())}
+                            visible = {getScannedVolumes(findEndereco(lista!, currentSolicitacao!)).includes(code.toUpperCase())}
                             message = "Código já inserido!"
                         />
                     </Dialog.Content>

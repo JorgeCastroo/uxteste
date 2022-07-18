@@ -9,7 +9,6 @@ import Render from '../../../../components/Screen/Render'
 import HomeHeader from '../../components/HomeHeader'
 import Section from '../../../../components/Screen/Section'
 import TopBox from '../../components/TopBox'
-import GroupInfo from '../../components/Group/Info'
 import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import SkeletonHomeMessage from '../../components/Message/Skeleton'
@@ -18,9 +17,9 @@ import { getGeolocation } from '../../../app/scripts/geolocationService'
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
 import getColetas from '../../../coletas/scripts/getColetas'
-import updateLista from '../../../solicitacao/scripts/requests/requestUpdateLista'
 import dayMoment from '../../../../utils/dayMoment'
 import getRemainder from '../../../../utils/getRemainder'
+import checkListaUpdate from '../../../solicitacao/scripts/checkListaUpdate'
 
 const requestInterval = interval(1000)
 
@@ -34,7 +33,7 @@ const Home: React.FC = () => {
     const { requestColeta } = useAppSelector(s => s.requestColetas)
     const isFocused = useIsFocused()
 
-    const [seconds, setSeconds] = useState<any>(0)
+    const [seconds, setSeconds] = useState(0)
 
     const SHOW_COLETAS_LOADING = requestColeta.loading
     const SHOW_COLETAS_DATA = !SHOW_COLETAS_LOADING && !!coletas && coletas.length > 0
@@ -47,13 +46,13 @@ const Home: React.FC = () => {
     }, [dispatch, userData])
 
     useEffect(() => {
-        if(isFocused && userData) getColetas(dispatch, userData)
-    }, [dispatch, isFocused, userData])
+        if(userData && isFocused) getColetas(dispatch, userData)
+    }, [dispatch, userData, isFocused])
 
     useEffect(() => {
         if(userData){
             if(getRemainder(seconds, 10)) getGeolocation(dispatch)
-            if(getRemainder(seconds, 60) && SHOW_DATA) updateLista(dispatch, userData)
+            if(getRemainder(seconds, 30) && SHOW_DATA) checkListaUpdate(dispatch, userData)
         }
     }, [dispatch, userData, seconds, SHOW_DATA])
 

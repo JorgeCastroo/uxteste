@@ -1,4 +1,4 @@
-import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { Volume } from "../../interfaces/Volume"
 import { UserData } from "../../../../interfaces/UserData"
@@ -12,10 +12,11 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
     try {
         dispatch(R.setRequestSendLeituraListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/MarcarLeitura`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/MarcarLeitura`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
+            idRemetente,
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
             listaVolumes,
@@ -38,7 +39,7 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
         dispatch(R.setRequestSendLeituraListaError())
         if(!sync){
             showMessage({
-                message: "Erro ao finalizar lista!",
+                message: "Erro ao marcar leitura da lista!",
                 description: error.message ?? JSON.stringify(error),
                 type: "danger",
                 duration: 10000,

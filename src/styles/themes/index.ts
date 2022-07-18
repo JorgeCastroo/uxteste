@@ -26,6 +26,8 @@ export const gradient = {
     primary: [colors.primary, colors.secondary],
     secondary: ['#1967D3', '#074FB1'],
     disabled: ['#EDEDED', '#A49A9A'],
+
+    success: [status.success.primary, status.success.secondary],
 }
 
 export const statusBarColor = 'rgba(0,0,0,0.3)'

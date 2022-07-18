@@ -1,5 +1,5 @@
-import React from 'react'
-import { List } from 'react-native-paper'
+import React, { Fragment } from 'react'
+import { Divider, List } from 'react-native-paper'
 import { ColetaBoxProps } from './types'
 import { Lista } from '../../../solicitacao/interfaces/Lista'
 import * as S from './styles'
@@ -8,8 +8,9 @@ import { elevation } from '../../../../styles/layout'
 import { useAppDispatch } from '../../../../redux/hooks'
 import { setColetasAprovadas, setColetasReprovadas } from '../../reducers/coletas/coletas'
 import Container from '../../../../components/Container'
-import ColetaBoxSelect from './Select'
+import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
 import copyAddress from '../../../solicitacao/scripts/copyAddress'
+import ColetaBoxSelect from './Select'
 
 const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, ...coleta }) => {
 
@@ -27,22 +28,28 @@ const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, ...coleta }) 
                 description = {`Endereços: ${coleta.listaEnderecos.length} | Volumes: ${coleta.qtdeTotalVolumes}`}
                 right = {props => 
                     <List.Icon 
-                        {...props} 
-                        icon = {selected ? "check-circle" : "checkbox-blank-circle-outline"} 
+                        icon = {selected ? "check-circle" : props.isExpanded ? 'chevron-up' : "chevron-down"} 
                         color = {selected ? status.success.primary : '#C4C4C4'}
                     />
                 }
             >
                 {coleta.listaEnderecos.map((endereco, index) => (
-                    <List.Item
-                        key = {index}
-                        title = {endereco.nomeCliente}
-                        titleNumberOfLines = {2}
-                        description = {`${endereco.logradouro}, ${endereco.bairro}, ${endereco.numero}, ${endereco.cidade}, ${endereco.uf}, ${endereco.cep}`}
-                        descriptionNumberOfLines = {4}
-                        left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
-                        onPress = {() => copyAddress(endereco)}
-                    />
+                    <Fragment key = {index}>
+                        <List.Item
+                            title = {endereco.nomeCliente}
+                            titleNumberOfLines = {2}
+                            description = {getFullAddress(endereco)}
+                            descriptionNumberOfLines = {4}
+                            left = {props => <List.Icon {...props} icon = "map-marker" color = {theme} />}
+                            onPress = {() => copyAddress(endereco)}
+                        />
+                        <List.Item
+                            title = "Volumes"
+                            description = {endereco.qtdeVolumes}
+                            left = {props => <List.Icon {...props} icon = "package-variant" color = {theme} />}
+                        />
+                        <Divider />
+                    </Fragment>
                 ))}
             </List.Accordion>
             <Container type = "row" padding = {false}>

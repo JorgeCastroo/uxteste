@@ -1,11 +1,10 @@
-import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
-import { ListaAtualizada } from "../../interfaces/ListaAtualizada"
+import { Endereco } from "../../interfaces/Lista"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
-import { updateListaVolumes } from "../../reducers/lista/listaReducer"
-import createVolume from "../createVolume"
+import { updateListas } from "../../reducers/lista/listaReducer"
 import createListaConfirmada from "../createListaConfirmada"
 import confirmUpdateLista from "./requestConfirmUpdateLista"
 import request from "../../../../utils/request"
@@ -15,27 +14,21 @@ export default async function updateLista(dispatch: Function, userData: UserData
     try {
         dispatch(R.setRequestUpdateListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AdicionarNovoSeller`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
             idMotorista: userData.idUsuarioSistema,
         }
-        const response = await request.post<ResponsePattern<ListaAtualizada[]>>({ endpoint, authorization, body })
+        const response = await request.post<ResponsePattern<Endereco[]>>({ endpoint, authorization, body })
 
         if(response && 'flagErro' in response){
             dispatch(R.setRequestUpdateListaData(response))
             if(!response.flagErro){
-                if(response.listaResultados.length > 0){
-                    response.listaResultados.forEach(lista => {
-                        dispatch(updateListaVolumes({
-                            idLista: lista.idLista, 
-                            idRemetente: lista.idRemetente,
-                            volumes: lista.listaVolumes.map(volume => createVolume(volume.idVolume, lista.idLista, volume.etiqueta))
-                        }))
-                    })                 
+                if(response.listaResultados.length > 0){             
+                    dispatch(updateListas(response.listaResultados))
                     showMessage({
-                        message: "Novos volumes foram adicionados!",
+                        message: "Novos endereços foram adicionados!",
                         type: "success",
                         duration: 5000,
                         floating: true,

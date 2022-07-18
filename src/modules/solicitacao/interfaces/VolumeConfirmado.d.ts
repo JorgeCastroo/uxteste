@@ -1,4 +1,4 @@
-export interface ListaConfirmada {
+export interface VolumeConfirmado {
     idLista: number
     listaVolumes: number[]
 }

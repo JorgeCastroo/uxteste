@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Data } from "../../types/data";
+import { Data } from "../../interfaces/data";
 
 interface State {
     requestColeta: {

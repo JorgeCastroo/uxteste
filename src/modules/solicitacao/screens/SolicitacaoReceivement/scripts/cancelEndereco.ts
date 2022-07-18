@@ -10,7 +10,7 @@ export default async function cancelEndereco(dispatch: Function, network: boolea
     try {
         if(network) await cancelEnderecoLista(dispatch, redirect, false, userData, idLista, idRemetente)
         else{
-            await addToSyncStack('syncListaCancelEndereco', createValueToSync({idLista, idRemetente} as SyncCancelEnderecoLista))
+            await addToSyncStack('syncEnderecoCancel', createValueToSync({idLista, idRemetente} as SyncCancelEnderecoLista))
             dispatch(updateEnderecoSituacao({status: 'CANCELADO', idLista, idRemetente}))
             redirect()
         }
