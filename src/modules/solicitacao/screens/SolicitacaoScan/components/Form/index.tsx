@@ -61,7 +61,6 @@ const Form: React.FC = () => {
                         <TextInput
                             mode = "flat"
                             label = "Código"
-                            autoCapitalize = "characters"
                             theme = {{
                                 colors: {
                                     primary: themes.colors.tertiary,

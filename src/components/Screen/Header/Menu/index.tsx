@@ -8,6 +8,8 @@ import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
 import CancelModal from '../../../../modules/solicitacao/components/CancelModal'
 import cancel from '../../../../modules/solicitacao/screens/SolicitacaoReceivement/scripts/cancel'
 import { APP_VERSION } from '../../../../config'
+import closeLista from '../../../../modules/solicitacao/scripts/requests/requestCloseLista'
+import removeLista from '../../../../modules/solicitacao/scripts/removeLista'
 
 const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
@@ -22,7 +24,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
     const navigation = useNavigation<any>()
 
-    const SHOW_LISTA_DATA = screenName === 'solicitacaoList' && !!lista && !!currentSolicitacao
+    const SHOW_LISTA_DATA = screenName === 'solicitacaoList' && !!lista
 
     const handleOnPress = (onPress: () => void) => {
         onPress()
@@ -43,16 +45,23 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                 anchor = {<Appbar.Action icon = "dots-vertical" color = "#FFF" onPress = {() => setMenuVisible(!menuVisible)} />}
             >
                 {SHOW_LISTA_DATA && (
-                    <Menu.Item
-                        icon = "text-box-remove"
-                        title = "Cancelar lista"
-                        onPress = {() => {
-                            Alert.alert('Atenção', 'Deseja cancelar a lista?', [
-                                { text: 'Não', style: 'cancel' },
-                                { text: 'Sim', onPress: () => setOpenCancelModal(true) }
-                            ])
-                        }}
-                    />
+                    <>
+                        <Menu.Item
+                            icon = "file-cancel"
+                            title = "Cancelar lista"
+                            onPress = {() => {
+                                Alert.alert('Atenção', 'Deseja cancelar a lista?', [
+                                    { text: 'Não', style: 'cancel' },
+                                    { text: 'Sim', onPress: () => handleOnPress(() => setOpenCancelModal(true)) }
+                                ])
+                            }}
+                        />
+                        <Menu.Item
+                            icon = "cancel"
+                            title = "DEV Limpar"
+                            onPress = {() => handleOnPress(() => removeLista(dispatch))}
+                        />
+                    </>
                 )}
                 <Menu.Item
                     icon = "information-outline"

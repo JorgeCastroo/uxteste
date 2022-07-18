@@ -12,18 +12,16 @@ import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
 import NoData from '../../../../components/NoData'
 import SolicitacaoListSearchbar from './components/Searchbar'
+import FormError from '../../../../components/Form/Error'
+import Button from '../../../../components/Button'
 import Loader from './components/Loader'
 import localGetLista from '../../scripts/local/localGetLista'
 import { idStatusLista } from '../../../../constants/idStatusLista'
 import { syncValuesLista } from '../../scripts/sync'
-import FormError from '../../../../components/Form/Error'
-import orderLista from '../../scripts/orderLista'
-import orderEndereco from '../../scripts/orderEndereco'
-import findListaPosition from '../../scripts/findListaPosition'
 import getAddresses from '../../scripts/getAddresses'
 import findLista from '../../scripts/findLista'
-import Button from '../../../../components/Button'
 import closeLista from '../../scripts/requests/requestCloseLista'
+import { Alert } from 'react-native'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -105,14 +103,22 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                             marginTop = {24}
                             message = "Ainda faltam listas para sincronizar!"
                         />
-                        {allIsSync && (
-                            <Button
-                                label = "Finalizar rota"
-                                color = {themes.gradient.success}
-                                disabled = {requestCloseLista.loading}
-                                loading = {requestCloseLista.loading}
-                                onPress = {closeLista}
-                            />
+                        {(allIsSync && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))) && (
+                            <Section>
+                                <Button
+                                    label = "Finalizar Rota"
+                                    color = {themes.gradient.success}
+                                    marginHorizontal
+                                    disabled = {requestCloseLista.loading}
+                                    loading = {requestCloseLista.loading}
+                                    onPress = {() => {
+                                        Alert.alert('Atenção', 'Deseja finalizar a rota?', [
+                                            {text: 'Não', style: 'cancel'},
+                                            {text: 'Sim', onPress: () => closeLista(dispatch, lista.map(f => f.idLista))}
+                                        ])
+                                    }}
+                                />
+                            </Section>
                         )}
                     </>
                 )}

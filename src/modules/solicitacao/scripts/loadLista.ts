@@ -16,14 +16,13 @@ export default async function loadLista(dispatch: Function, userData: UserData, 
         const reponseLista = await getLista(dispatch, userData)
         if(!!reponseLista){
             let newListas: Lista[] = reponseLista
-            /*
+            
             if(oldListas && oldListas.length > 0){
                 newListas = reponseLista.filter(f => !oldListas.map(lista => lista.idLista).includes(f.idLista))
                 newListas = [...oldListas, ...newListas]
             }else{
                 newListas = reponseLista
             }
-            */
             await localSetLista(dispatch, newListas)
             // let newListas: Lista[] = []
 

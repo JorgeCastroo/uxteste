@@ -12,7 +12,6 @@ interface State {
     currentLista: Lista | null
     currentSolicitacao: Endereco | null
     currentVolumes: ListaVolume[] | null
-    currentPosition: number | null
     loadingNewLista: boolean
 }
 
@@ -23,7 +22,6 @@ const initialState: State = {
     currentLista: null,
     currentSolicitacao: null,
     currentVolumes: null,
-    currentPosition: null,
     loadingNewLista: false,
 }
 
@@ -49,9 +47,6 @@ const listaSlice = createSlice({
         },
         setCurrentVolumes: (state, action: PayloadAction<ListaVolume[]>) => {
             state.currentVolumes = action.payload
-        },
-        setCurrentPosition: (state, action: PayloadAction<number>) => {
-            state.currentPosition = action.payload
         },
 
         updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number}>) => {
@@ -160,8 +155,8 @@ const listaSlice = createSlice({
         },
         
         scanEnderecoVolume: (state, action: PayloadAction<string>) => {
-            const current = state.currentSolicitacao!
-            const volumeIndex = state.currentSolicitacao!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
+            const current = state.lista!.find(f => f.idLista === state.currentSolicitacao!.idLista)!.listaEnderecos.find(f => f.idLista === state.currentSolicitacao!.idLista && f.idRemetente === state.currentSolicitacao!.idRemetente)!
+            const volumeIndex = current!.listaVolumes.findIndex(volume => volume.etiqueta === action.payload)!
 
             state.lista!
             .find(f => f.idLista === current.idLista)!.listaEnderecos
@@ -177,7 +172,6 @@ const listaSlice = createSlice({
             state.currentLista = null
             state.currentSolicitacao = null
             state.currentVolumes = null
-            state.currentPosition = null
         },
 
         setLoadingNewLista: (state, action: PayloadAction<boolean>) => {
@@ -188,7 +182,7 @@ const listaSlice = createSlice({
 
 export const { 
     setLista, setOldLista, setFilteredEndereco,
-    setCurrentLista, setCurrentSolicitacao, setCurrentVolumes, setCurrentPosition,
+    setCurrentLista, setCurrentSolicitacao, setCurrentVolumes,
     scanEnderecoVolume, 
     updateListas, updateListaEndereco, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
     addListaEnderecos, addListaVolumes,

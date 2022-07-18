@@ -6,11 +6,15 @@ import { ControlProps } from './types'
 import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
 import { setModalVisible } from '../../../../reducers/solicitacaoScan/solicitacaoScanReducer'
+import findEndereco from '../../../../scripts/findEndereco'
+import getScannedVolumes from '../../../../scripts/getScannedVolumes'
 
 const Control: React.FC <ControlProps> = ({ navigation }) => {
 
     const dispatch = useAppDispatch()
-    const { scannedSolicitacoes } = useAppSelector(s => s.solicitacaoScan)
+    const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
+
+    const scanned = getScannedVolumes(findEndereco(lista!, currentSolicitacao!))
 
     return(
 
@@ -18,8 +22,8 @@ const Control: React.FC <ControlProps> = ({ navigation }) => {
             <TouchableOpacity onPress = {() => navigation.goBack()}>
                 <MaterialCommunityIcons name = "arrow-left" size = {24} color = "#fff" />
             </TouchableOpacity>
-            <TouchableOpacity onPress = {() => scannedSolicitacoes.length > 0 && navigation.navigate('solicitacaoScanList')}>
-                <Text style = {{color: '#fff', fontWeight: 'bold'}}>{`(${scannedSolicitacoes.length}) códigos escaneados`}</Text>
+            <TouchableOpacity onPress = {() => scanned.length > 0 && navigation.navigate('solicitacaoScanList')}>
+                <Text style = {{color: '#fff', fontWeight: 'bold'}}>{`(${scanned.length}) códigos escaneados`}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress = {() => dispatch(setModalVisible(true))}>
                 <MaterialCommunityIcons name = "keyboard" size = {24} color = "#fff" />
