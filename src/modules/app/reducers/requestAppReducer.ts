@@ -5,10 +5,12 @@ import { AppVersion } from "../interfaces/AppVersion"
 
 interface State {
     requestAppVersion: ResponseDefault<AppVersion>
+    requestAppLocation: ResponseDefault<any>
 }
 
 const initialState: State = {
     requestAppVersion: responseInitialValues,
+    requestAppLocation: responseInitialValues,
 }
 
 const requestsAppSlice = createSlice({
@@ -34,10 +36,31 @@ const requestsAppSlice = createSlice({
         resetRequestAppVersion: (state) => {
             state.requestAppVersion = {...responseInitialValues}
         },
+
+        setRequestAppLocationData: (state, action: PayloadAction<ResponsePattern<any>>) => {
+            state.requestAppLocation.data = action.payload
+            state.requestAppLocation.loading = false
+            state.requestAppLocation.error = false
+        },
+        setRequestAppLocationLoading: (state) => {
+            state.requestAppLocation.loading = true
+            state.requestAppLocation.error = false
+        },
+        setRequestAppLocationError: (state) => {
+            state.requestAppLocation.loading = false
+            state.requestAppLocation.error = true
+        },
+        setRequestAppLocationMessage: (state, action: PayloadAction<string>) => {
+            state.requestAppLocation.message = action.payload
+        },
+        resetRequestAppLocation: (state) => {
+            state.requestAppLocation = {...responseInitialValues}
+        },
     }
 })
 
 export const {
     setRequestAppVersionData, setRequestAppVersionLoading, setRequestAppVersionError, setRequestAppVersionMessage, resetRequestAppVersion,
+    setRequestAppLocationData, setRequestAppLocationLoading, setRequestAppLocationError, setRequestAppLocationMessage, resetRequestAppLocation
 } = requestsAppSlice.actions
 export default requestsAppSlice.reducer

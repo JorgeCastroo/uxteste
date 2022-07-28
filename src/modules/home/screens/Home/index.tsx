@@ -20,12 +20,14 @@ import getColetas from '../../../coletas/scripts/getColetas'
 import dayMoment from '../../../../utils/dayMoment'
 import getRemainder from '../../../../utils/getRemainder'
 import checkListaUpdate from '../../../solicitacao/scripts/checkListaUpdate'
+import sendAppLocation from '../../../app/scripts/requests/sendAppLocation'
 
 const requestInterval = interval(1000)
 
 const Home: React.FC = () => {
 
     const dispatch = useAppDispatch()
+    const { location } = useAppSelector(s => s.app)
     const { userData } = useAppSelector(s => s.auth)
     const { lista } = useAppSelector(s => s.lista)
     const { coletas } = useAppSelector(s => s.coletas)
@@ -37,7 +39,7 @@ const Home: React.FC = () => {
 
     const SHOW_COLETAS_LOADING = requestColeta.loading
     const SHOW_COLETAS_DATA = !SHOW_COLETAS_LOADING && !!coletas && coletas.length > 0
-    const SHOW_DATA = !!lista
+    const SHOW_DATA = !!lista && !!userData
 
     useObservable(requestInterval, setSeconds as any)
 
@@ -50,11 +52,19 @@ const Home: React.FC = () => {
     }, [dispatch, userData, isFocused])
 
     useEffect(() => {
-        if(userData){
-            if(getRemainder(seconds, 10)) getGeolocation(dispatch)
-            if(getRemainder(seconds, 30) && SHOW_DATA) checkListaUpdate(dispatch, userData)
+        (async() => {
+            if(SHOW_DATA){
+                if(getRemainder(seconds, 10)) getGeolocation(dispatch)
+                if(getRemainder(seconds, 60)) checkListaUpdate(dispatch, userData)
+            }
+        })()
+    }, [dispatch, seconds, SHOW_DATA])
+
+    useEffect(() => {
+        if(SHOW_DATA && location){
+            if(getRemainder(seconds, 30)) sendAppLocation(dispatch, userData, lista.map(i => i.idLista), location.coords)
         }
-    }, [dispatch, userData, seconds, SHOW_DATA])
+    }, [dispatch, seconds, location, SHOW_DATA])
 
     return(
 
