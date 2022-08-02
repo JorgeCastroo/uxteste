@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { Text } from 'react-native-paper'
 import { PermissionsAndroid } from 'react-native'
@@ -12,11 +12,13 @@ import Section from '../../../../components/Screen/Section'
 import Button from '../../../../components/Button'
 import Container from '../../../../components/Container'
 import info from '../../../../utils/info'
+import { PERMISSIONS, request } from 'react-native-permissions'
 
 const { PRIORITIES: { HIGH_ACCURACY }, useLocationSettings } = LocationEnabler
 
 const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>> = ({ navigation }) => {
 
+    const [permited, setPermited] = useState(false)
     const [gpsEnabled, setGpsEnabled] = useLocationSettings({
         priority: HIGH_ACCURACY,
         alwaysShow: true,
@@ -34,10 +36,15 @@ const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>
                     buttonPositive: "OK"
                 }
             )
-            if(granted === PermissionsAndroid.RESULTS.GRANTED) navigation.navigate('authLogin')
+            if(granted === PermissionsAndroid.RESULTS.GRANTED) requestAlways()
         } catch (error) { 
             info.error('locationPermission',error)
         }
+    }, [])
+
+    const requestAlways = useCallback(async () => {
+        const result = await request(PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION)
+        if (result === 'granted') setPermited(true)
     }, [])
 
     useEffect(() => {
