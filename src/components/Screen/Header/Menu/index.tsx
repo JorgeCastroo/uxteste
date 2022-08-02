@@ -56,11 +56,11 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                                 ])
                             }}
                         />
-                        <Menu.Item
+                        {/* <Menu.Item
                             icon = "cancel"
                             title = "DEV Limpar"
                             onPress = {() => handleOnPress(() => removeLista(dispatch))}
-                        />
+                        /> */}
                     </>
                 )}
                 <Menu.Item

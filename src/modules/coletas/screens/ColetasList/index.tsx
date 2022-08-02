@@ -63,9 +63,11 @@ const ColetasList: React.FC = () => {
         
         if (!!responseAprovadas) {
             if (!responseAprovadas.flagErro){
-                loadLista(dispatch, userData!, getCoords(location!), lista)
+                
+                await loadLista(dispatch, userData!, getCoords(location!), lista)
                 dispatch(setResetColetasAprovadas())
                 dispatch(setColetas(null))
+                
                 navigation.navigate("solicitacaoRoutes")
             } else Alert.alert("Erro ao prosseguir com as coletas!")
         }

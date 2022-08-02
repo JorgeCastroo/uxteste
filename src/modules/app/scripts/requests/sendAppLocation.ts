@@ -21,16 +21,14 @@ export default async function sendAppLocation(dispatch: Function, { idTransporta
             idTransportadora,
             latitude: coords.latitude,
             longitude: coords.longitude,
-            idDevice: getUniqueId(),
+            idDevice: await getUniqueId(),
             flagGPSAtivo: true
         }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
 
         if(response && 'flagErro' in response){
             dispatch(R.setRequestAppLocationData(response))
-            if(!response.flagErro){
-                
-            }else throw new Error(response.listaMensagens[0])
+            if(response.flagErro) throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {
         info.error('sendAppLocation',error)

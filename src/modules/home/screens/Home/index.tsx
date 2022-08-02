@@ -13,6 +13,7 @@ import GroupStatus from '../../components/Group/Status'
 import HomeMessage from '../../components/Message'
 import SkeletonHomeMessage from '../../components/Message/Skeleton'
 import Container from '../../../../components/Container'
+import sendAppLocation from '../../../app/scripts/requests/sendAppLocation'
 import { getGeolocation } from '../../../app/scripts/geolocationService'
 import initPushNotification from '../../../app/scripts/pushNotification/initPushNotification'
 import AppVersion from '../../../app/components/AppVersion'
@@ -20,7 +21,6 @@ import getColetas from '../../../coletas/scripts/getColetas'
 import dayMoment from '../../../../utils/dayMoment'
 import getRemainder from '../../../../utils/getRemainder'
 import checkListaUpdate from '../../../solicitacao/scripts/checkListaUpdate'
-import sendAppLocation from '../../../app/scripts/requests/sendAppLocation'
 
 const requestInterval = interval(1000)
 
@@ -53,10 +53,8 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         (async() => {
-            if(SHOW_DATA){
-                if(getRemainder(seconds, 10)) getGeolocation(dispatch)
-                if(getRemainder(seconds, 60)) checkListaUpdate(dispatch, userData)
-            }
+            if(getRemainder(seconds, 10)) getGeolocation(dispatch)  
+            if(getRemainder(seconds, 60) && SHOW_DATA) checkListaUpdate(dispatch, userData)
         })()
     }, [dispatch, seconds, SHOW_DATA])
 
