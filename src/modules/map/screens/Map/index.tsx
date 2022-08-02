@@ -20,7 +20,7 @@ import fitMap from '../../scripts/fitMap'
 import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
 import getStatus from '../../../solicitacao/scripts/getStatus'
 import getAddresses from '../../../solicitacao/scripts/getAddresses'
-import { setCurrentSolicitacao, setCurrentVolumes } from '../../../solicitacao/reducers/lista/listaReducer'
+import { setCurrentSolicitacao } from '../../../solicitacao/reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../../solicitacao/reducers/solicitacaoScan/solicitacaoScanReducer'
 import { elevation } from '../../../../styles/layout'
 import MapPopup from '../../components/Popup'
@@ -102,7 +102,6 @@ const Map: React.FC <StackScreenProps<AppRoutesParams, 'map'>> = ({ navigation }
                                             onPress = {() => {
                                                 dispatch(resetScannedSolicitacoes())
                                                 dispatch(setCurrentSolicitacao(item))
-                                                dispatch(setCurrentVolumes(item.listaVolumes))
                                                 navigation.navigate('solicitacaoRoutes', { screen: 'solicitacaoReceivement' } as any)
                                             }}
                                         >

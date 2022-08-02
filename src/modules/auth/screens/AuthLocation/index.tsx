@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { PERMISSIONS, request } from 'react-native-permissions'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { Text } from 'react-native-paper'
 import { PermissionsAndroid } from 'react-native'
@@ -12,7 +13,6 @@ import Section from '../../../../components/Screen/Section'
 import Button from '../../../../components/Button'
 import Container from '../../../../components/Container'
 import info from '../../../../utils/info'
-import { PERMISSIONS, request } from 'react-native-permissions'
 
 const { PRIORITIES: { HIGH_ACCURACY }, useLocationSettings } = LocationEnabler
 
@@ -36,7 +36,7 @@ const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>
                     buttonPositive: "OK"
                 }
             )
-            if(granted === PermissionsAndroid.RESULTS.GRANTED) requestAlways()
+            if(granted === PermissionsAndroid.RESULTS.GRANTED) navigation.navigate('authLogin')
         } catch (error) { 
             info.error('locationPermission',error)
         }

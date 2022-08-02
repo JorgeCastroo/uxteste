@@ -28,7 +28,7 @@ const appSlice = createSlice({
         setAppNetwork: (state, action: PayloadAction<boolean>) => {
             state.network = action.payload
         },
-        setAppLocation: (state, action: PayloadAction<GeoPosition>) => {
+        setAppLocation: (state, action: PayloadAction<GeoPosition | null>) => {
             state.location = action.payload
         },
         setAppVersion: (state, action: PayloadAction<AppVersion>) => {

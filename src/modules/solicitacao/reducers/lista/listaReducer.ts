@@ -11,7 +11,6 @@ interface State {
     filteredEnderecos: Endereco[] | null
     currentLista: Lista | null
     currentSolicitacao: Endereco | null
-    currentVolumes: ListaVolume[] | null
     loadingNewLista: boolean
 }
 
@@ -21,7 +20,6 @@ const initialState: State = {
     filteredEnderecos: null,
     currentLista: null,
     currentSolicitacao: null,
-    currentVolumes: null,
     loadingNewLista: false,
 }
 
@@ -45,9 +43,6 @@ const listaSlice = createSlice({
         setCurrentSolicitacao: (state, action: PayloadAction<Endereco>) => {
             state.currentSolicitacao = action.payload
         },
-        setCurrentVolumes: (state, action: PayloadAction<ListaVolume[]>) => {
-            state.currentVolumes = action.payload
-        },
 
         updateListaSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number}>) => {
             state.lista!.find(f => f.idLista === action.payload.idLista)!.situacao = idStatusLista[action.payload.status]
@@ -66,9 +61,12 @@ const listaSlice = createSlice({
             .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
             .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
 
-            if(state.currentSolicitacao) state.currentSolicitacao!.situacao = idStatusLista[action.payload.status]
+            if(state.currentSolicitacao){
+                state.currentSolicitacao.situacao = idStatusLista[action.payload.status]
 
-            state.currentSolicitacao = {...state.currentSolicitacao!}
+                state.currentSolicitacao = {...state.currentSolicitacao!}
+            }
+
             state.lista = [...state.lista!]
         },
         updateListaEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
@@ -77,9 +75,12 @@ const listaSlice = createSlice({
             .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
             .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
 
-            if(state.currentSolicitacao) state.currentSolicitacao.situacao = idStatusLista[action.payload.status]
+            if(state.currentSolicitacao){
+                state.currentSolicitacao.situacao = idStatusLista[action.payload.status]
+                
+                state.currentSolicitacao = {...state.currentSolicitacao!}
+            }
 
-            state.currentSolicitacao = {...state.currentSolicitacao!}
             state.lista = [...state.lista!]
         },
         updateListaVolumes: (state, action: PayloadAction<{idLista: number, idRemetente: number, volumes: ListaVolume[]}>) => {
@@ -171,7 +172,6 @@ const listaSlice = createSlice({
             state.filteredEnderecos = null
             state.currentLista = null
             state.currentSolicitacao = null
-            state.currentVolumes = null
         },
 
         setLoadingNewLista: (state, action: PayloadAction<boolean>) => {
@@ -182,8 +182,8 @@ const listaSlice = createSlice({
 
 export const { 
     setLista, setOldLista, setFilteredEndereco,
-    setCurrentLista, setCurrentSolicitacao, setCurrentVolumes,
-    scanEnderecoVolume, 
+    setCurrentLista, setCurrentSolicitacao,
+    scanEnderecoVolume,
     updateListas, updateListaEndereco, updateListaSituacao, updateEnderecoSituacao, updateListaVolumes, updateListaEnderecoSituacao,
     addListaEnderecos, addListaVolumes,
     setLoadingNewLista,

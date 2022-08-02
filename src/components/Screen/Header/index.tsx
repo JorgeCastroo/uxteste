@@ -8,7 +8,9 @@ import HeaderMenu from './Menu'
 
 const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtitle, screenName }) => {
 
+    const { location } = useAppSelector(s => s.app)
     const { syncLoading } = useAppSelector(s => s.sync)
+    const { lista } = useAppSelector(s => s.lista)
     const navigation = useNavigation<any>()
 
     const showBack = goBack ?? true
@@ -20,6 +22,7 @@ const Header: React.FC <ScreenHeaderProps> = ({ goBack, backRoute, title, subtit
             <Appbar.Content title = {title} subtitle = {subtitle} />
 
             {syncLoading && <Appbar.Action icon = "sync" />}
+            {(!!lista && !location) && <Appbar.Action icon = "map-marker-off-outline" /> }
             <HeaderMenu screenName = {screenName} />
         </Appbar.Header>
 

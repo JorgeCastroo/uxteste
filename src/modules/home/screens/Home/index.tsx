@@ -52,17 +52,14 @@ const Home: React.FC = () => {
     }, [dispatch, userData, isFocused])
 
     useEffect(() => {
-        (async() => {
-            if(getRemainder(seconds, 10)) getGeolocation(dispatch)  
-            if(getRemainder(seconds, 60) && SHOW_DATA) checkListaUpdate(dispatch, userData)
-        })()
-    }, [dispatch, seconds, SHOW_DATA])
+        if(getRemainder(seconds, 10)) getGeolocation(dispatch)  
 
-    useEffect(() => {
-        if(SHOW_DATA && location){
-            if(getRemainder(seconds, 30)) sendAppLocation(dispatch, userData, lista.map(i => i.idLista), location.coords)
+        if(getRemainder(seconds, 30) && SHOW_DATA && !!location && !!location.coords){
+            sendAppLocation(dispatch, userData, lista.map(i => i.idLista), location.coords)
         }
-    }, [dispatch, seconds, location, SHOW_DATA])
+        
+        if(getRemainder(seconds, 60) && SHOW_DATA) checkListaUpdate(dispatch, userData)
+    }, [dispatch, seconds, SHOW_DATA])
 
     return(
 

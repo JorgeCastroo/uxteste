@@ -4,7 +4,7 @@ import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParam
 import { Endereco } from '../../interfaces/Lista'
 import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { setCurrentLista, setCurrentSolicitacao, setCurrentVolumes } from '../../reducers/lista/listaReducer'
+import { setCurrentLista, setCurrentSolicitacao } from '../../reducers/lista/listaReducer'
 import { resetScannedSolicitacoes } from '../../reducers/solicitacaoScan/solicitacaoScanReducer'
 import Header from '../../../../components/Screen/Header'
 import Render from '../../../../components/Screen/Render'
@@ -48,7 +48,6 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const handleNavigate = (item: Endereco) => {
         dispatch(setCurrentLista(findLista(lista!, item.idLista)))
         dispatch(setCurrentSolicitacao(item))
-        dispatch(setCurrentVolumes(item.listaVolumes))
         dispatch(resetScannedSolicitacoes())
         navigation.navigate('solicitacaoReceivement')
     }

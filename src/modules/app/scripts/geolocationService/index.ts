@@ -1,4 +1,5 @@
 import Geolocation, { GeoPosition } from 'react-native-geolocation-service'
+import { showMessage } from "react-native-flash-message"
 import { setAppLocation } from '../../reducers/appReducer'
 import info from '../../../../utils/info'
 
@@ -12,6 +13,8 @@ async function getGeolocation(dispatch: Function){
         },
         (error) => {
             info.error('getGeolocation', `${error.code, error.message}`)
+            dispatch(setAppLocation(null))
+            showMessage({ message: 'Localização desativada!', type: 'warning', floating: true, autoHide: false })
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 5000 }
     )
