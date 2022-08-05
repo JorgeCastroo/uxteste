@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
 import { getUniqueId } from "react-native-device-info"
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { UserData } from "../../../../interfaces/UserData"
@@ -12,7 +12,7 @@ export default async function sendAppLocation(dispatch: Function, { idTransporta
     try {
         dispatch(R.setRequestAppLocationLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/EnviarPosicaoMotorista`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/EnviarPosicaoMotorista`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idMotorista: idUsuarioSistema,
