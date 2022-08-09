@@ -2,15 +2,15 @@ export const SHOW_RESPONSE_LOG = {
     REQUEST: false,
     HEADER: false,
     BODY: false,
-    RESPONSE: false,
+    RESPONSE: true,
     ERROR: false,
 }
 
 export const SHOW_LOG = {
     LOG: false,
     DATA: false,
-    ERROR: true,
+    ERROR: false,
     WARN: false,
 }
 
-export const APP_VERSION = '6.3.0'
+export const APP_VERSION = '6.3.1'

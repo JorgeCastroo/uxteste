@@ -60,7 +60,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const handleCancelEndereco = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
         await cancelEndereco(dispatch, !!network, redirect, userData!, idLista, idRemetente)
-
+        
         if(!checkSaveLista()){
             await sleep(500)
             dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}))
@@ -131,7 +131,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     onPress = {handleNavigate}
                                 />
                             )}
-                            {[2, 3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {[2, 3, 6].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Cancelar Recebimento"
                                     color = {[themes.status.error.primary, themes.status.error.secondary]}
@@ -147,7 +147,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     }}
                                 />
                             )}
-                            {[3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {[3, 5].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Finalizar Recebimento"
                                     color = {[themes.status.success.primary, themes.status.success.secondary]}

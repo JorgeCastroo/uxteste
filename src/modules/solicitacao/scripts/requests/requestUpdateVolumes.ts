@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { VolumeAtualizado } from "../../interfaces/VolumeAtualizado"
@@ -14,7 +14,7 @@ export default async function updateVolume(dispatch: Function, userData: UserDat
     try {
         dispatch(R.setRequestUpdateVolumeLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AtualizacaoLista`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,

@@ -6,11 +6,10 @@ export default async function getSyncStatus(key: string){
     try {
         const currentSyncStorage = await storage.getItem<ValueToSync<any>[]>(key)
         if(!!currentSyncStorage && currentSyncStorage.length > 0){
-            if(currentSyncStorage.every(f => f.sync)) return true
-            else return false
+            return currentSyncStorage.every(f => f.sync === true)
         }else return true
     } catch (error) {
         info.error('getSyncStatus',error)
-        return false
+        return true
     }
 }

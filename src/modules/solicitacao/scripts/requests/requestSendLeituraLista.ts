@@ -1,4 +1,4 @@
-import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { Volume } from "../../interfaces/Volume"
 import { UserData } from "../../../../interfaces/UserData"
@@ -12,7 +12,7 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
     try {
         dispatch(R.setRequestSendLeituraListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/MarcarLeitura`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/MarcarLeitura`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
@@ -27,14 +27,14 @@ export default async function sendLeituraLista(dispatch: Function, redirect: () 
             dispatch(R.setRequestSendLeituraListaData(response))
             if(!response.flagErro){
                 if(!sync){
-                    redirect()
                     dispatch(updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}))
+                    redirect()
                 }
                 return true
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
     } catch (error: any) {
-        info.error('saveLista',error)
+        info.error('sendLeituraLista',error)
         dispatch(R.setRequestSendLeituraListaMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestSendLeituraListaError())
         if(!sync){

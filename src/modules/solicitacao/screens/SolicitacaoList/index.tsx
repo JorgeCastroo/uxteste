@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Alert } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { Endereco } from '../../interfaces/Lista'
@@ -21,7 +22,6 @@ import { syncValuesLista } from '../../scripts/sync'
 import getAddresses from '../../scripts/getAddresses'
 import findLista from '../../scripts/findLista'
 import closeLista from '../../scripts/requests/requestCloseLista'
-import { Alert } from 'react-native'
 
 const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>> = ({ navigation }) => {
 
@@ -54,10 +54,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     
     useEffect(() => {
         (async() => {
-            if(lista && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))){
-                const syncStatus = await syncValuesLista()
-                setAllIsSync(syncStatus)
-            }
+            setAllIsSync(await syncValuesLista())
         })()
     }, [dispatch, lista])
 
@@ -73,6 +70,11 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 <Header title = "Listas" screenName = "solicitacaoList" goBack = {false} />
                 {SHOW_LOADING && <Loader percent = {loaderPercent} />}
                 {SHOW_NO_DATA && <NoData emoji = "confused" message = {['Você não possui listas!']} />}
+                <FormError
+                    visible = {!allIsSync}
+                    marginTop = {24}
+                    message = "Ainda faltam listas para sincronizar!"
+                />
                 {SHOW_DATA && (
                     <>
                         <SolicitacaoListSearchbar />
@@ -97,28 +99,21 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                                 />
                             ))}
                         </Section>
-                        <FormError
-                            visible = {!allIsSync}
-                            marginTop = {24}
-                            message = "Ainda faltam listas para sincronizar!"
-                        />
-                        {(allIsSync && lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))) && (
-                            <Section>
-                                <Button
-                                    label = "Finalizar Rota"
-                                    color = {themes.gradient.success}
-                                    marginHorizontal
-                                    disabled = {requestCloseLista.loading}
-                                    loading = {requestCloseLista.loading}
-                                    onPress = {() => {
-                                        Alert.alert('Atenção', 'Deseja finalizar a rota?', [
-                                            {text: 'Não', style: 'cancel'},
-                                            {text: 'Sim', onPress: () => closeLista(dispatch, lista.map(f => f.idLista))}
-                                        ])
-                                    }}
-                                />
-                            </Section>
-                        )}
+                        <Section>
+                            <Button
+                                label = "Finalizar Rota"
+                                color = {themes.gradient.success}
+                                marginHorizontal
+                                disabled = {requestCloseLista.loading || !lista.every(f => [idStatusLista['FINALIZADO'], idStatusLista['CANCELADO']].includes(f.situacao))}
+                                loading = {requestCloseLista.loading}
+                                onPress = {() => {
+                                    Alert.alert('Atenção', 'Deseja finalizar a rota?', [
+                                        {text: 'Não', style: 'cancel'},
+                                        {text: 'Sim', onPress: () => closeLista(dispatch, lista.map(f => f.idLista))}
+                                    ])
+                                }}
+                            />
+                        </Section>
                     </>
                 )}
                 <Section />

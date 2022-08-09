@@ -1,4 +1,4 @@
-import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { Coordinates } from "../../../../interfaces/Coordinates"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
@@ -11,7 +11,7 @@ export default async function startReceivingLista(dispatch: Function, sync: bool
     try {
         dispatch(R.setRequestStartReceivingListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,

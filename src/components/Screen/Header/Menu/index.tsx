@@ -8,8 +8,8 @@ import setUserLogout from '../../../../modules/auth/scripts/setUserLogout'
 import CancelModal from '../../../../modules/solicitacao/components/CancelModal'
 import cancel from '../../../../modules/solicitacao/screens/SolicitacaoReceivement/scripts/cancel'
 import { APP_VERSION } from '../../../../config'
-import closeLista from '../../../../modules/solicitacao/scripts/requests/requestCloseLista'
-import removeLista from '../../../../modules/solicitacao/scripts/removeLista'
+import copySolicitacao from '../../../../modules/solicitacao/scripts/copySolicitacao'
+import findEndereco from '../../../../modules/solicitacao/scripts/findEndereco'
 
 const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
 
@@ -25,6 +25,7 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
     const navigation = useNavigation<any>()
 
     const SHOW_LISTA_DATA = screenName === 'solicitacaoList' && !!lista
+    const SHOW_SOLICITACAO_DATA = screenName === 'solicitacaoReceivement' && !!currentSolicitacao && !!lista
 
     const handleOnPress = (onPress: () => void) => {
         onPress()
@@ -62,6 +63,13 @@ const HeaderMenu: React.FC <HeaderMenuProps> = ({ screenName }) => {
                             onPress = {() => handleOnPress(() => removeLista(dispatch))}
                         /> */}
                     </>
+                )}
+                {SHOW_SOLICITACAO_DATA && (
+                    <Menu.Item
+                        icon = "content-copy"
+                        title = "Copiar solicitação"
+                        onPress = {() => handleOnPress(() => copySolicitacao(findEndereco(lista, currentSolicitacao)))}
+                    />
                 )}
                 <Menu.Item
                     icon = "information-outline"
