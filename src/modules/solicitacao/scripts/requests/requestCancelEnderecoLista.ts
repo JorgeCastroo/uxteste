@@ -1,4 +1,4 @@
-import { VVLOG_HML_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
+import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { ResponsePattern } from "../../../../utils/response/types"
@@ -11,7 +11,7 @@ export default async function cancelEnderecoLista(dispatch: Function, redirect: 
     try {
         dispatch(R.setRequestCancelEnderecoListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/MarcarLeitura`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/MarcarLeitura`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,

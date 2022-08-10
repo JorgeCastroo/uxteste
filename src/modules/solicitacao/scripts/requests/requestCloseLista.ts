@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
 import { ResponsePattern } from "../../../../utils/response/types"
 import * as R from "../../reducers/lista/requestListaReducer"
 import removeLista from "../removeLista"
@@ -9,7 +9,7 @@ export default async function closeLista(dispatch: Function, idsLista: number[])
     try {
         dispatch(R.setRequestCloseListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
         const authorization = VVLOG_AUTHORIZATION
         const body = { idsLista }
         const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
