@@ -61,12 +61,6 @@ const listaSlice = createSlice({
             .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
             .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
 
-            if(!!state.currentSolicitacao){
-                state.currentSolicitacao.situacao = idStatusLista[action.payload.status]
-
-                state.currentSolicitacao = {...state.currentSolicitacao!}
-            }
-
             state.lista = [...state.lista!]
         },
         updateListaEnderecoSituacao: (state, action: PayloadAction<{status: keyof typeof idStatusLista, idLista: number, idRemetente: number}>) => {
@@ -74,12 +68,6 @@ const listaSlice = createSlice({
             state.lista!
             .find(f => f.idLista === action.payload.idLista)!.listaEnderecos
             .find(f => f.idLista === action.payload.idLista && f.idRemetente === action.payload.idRemetente)!.situacao = idStatusLista[action.payload.status]
-
-            if(state.currentSolicitacao){
-                state.currentSolicitacao.situacao = idStatusLista[action.payload.status]
-                
-                state.currentSolicitacao = {...state.currentSolicitacao!}
-            }
 
             state.lista = [...state.lista!]
         },

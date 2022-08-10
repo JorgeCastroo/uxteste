@@ -34,7 +34,7 @@ const Routes: React.FC = () => {
     }, [dispatch])
 
     useEffect(() => {
-        if(!!lista && JSON.stringify(lista) !== JSON.stringify(oldLista ?? [])) localSetLista(dispatch, lista)
+        if(!!lista && JSON.stringify(lista) !== JSON.stringify(oldLista ?? [])) localSetLista(dispatch, lista, false)
     }, [dispatch, lista])
 
     useEffect(() => {
