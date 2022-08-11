@@ -83,7 +83,6 @@ export async function syncSaveLista(dispatch: Function, userData: UserData){
 export async function syncSendLista(dispatch: Function, userData: UserData){
     try {
         const { key, items } = await handleSyncStorage<SyncSendLista>('syncListaSend')
-        console.log("🚀 ~ file: index.ts ~ line 86 ~ syncSendLista ~ items", items)
 
         if(!!items && items.filter(({ sync }) => !sync).length > 0){
             const syncedValues: SyncSendLista[] = []
