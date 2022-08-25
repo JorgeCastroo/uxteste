@@ -16,7 +16,7 @@ async function requestGet<T>({authorization, endpoint, params}: RequestPattern){
         const response = await fetch(input, {
             method: 'GET',
             headers: createRequestHeaders(authorization),
-            //signal: controller.signal,
+            signal: controller.signal,
         })
         const jsonResponse = await response.json()
         
@@ -44,7 +44,7 @@ async function requestPost<T>({authorization, endpoint, params, body}: RequestPa
             method: 'POST',
             headers: createRequestHeaders(authorization),
             body: JSON.stringify(body),
-            //signal: controller.signal,
+            signal: controller.signal,
         })
 
         const jsonResponse = await response.json()
@@ -73,7 +73,7 @@ async function requestDelete<T>({authorization, endpoint, params, body}: Request
             method: 'DELETE',
             headers: createRequestHeaders(authorization),
             body: JSON.stringify(body),
-            //signal: controller.signal,
+            signal: controller.signal,
         })
         const jsonResponse = await response.json()
         
@@ -101,7 +101,7 @@ async function requestPut<T>({authorization, endpoint, params, body}: RequestPat
             method: 'PUT',
             headers: createRequestHeaders(authorization),
             body: JSON.stringify(body),
-            //signal: controller.signal,
+            signal: controller.signal,
         })
         const jsonResponse = await response.json()
         

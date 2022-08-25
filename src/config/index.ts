@@ -13,6 +13,6 @@ export const SHOW_LOG = {
     WARN: false,
 }
 
-export const REQUEST_TIMEOUT = 1000 * 5
+export const REQUEST_TIMEOUT = 1000 * 60
 
 export const APP_VERSION = '6.4.0-hml'
