@@ -1,16 +1,18 @@
 export const SHOW_RESPONSE_LOG = {
-    REQUEST: false,
+    REQUEST: true,
     HEADER: false,
-    BODY: false,
-    RESPONSE: false,
-    ERROR: false,
+    BODY: true,
+    RESPONSE: true,
+    ERROR: true,
 }
 
 export const SHOW_LOG = {
     LOG: false,
     DATA: false,
-    ERROR: false,
+    ERROR: true,
     WARN: false,
 }
 
-export const APP_VERSION = '6.3.2'
+export const REQUEST_TIMEOUT = 1000 * 5
+
+export const APP_VERSION = '6.4.0-hml'

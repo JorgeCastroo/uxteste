@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { Endereco } from "../../interfaces/Lista"
@@ -16,7 +16,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
         //dispatch(updateListas(MOCK_LISTA_UPDATE))
         dispatch(R.setRequestUpdateListaLoading())
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AdicionarNovoSeller`
+        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AdicionarNovoSeller`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
@@ -35,7 +35,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
                         duration: 5000,
                         floating: true,
                     })
-                    confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
+                    //confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
                 }
             }else throw new Error(response.listaMensagens[0])
         }else throw new Error('Erro na requisição')
@@ -43,5 +43,12 @@ export default async function updateLista(dispatch: Function, userData: UserData
         info.error('updateLista',error)
         dispatch(R.setRequestUpdateListaMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestUpdateListaError())
+        showMessage({
+            message: "Erro ao atualizar a lista!",
+            description: error.message ?? JSON.stringify(error),
+            type: "danger",
+            duration: 10000,
+            floating: true,
+        })
     }
 }
