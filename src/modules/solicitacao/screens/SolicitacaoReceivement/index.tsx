@@ -10,7 +10,6 @@ import Header from '../../../../components/Screen/Header'
 import Button from '../../../../components/Button'
 import Section from '../../../../components/Screen/Section'
 import SolicitacaoBox from '../../components/SolicitacaoBox'
-import startEndereco from './scripts/startEndereco'
 import start from './scripts/start'
 import send from './scripts/send'
 import { idStatusLista } from '../../../../constants/idStatusLista'
@@ -38,28 +37,27 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     
     const SHOW_DATA = !!currentSolicitacao && !!lista
 
-    const redirect = () => navigation.navigate('solicitacaoList')
+    const redirectList = () => navigation.navigate('solicitacaoList')
+    const redirectScan = () => navigation.navigate('solicitacaoScan')
 
     const checkSaveLista = () => {
         const { idLista, idRemetente } = currentSolicitacao!
         return checkStatus(findLista(lista!, idLista), idRemetente, ['APROVADO', 'COLETANDO'])
     }
 
-    const handleNavigate = () => navigation.navigate('solicitacaoScan')
-
     const handleStart = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
 
-        if(findLista(lista!, idLista).situacao !== idStatusLista['COLETANDO']) await start(dispatch, !!network, idLista, getCoords(location!))
+        await start(dispatch, !!network, idLista, idRemetente, getCoords(location!))
         //await startEndereco(dispatch, !!network, handleNavigate, idLista, idRemetente, getCoords(location!))
 
         dispatch(updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}))
-        handleNavigate()
+        redirectScan()
     }
 
     const handleCancelEndereco = async () => {
         const { idLista, idRemetente } = currentSolicitacao!
-        await cancelEndereco(dispatch, !!network, redirect, userData!, idLista, idRemetente)
+        await cancelEndereco(dispatch, !!network, redirectList, userData!, idLista, idRemetente)
         
         if(!checkSaveLista()){
             await sleep(500)
@@ -71,7 +69,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
         const { idLista, idRemetente } = currentSolicitacao! 
         const openModal = () => setOpenSuccessModal(true)
 
-        await send(dispatch, !!network, redirect, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
+        await send(dispatch, !!network, redirectList, openModal, userData!, idLista, idRemetente, getVolumes(lista!, currentSolicitacao!))
 
         if(!checkSaveLista()){
             await sleep(500)
@@ -106,7 +104,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                             />
                         </Section>
                         <Section>
-                            {[2].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {[2].includes(findEndereco(lista, currentSolicitacao).situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Iniciar Recebimento"
                                     marginHorizontal
@@ -121,17 +119,17 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     }}
                                 />
                             )}
-                            {[3].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {[3].includes(findEndereco(lista, currentSolicitacao).situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Continuar Recebimento"
                                     marginHorizontal
                                     marginBottom = {8}
                                     loading = {requestStartReceivingEndereco.loading}
                                     disabled = {requestStartReceivingEndereco.loading}
-                                    onPress = {handleNavigate}
+                                    onPress = {redirectScan}
                                 />
                             )}
-                            {[2, 3, 6].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {[2, 3, 6].includes(findEndereco(lista, currentSolicitacao).situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Cancelar Recebimento"
                                     color = {[themes.status.error.primary, themes.status.error.secondary]}
@@ -147,7 +145,7 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                                     }}
                                 />
                             )}
-                            {[3, 5].includes(currentSolicitacao.situacao ?? idStatusLista['APROVADO']) && (
+                            {[3, 5].includes(findEndereco(lista, currentSolicitacao).situacao ?? idStatusLista['APROVADO']) && (
                                 <Button
                                     label = "Finalizar Recebimento"
                                     color = {[themes.status.success.primary, themes.status.success.secondary]}
@@ -167,7 +165,11 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                     </>
                 )}
             </Render>
-            <SuccessModal open = {openSuccessModal} setOpen = {setOpenSuccessModal} redirect = {redirect} />
+            <SuccessModal
+                open = {openSuccessModal}
+                setOpen = {setOpenSuccessModal}
+                redirect = {redirectList}
+            />
         </>
 
     )

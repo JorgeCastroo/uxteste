@@ -2,7 +2,7 @@ const MOCK_LISTA = [
     {
         "idLista": 234046,
         "idUsuario": 1,
-        "situacao": 1,
+        "situacao": 2,
         "rota": "TESTE_FIRST_MILE",
         "dtCadastro": "2022-07-07T14:15:00",
         "qtdeTotalVolumes": 106,

@@ -3,6 +3,7 @@ import { Coordinates } from "../../../../interfaces/Coordinates"
 
 export interface SyncStartLista {
     idLista: number
+    idRemetente: number
     coords: Coordinates
 }
 

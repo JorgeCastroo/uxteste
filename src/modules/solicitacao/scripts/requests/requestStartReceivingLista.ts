@@ -7,7 +7,7 @@ import info from "../../../../utils/info"
 import request from "../../../../utils/request"
 import { idStatusLista } from "../../../../constants/idStatusLista"
 
-export default async function startReceivingLista(dispatch: Function, sync: boolean, idLista: number, coords: Coordinates){
+export default async function startReceivingLista(dispatch: Function, sync: boolean, idLista: number, idRemetente: number, coords: Coordinates){
     try {
         dispatch(R.setRequestStartReceivingListaLoading())
 
@@ -15,6 +15,7 @@ export default async function startReceivingLista(dispatch: Function, sync: bool
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idLista,
+            idRemetente,
             idStatusLista: idStatusLista['COLETANDO'],
             latitude: coords.latitude,
             longitude: coords.longitude

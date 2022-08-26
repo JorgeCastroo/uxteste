@@ -34,7 +34,7 @@ export async function syncStartLista(dispatch: Function){
             const syncedValues: SyncStartLista[] = []
 
             await Promise.all(items.filter(f => !f.sync).map(async ({ value }) => {
-                const functionToSync = () => startReceivingLista(dispatch, false, value.idLista, value.coords)
+                const functionToSync = () => startReceivingLista(dispatch, false, value.idLista, value.idRemetente, value.coords)
                 await syncValue(functionToSync, value, syncedValues)
             }))
             await updateSyncStack(key, items, syncedValues)
