@@ -25,21 +25,34 @@ export default async function updateLista(dispatch: Function, userData: UserData
         const response = await request.post<ResponsePattern<Endereco[]>>({ endpoint, authorization, body })
 
         if(response && 'flagErro' in response){
+
             dispatch(R.setRequestUpdateListaData(response))
-            if(!response.flagErro){
-                if(response.listaResultados.length > 0){             
-                    dispatch(updateListas(response.listaResultados))
-                    showMessage({
-                        message: "Novos endereços foram adicionados!",
-                        type: "success",
-                        duration: 5000,
-                        floating: true,
-                    })
-                    //confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
-                }
-            }else throw new Error(response.listaMensagens[0])
-        }else throw new Error('Erro na requisição')
+
+            if(response.flagErro){
+                throw new Error(response.listaMensagens[0])
+            }
+
+            if(response.listaResultados.length > 0){           
+
+                dispatch(updateListas(response.listaResultados))
+                
+                showMessage({
+                    message: "Novos endereços foram adicionados!",
+                    type: "success",
+                    duration: 5000,
+                    floating: true,
+                })
+
+                confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
+            }
+
+        } else throw new Error('Atenção! O APP está com problema de conexão com TMS, por favor informe a TI.')
+
+
     } catch (error: any) {
+
+        console.log(error)
+
         info.error('updateLista',error)
         dispatch(R.setRequestUpdateListaMessage(error.message ?? JSON.stringify(error)))
         dispatch(R.setRequestUpdateListaError())
