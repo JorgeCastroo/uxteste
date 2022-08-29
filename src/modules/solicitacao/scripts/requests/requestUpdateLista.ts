@@ -46,12 +46,9 @@ export default async function updateLista(dispatch: Function, userData: UserData
                 confirmUpdateLista(dispatch, createListaConfirmada(response.listaResultados))
             }
 
-        } else throw new Error('Atenção! O APP está com problema de conexão com TMS, por favor informe a TI.')
-
+        } else throw new Error('Atenção! O APP está com problemas de conexão com o TMS, por favor informe o departamento de TI.')
 
     } catch (error: any) {
-
-        console.log(error)
 
         info.error('updateLista',error)
         dispatch(R.setRequestUpdateListaMessage(error.message ?? JSON.stringify(error)))
@@ -60,7 +57,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
             message: "Erro ao atualizar a lista!",
             description: error.message ?? JSON.stringify(error),
             type: "danger",
-            duration: 10000,
+            duration: 20000,
             floating: true,
         })
     }
