@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Alert } from 'react-native'
+import { Alert, Text } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import { Endereco } from '../../interfaces/Lista'
@@ -27,6 +27,10 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
 
     const dispatch = useAppDispatch()
     const { lista, filteredEnderecos, loadingNewLista } = useAppSelector(s => s.lista)
+    const { userData } = useAppSelector(s => s.auth)
+
+    //userData.dtUltimaAtualizacao = new Date()
+
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
     const { requestGetLista, requestCloseLista } = useAppSelector(s => s.requestLista)
@@ -77,8 +81,11 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 />
                 {SHOW_DATA && (
                     <>
+                        {/* <Section marginTop = {10} marginBottom = {0}>
+                            <Text style = {{color: '#333333', fontSize: 18}}>Última atualização: {userData?.dtUltimaAtualizacao}</Text>
+                        </Section> */}
                         <SolicitacaoListSearchbar />
-                        <Section marginTop = {20}>
+                        <Section marginTop = {10}>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum endereço encontrado!']} />}
                             {SHOW_FILTERED_LISTA_DATA && filteredEnderecos.map((item, index) => (
                                 <SolicitacaoBox 

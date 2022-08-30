@@ -43,7 +43,7 @@ const Routes: React.FC = () => {
                 if(netInfo.isInternetReachable === true) hideMessage()
                 else{
                     showMessage({
-                        message: "Sem Conexão com a internet!",
+                        message: "Sem conexão com a internet!",
                         type: "danger",
                         duration: 10000,
                         autoHide: false,

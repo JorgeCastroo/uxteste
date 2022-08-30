@@ -11,7 +11,11 @@ import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 import MOCK_LISTA_UPDATE from "../../../../mock/listaUpdate"
 
+
 export default async function updateLista(dispatch: Function, userData: UserData){
+
+    //userData.dtUltimaAtualizacao = new Date()
+    
     try {
         //dispatch(updateListas(MOCK_LISTA_UPDATE))
         dispatch(R.setRequestUpdateListaLoading())
