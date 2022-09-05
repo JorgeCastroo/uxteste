@@ -18,7 +18,7 @@ const initialState: State = {
     appVersion: null,
     isVersionDeprected: false,
     openVersionDialog: false,
-    dtUltimaAtualizacao: "",
+    dtUltimaAtualizacao: ""
 }
 
 const appSlice = createSlice({
