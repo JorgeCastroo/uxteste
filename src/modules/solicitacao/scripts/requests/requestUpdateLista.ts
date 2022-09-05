@@ -32,7 +32,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
 
             dispatch(R.setRequestUpdateListaData(response))
 
-            if(response.flagErro){
+            if (response.flagErro){
                 throw new Error(response.listaMensagens[0])
             }
 
