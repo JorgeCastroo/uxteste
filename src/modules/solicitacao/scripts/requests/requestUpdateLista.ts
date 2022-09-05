@@ -10,13 +10,13 @@ import confirmUpdateLista from "./requestConfirmUpdateLista"
 import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 import MOCK_LISTA_UPDATE from "../../../../mock/listaUpdate"
-
+import { setAppDtAtualizacao } from "../../../app/reducers/appReducer"
+import moment from 'moment'
 
 export default async function updateLista(dispatch: Function, userData: UserData){
 
-    //userData.dtUltimaAtualizacao = new Date()
-    
     try {
+        
         //dispatch(updateListas(MOCK_LISTA_UPDATE))
         dispatch(R.setRequestUpdateListaLoading())
 
@@ -35,6 +35,8 @@ export default async function updateLista(dispatch: Function, userData: UserData
             if(response.flagErro){
                 throw new Error(response.listaMensagens[0])
             }
+
+            dispatch(setAppDtAtualizacao(moment(new Date()).format('DD/MM/YYYY hh:mm')))
 
             if(response.listaResultados.length > 0){           
 

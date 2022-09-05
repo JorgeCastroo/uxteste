@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { RNCamera } from 'react-native-camera'
 import * as S from './styles'
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks'
@@ -11,12 +11,16 @@ const Header: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { scanMode, scanFlashlight } = useAppSelector(s => s.solicitacaoScan)
+    const { dtUltimaAtualizacao } = useAppSelector(s => s.app)
     const scanTypes = RNCamera.Constants.BarCodeType
-
+      
     return(
 
         <S.Header>
-            <Section type = "row" marginTop = {52} center>
+            <Section marginTop = {30} marginBottom = {0}>
+                <Text style = {{color: '#ffffff', fontSize: 16, textAlign: 'center'}}>Última atualização: {dtUltimaAtualizacao}</Text>
+            </Section>
+            <Section type = "row" marginTop = {22} center>
                 <Button
                     active = {scanMode === scanTypes.code39}
                     label = "Código de Barras"

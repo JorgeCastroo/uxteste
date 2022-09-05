@@ -28,8 +28,7 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
     const dispatch = useAppDispatch()
     const { lista, filteredEnderecos, loadingNewLista } = useAppSelector(s => s.lista)
     const { userData } = useAppSelector(s => s.auth)
-
-    //userData.dtUltimaAtualizacao = new Date()
+    const { dtUltimaAtualizacao } = useAppSelector(s => s.app)
 
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
@@ -81,9 +80,9 @@ const SolicitacaoList: React.FC<StackScreenProps<SolicitacaoRoutesParams, 'solic
                 />
                 {SHOW_DATA && (
                     <>
-                        {/* <Section marginTop = {10} marginBottom = {0}>
-                            <Text style = {{color: '#333333', fontSize: 18}}>Última atualização: {userData?.dtUltimaAtualizacao}</Text>
-                        </Section> */}
+                        <Section marginTop = {10} marginBottom = {0}>
+                            <Text style = {{color: '#333333', fontSize: 16}}>Última atualização: {dtUltimaAtualizacao}</Text>
+                        </Section>
                         <SolicitacaoListSearchbar />
                         <Section marginTop = {10}>
                             {SHOW_FILTERED_LISTA_NO_DATA && <NoData emoji = "confused" message = {['Nenhum endereço encontrado!']} />}

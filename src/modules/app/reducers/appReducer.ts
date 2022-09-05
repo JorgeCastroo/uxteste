@@ -5,12 +5,11 @@ import { APP_VERSION } from "../../../config"
 
 interface State {
     network?: boolean
-
     location: GeoPosition | null
-
     appVersion: AppVersion | null
     isVersionDeprected: boolean
     openVersionDialog: boolean
+    dtUltimaAtualizacao: string
 }
 
 const initialState: State = {
@@ -19,6 +18,7 @@ const initialState: State = {
     appVersion: null,
     isVersionDeprected: false,
     openVersionDialog: false,
+    dtUltimaAtualizacao: "",
 }
 
 const appSlice = createSlice({
@@ -30,6 +30,9 @@ const appSlice = createSlice({
         },
         setAppLocation: (state, action: PayloadAction<GeoPosition | null>) => {
             state.location = action.payload
+        },
+        setAppDtAtualizacao: (state, action: PayloadAction<string>) => {
+            state.dtUltimaAtualizacao = action.payload
         },
         setAppVersion: (state, action: PayloadAction<AppVersion>) => {
             state.appVersion = action.payload
@@ -45,5 +48,5 @@ const appSlice = createSlice({
     }
 })
 
-export const { setAppNetwork, setAppLocation, setAppVersion, setAppVersionDeprected, setAppVersionDialog } = appSlice.actions
+export const { setAppNetwork, setAppLocation, setAppDtAtualizacao, setAppVersion, setAppVersionDeprected, setAppVersionDialog } = appSlice.actions
 export default appSlice.reducer

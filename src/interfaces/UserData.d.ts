@@ -5,5 +5,4 @@ export interface UserData {
     idUsuarioSistema:    number;
     info:                null;
     nomeUsuario:         string;
-    dtUltimaAtualizacao: date | null;
 }

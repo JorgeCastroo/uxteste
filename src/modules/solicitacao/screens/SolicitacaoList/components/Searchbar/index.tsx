@@ -24,7 +24,7 @@ const SolicitacaoListSearchbar: React.FC = () => {
 
     return(
 
-        <Section marginTop = {20}>
+        <Section marginTop = {10}>
             <Searchbar
                 placeholder = "Pesquisar"
                 theme = {{colors: {primary: themes.colors.primary}}}

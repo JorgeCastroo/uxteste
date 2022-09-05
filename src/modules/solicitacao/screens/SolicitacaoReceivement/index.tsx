@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, View } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { SolicitacaoRoutesParams } from '../../interfaces/SolicitacaoRoutesParams'
 import themes from '../../../../styles/themes'
@@ -30,13 +30,14 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
     const { network, location } = useAppSelector(s => s.app)
     const { userData } = useAppSelector(s => s.auth)
     const { lista, currentSolicitacao } = useAppSelector(s => s.lista)
+    const { dtUltimaAtualizacao } = useAppSelector(s => s.app)
     //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
     const { requestStartReceivingLista, requestSaveLista, requestSendLeituraLista, requestCancelEnderecoLista, requestStartReceivingEndereco } = useAppSelector(s => s.requestLista)
 
     const [openSuccessModal, setOpenSuccessModal] = useState(false)
     
     const SHOW_DATA = !!currentSolicitacao && !!lista
-
+ 
     const redirectList = () => navigation.navigate('solicitacaoList')
     const redirectScan = () => navigation.navigate('solicitacaoScan')
 
@@ -84,7 +85,10 @@ const SolicitacaoReceivement: React.FC <StackScreenProps<SolicitacaoRoutesParams
                 <Header title = "Lista" screenName = "solicitacaoReceivement" />
                 {SHOW_DATA && (
                     <>
-                        <Section marginTop = {20}>
+                        <Section marginTop = {10} marginBottom = {0}>
+                            <Text style = {{color: '#333333', fontSize: 16}}>Última atualização: {dtUltimaAtualizacao}</Text>
+                        </Section>
+                        <Section marginTop = {10}>
                             <SolicitacaoBox
                                 {...findEndereco(lista, currentSolicitacao)} 
                                 /*position = {findListaPosition(currentSolicitacao, roteirizacao)}*/
