@@ -1,4 +1,4 @@
-import { VVLOG_AUTHORIZATION, VVLOG_HML_ENDPOINT } from "@env"
+import { VVLOG_AUTHORIZATION, VVLOG_ENDPOINT } from "@env"
 import { showMessage } from "react-native-flash-message"
 import { UserData } from "../../../../interfaces/UserData"
 import { Endereco } from "../../interfaces/Lista"
@@ -20,7 +20,7 @@ export default async function updateLista(dispatch: Function, userData: UserData
         //dispatch(updateListas(MOCK_LISTA_UPDATE))
         dispatch(R.setRequestUpdateListaLoading())
 
-        const endpoint = `${VVLOG_HML_ENDPOINT}/Lista/FirstMile/AdicionarNovoSeller`
+        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AdicionarNovoSeller`
         const authorization = VVLOG_AUTHORIZATION
         const body = {
             idTransportadora: userData.idTransportadora,
