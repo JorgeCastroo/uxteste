@@ -35,7 +35,13 @@ const ColetasList: React.FC = () => {
     const SHOW_NO_COLETAS = SHOW_DATA && coletas.length === 0
 
     const handleAceitarColetas = async () => {
+
+        console.log(coletasAprovadas);
+        console.log("handleAceitarColetas 1.0");
+
         dispatch(setLoadingColetasAprovadas(true))
+
+        console.log("handleAceitarColetas 1.1");
 
         let responseAprovadas, responseReprovadas
         for (const coleta of coletasAprovadas) {
@@ -46,6 +52,8 @@ const ColetasList: React.FC = () => {
                 longitude: (location?.coords.longitude ?? 0).toString(),
             })
         }
+
+        console.log("handleAceitarColetas 1.2");
 
         const coletasNaoAprovadas = coletas!.filter(coleta => !coletasAprovadas.map(c => c.idLista).includes(coleta.idLista))
         if(coletasNaoAprovadas && coletasNaoAprovadas.length > 0){
@@ -59,8 +67,12 @@ const ColetasList: React.FC = () => {
             }
         }
 
+        console.log("handleAceitarColetas 1.3");
+
         dispatch(setLoadingColetasAprovadas(false))
         
+        console.log("handleAceitarColetas 1.4");
+
         if (!!responseAprovadas) {
             if (!responseAprovadas.flagErro){
                 

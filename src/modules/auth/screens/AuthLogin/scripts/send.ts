@@ -15,6 +15,10 @@ export default async function send(dispatch: Function, body: typeof loginFormVal
         const authorization = VVLOG_AUTHORIZATION
         const response = await request.post<UserData>({ endpoint, authorization, body })
 
+        console.log(endpoint);
+        console.log(body);
+        console.log(response);
+
         if (response) {
             dispatch(R.setRequestSendAuthLoginData(response))
             if((response as any).flagErro === false && response.idUsuarioSistema) setUserData(dispatch, response, true)

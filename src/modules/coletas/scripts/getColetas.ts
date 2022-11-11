@@ -9,6 +9,9 @@ import { ResponsePattern } from "../../../utils/response/types"
 
 export default async function getColetas(dispatch: Function, userData: UserData) {
     try {
+
+        console.log("getColetas");
+
         dispatch(setRequestColetasLoading())
         dispatch(setColetas(null))
 
