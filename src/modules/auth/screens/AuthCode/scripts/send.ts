@@ -8,30 +8,7 @@ import setUserData from "../../../scripts/setUserData"
 import { codeFormValues } from "../Form/components/constants"
 import storage from "../../../../../utils/storage"
 import { Alert } from "react-native";
-
-
-interface TruxDiscoveryLogin {
-    access_token: string,
-}
-
-interface TruxDiscovery {
-    codigoAcesso: string | null,
-    nomeCliente: string,
-    urlRouting: string,
-    tokenRouting: string,
-    urlApiMobile: string,
-    urlApiTms: string,
-    tokenTms: string,
-    versaoCodigoMobile: string,
-    idTransportadora: string,
-    DistanciaLimite: string,
-    S3AcessKey: string,
-    S3Bucket: string,
-    S3Directory: string,
-    S3SecretKey: string,
-    FirstMileApiMobile: string,
-    FirstMileApiKey:string
-}
+import { TruxDiscovery, TruxDiscoveryLogin } from "../../../../../interfaces/TruxDiscovery"
 
 
 async function getToken() {
@@ -58,7 +35,6 @@ async function getToken() {
 
     return jsonResponse as TruxDiscoveryLogin
 }
-
 
 async function getConfiguracao(codigoAcesso: any, token: TruxDiscoveryLogin) {
 

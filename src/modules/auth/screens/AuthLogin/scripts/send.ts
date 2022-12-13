@@ -7,26 +7,7 @@ import request from "../../../../../utils/request"
 import setUserData from "../../../scripts/setUserData"
 import { loginFormValues } from "../components/Form/constants"
 import storage from "../../../../../utils/storage"
-
-
-interface TruxDiscovery {
-    codigoAcesso: string | null,
-    nomeCliente: string,
-    urlRouting: string,
-    tokenRouting: string,
-    urlApiMobile: string,
-    urlApiTms: string,
-    tokenTms: string,
-    versaoCodigoMobile: string,
-    idTransportadora: string,
-    DistanciaLimite: string,
-    S3AcessKey: string,
-    S3Bucket: string,
-    S3Directory: string,
-    S3SecretKey: string,
-    FirstMileApiMobile: string,
-    FirstMileApiKey:string
-}
+import { TruxDiscovery } from "../../../../../interfaces/TruxDiscovery"
 
 
 export default async function send(dispatch: Function, body: typeof loginFormValues) {
