@@ -14,11 +14,19 @@ interface Body {
 
 export default async function acceptColeta(dispatch: Function, body: Body) {
     try {
+
+
+        console.log("acceptColeta");
+
         dispatch(setRequestAcceptColetasLoading())
 
         const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`
         const authorization = VVLOG_AUTHORIZATION
         const response = await request.post<ResponsePattern<any>>({ authorization, endpoint, body })
+
+        console.log(endpoint);
+        console.log(body);
+        console.log(response);
 
         if (response) {
             dispatch(setRequestColetasAceitasData(response))

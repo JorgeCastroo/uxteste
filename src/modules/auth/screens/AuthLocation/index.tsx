@@ -36,7 +36,7 @@ const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>
                     buttonPositive: "OK"
                 }
             )
-            if(granted === PermissionsAndroid.RESULTS.GRANTED) navigation.navigate('authLogin')
+            if(granted === PermissionsAndroid.RESULTS.GRANTED) navigation.navigate('authCode')
         } catch (error) { 
             info.error('locationPermission',error)
         }
@@ -50,7 +50,7 @@ const AuthLocation: React.FC <StackScreenProps<AuthRoutesParams, 'authLocation'>
     useEffect(() => {
         (async () => {
             const alreadyPermited = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-            if (gpsEnabled && alreadyPermited) navigation.navigate('authLogin')
+            if (gpsEnabled && alreadyPermited) navigation.navigate('authCode')
         })()
     }, [gpsEnabled])
 
