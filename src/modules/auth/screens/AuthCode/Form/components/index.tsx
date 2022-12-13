@@ -7,11 +7,14 @@ import FormInput from '../../../../../../components/Form/Input'
 import Button from '../../../../../../components/Button'
 import FormError from '../../../../../../components/Form/Error'
 import { codeFormSchema, codeFormValues } from './constants'
+import send from '../../scripts/send'
+import { useNavigation } from '@react-navigation/native'
 
 const Form: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { requestSendAuthCode } = useAppSelector(s => s.requestAuthCode)
+    const navigation = useNavigation()
 
     return(
 
@@ -19,7 +22,7 @@ const Form: React.FC = () => {
             <Formik
                 initialValues = {codeFormValues}
                 validationSchema = {codeFormSchema}
-                onSubmit = {v => {}}
+                onSubmit = {v => send(navigation,dispatch, v)}
             >
                 {({ values, errors, handleSubmit, setFieldValue }) => (
                     <>

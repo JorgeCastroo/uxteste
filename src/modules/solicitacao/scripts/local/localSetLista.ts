@@ -5,6 +5,10 @@ import storage from "../../../../utils/storage"
 
 export default async function localSetLista(dispatch: Function, lista: Lista[], saveLista?: boolean){
     try {
+
+
+        console.log("save localstorage len:",lista.length)
+
         info.log('localSetLista','saving lista to local storage...')
         await storage.setItem('lista', lista)
         dispatch(setOldLista(lista))

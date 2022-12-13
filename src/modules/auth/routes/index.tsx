@@ -5,6 +5,8 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 import { AuthRoutesParams } from '../interfaces/AuthRoutesParams'
 import AuthLocation from '../screens/AuthLocation'
 import AuthLogin from '../screens/AuthLogin'
+import AuthCode from '../screens/AuthCode'
+
 
 const { PRIORITIES: { HIGH_ACCURACY }, useLocationSettings } = LocationEnabler
 
@@ -28,12 +30,13 @@ const AuthRoutes: React.FC = () => {
     return(
 
         <Stack.Navigator
-            initialRouteName = {(gpsEnabled && locationEnabled === true) ? 'authLogin'  : 'authLocation'}
+            initialRouteName = {(gpsEnabled && locationEnabled === true) ? 'authCode'  : 'authLocation'}
             screenOptions = {{
                 headerShown: false,
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
+            <Stack.Screen name = "authCode" component={AuthCode} />
             <Stack.Screen name = "authLocation" component = {AuthLocation} />
             <Stack.Screen name = "authLogin" component = {AuthLogin} />
         </Stack.Navigator>

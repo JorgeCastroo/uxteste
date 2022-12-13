@@ -2,6 +2,7 @@ import React from 'react'
 import AutoHeightImage from 'react-native-auto-height-image'
 import Render from '../../../../components/Screen/Render'
 import Section from '../../../../components/Screen/Section'
+import Form from './Form/components'
 
 const AuthCode: React.FC = () => {
 
@@ -12,6 +13,7 @@ const AuthCode: React.FC = () => {
                 statusBarOptions = {{ barStyle: 'dark-content', backgroundColor: '#fff' }} 
                 wrapperColor = '#fff'
                 paddingBottom = {20}
+          
             >
                 <Section marginTop = {60} marginBottom = {110} center>
                     <AutoHeightImage
@@ -19,7 +21,9 @@ const AuthCode: React.FC = () => {
                         width = {240}
                     />
                 </Section>
+                <Form />
             </Render>
+            
         </>
 
     )

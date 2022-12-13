@@ -1,7 +1,6 @@
 import React from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import themes from '../../../../styles/themes'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { setColetas, setLoadingColetasAprovadas, setResetColetasAprovadas } from '../../reducers/coletas/coletas'
 import Header from '../../../../components/Screen/Header'
@@ -18,13 +17,14 @@ import getColetas from '../../scripts/getColetas'
 import Container from '../../../../components/Container'
 import { getCoords } from '../../../app/scripts/geolocationService'
 import { idStatusLista } from '../../../../constants/idStatusLista'
+import themes from '../../../../styles/themes'
 
 const ColetasList: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const { location } = useAppSelector(s => s.app)
     const { userData } = useAppSelector(s => s.auth)
-    const { coletas, coletasAprovadas, loadingColetasAprovadas } = useAppSelector(s => s.coletas)
+    const { coletas, coletasReprovadas, coletasAprovadas, loadingColetasAprovadas } = useAppSelector(s => s.coletas)
     const { lista } = useAppSelector(s => s.lista)
     const { requestColeta } = useAppSelector(s => s.requestColetas)
     const navigation = useNavigation<any>()
@@ -34,55 +34,76 @@ const ColetasList: React.FC = () => {
     const SHOW_COLETAS = SHOW_DATA && coletas.length > 0
     const SHOW_NO_COLETAS = SHOW_DATA && coletas.length === 0
 
-    const handleAceitarColetas = async () => {
 
-        console.log(coletasAprovadas);
-        console.log("handleAceitarColetas 1.0");
+    const handleCancelarColetas = async () => {
 
         dispatch(setLoadingColetasAprovadas(true))
 
-        console.log("handleAceitarColetas 1.1");
-
-        let responseAprovadas, responseReprovadas
-        for (const coleta of coletasAprovadas) {
-            responseAprovadas = await acceptColeta(dispatch, {
-                idLista: coleta.idLista,
-                idStatusLista: idStatusLista['APROVADO'],
-                latitude: (location?.coords.latitude ?? 0).toString(),
-                longitude: (location?.coords.longitude ?? 0).toString(),
-            })
-        }
-
-        console.log("handleAceitarColetas 1.2");
+        let responseReprovadas
 
         const coletasNaoAprovadas = coletas!.filter(coleta => !coletasAprovadas.map(c => c.idLista).includes(coleta.idLista))
-        if(coletasNaoAprovadas && coletasNaoAprovadas.length > 0){
+
+        console.log("coletasNaoAprovadas", coletasNaoAprovadas.length)
+
+        if (coletasNaoAprovadas && coletasNaoAprovadas.length > 0) {
+
             for (const coleta of coletasNaoAprovadas) {
+                
                 responseReprovadas = await acceptColeta(dispatch, {
                     idLista: coleta.idLista,
                     idStatusLista: idStatusLista['REPROVADO'],
                     latitude: (location?.coords.latitude ?? 0).toString(),
                     longitude: (location?.coords.longitude ?? 0).toString(),
                 })
+                
+            }
+
+            if (!!responseReprovadas) {
+                if (!responseReprovadas.flagErro) {
+    
+                    await loadLista(dispatch, userData!, getCoords(location!), lista)
+                    dispatch(setResetColetasAprovadas())
+                    dispatch(setColetas(null))
+    
+                    navigation.navigate("solicitacaoRoutes")
+                } else Alert.alert("Erro ao prosseguir com as coletas!")
             }
         }
 
-        console.log("handleAceitarColetas 1.3");
+        dispatch(setLoadingColetasAprovadas(false))
+
+    }
+
+    const handleAceitarColetas = async () => {
+
+        dispatch(setLoadingColetasAprovadas(true))
+
+        let responseAprovadas
+        for (const coleta of coletasAprovadas) {
+            
+            responseAprovadas = await acceptColeta(dispatch, {
+                idLista: coleta.idLista,
+                idStatusLista: idStatusLista['APROVADO'],
+                latitude: (location?.coords.latitude ?? 0).toString(),
+                longitude: (location?.coords.longitude ?? 0).toString(),
+            })
+             
+        }
+
 
         dispatch(setLoadingColetasAprovadas(false))
-        
-        console.log("handleAceitarColetas 1.4");
-
+  
         if (!!responseAprovadas) {
-            if (!responseAprovadas.flagErro){
-                
+            if (!responseAprovadas.flagErro) {
+
                 await loadLista(dispatch, userData!, getCoords(location!), lista)
                 dispatch(setResetColetasAprovadas())
                 dispatch(setColetas(null))
-                
+
                 navigation.navigate("solicitacaoRoutes")
             } else Alert.alert("Erro ao prosseguir com as coletas!")
         }
+        
     }
 
     return (
@@ -93,9 +114,9 @@ const ColetasList: React.FC = () => {
                     barStyle: SHOW_LOADING ? 'dark-content' : 'light-content',
                     backgroundColor: SHOW_LOADING ? '#F5F5F5' : themes.colors.primary,
                 }}
-                align = {SHOW_LOADING ? 'center' : 'flex-start'}
-                paddingBottom = {24}
-                onRefresh = {async () => !SHOW_LOADING && await getColetas(dispatch, userData!)}
+                align={SHOW_LOADING ? 'center' : 'flex-start'}
+                paddingBottom={24}
+                onRefresh={async () => !SHOW_LOADING && await getColetas(dispatch, userData!)}
             >
                 {SHOW_LOADING && <Loader />}
                 {SHOW_DATA && (
@@ -108,14 +129,14 @@ const ColetasList: React.FC = () => {
                                     {coletas.map((coleta, index) => (
                                         <ColetasBox
                                             {...coleta}
-                                            key = {index}
-                                            selected = {!!coletasAprovadas.find(f => f.idLista === coleta.idLista)}
+                                            key={index}
+                                            selected={!!coletasAprovadas.find(f => f.idLista === coleta.idLista)}
                                         />
                                     ))}
                                 </Section>
                             </>
                         )}
-                        {SHOW_NO_COLETAS && <NoData emoji = "confused" message = {['Nenhuma coleta encontrada!']} />}
+                        {SHOW_NO_COLETAS && <NoData emoji="confused" message={['Nenhuma coleta encontrada!']} />}
                         {SHOW_DATA && coletasAprovadas.length > 0 && (
                             <Container>
                                 <Button
@@ -127,6 +148,21 @@ const ColetasList: React.FC = () => {
                                 />
                             </Container>
                         )}
+
+                        {SHOW_DATA && coletasReprovadas.length > 0 && (
+                            <Container>
+                                <Button
+                                    label="Recusar"
+                                    color={[themes.status.error.primary, themes.status.error.secondary]} 
+                                    marginHorizontal={true}
+                                    loading={loadingColetasAprovadas}
+                                    disabled={loadingColetasAprovadas}
+                                    onPress={handleCancelarColetas}
+                                />
+                            </Container>
+                        )}
+
+
                     </>
                 )}
             </Render>
