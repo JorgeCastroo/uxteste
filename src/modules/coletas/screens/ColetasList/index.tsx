@@ -131,6 +131,7 @@ const ColetasList: React.FC = () => {
                                             {...coleta}
                                             key={index}
                                             selected={!!coletasAprovadas.find(f => f.idLista === coleta.idLista)}
+                                            selected2={!!coletasReprovadas.find(f => f.idLista === coleta.idLista)}
                                         />
                                     ))}
                                 </Section>
