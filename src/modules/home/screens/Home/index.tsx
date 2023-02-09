@@ -109,10 +109,11 @@ const Home: React.FC = () => {
                 onPress={() => getColetas(dispatch, userData!)}
               />
             )}
-            {SHOW_COLETAS_LOADING && <SkeletonHomeMessage />}
-            {SHOW_COLETAS_DATA && <HomeMessage />}
+            {!netInfo.isInternetReachable
+              ? SHOW_COLETAS_LOADING && <SkeletonHomeMessage />
+              : SHOW_COLETAS_DATA && <HomeMessage />}
           </Section>
-          {SHOW_DATA && (
+          {lista && lista?.length > 0 && (
             <>
               {/* <GroupInfo /> */}
               <GroupStatus />

@@ -10,14 +10,15 @@ import {
 import info from '../../../utils/info';
 import request from '../../../utils/request';
 import {ResponsePattern} from '../../../utils/response/types';
-import storage from '../../../utils/storage';
+import {setLista} from '../../solicitacao/reducers/lista/listaReducer';
 
-export default async function getColetas(
+export default async function getColetando(
   dispatch: Function,
   userData: UserData,
+  lista: Lista[],
 ) {
   try {
-    console.log('getColetas');
+    console.log('getColetando');
 
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
@@ -27,8 +28,9 @@ export default async function getColetas(
     const body = {
       idTransportadora: userData.idTransportadora,
       idMotorista: userData.idUsuarioSistema,
-      idStatusLista: 1,
+      idStatusLista: 3,
     };
+
     const response = await request.post<ResponsePattern<Lista[]>>({
       endpoint,
       authorization,
@@ -36,10 +38,26 @@ export default async function getColetas(
     });
 
     if (response) {
-      dispatch(setRequestColetasData(response));
-      if (!response.flagErro) {
-        dispatch(setColetas(response.listaResultados));
-      } else throw new Error(response.listaMensagens[0]);
+      if (!lista) {
+        dispatch(setLista(response.listaResultados));
+      }
+
+      var listadd = response.listaResultados.filter(
+        item => !lista.some(item2 => item2.idLista === item.idLista),
+      );
+      if (listadd.length > 0) {
+        const newlista = lista.concat(listadd);
+        dispatch(setLista(newlista));
+
+        console.log('Adicionada Lista status 3');
+      } else {
+        console.log('Lista atualizada !');
+      }
+
+      return response.listaResultados;
+      // dispatch(setRequestColetasData(response));
+      // if (!response.flagErro) dispatch(setColetas(response.listaResultados));
+      // else throw new Error(response.listaMensagens[0]);
     } else throw new Error('Erro na requisição');
   } catch (error: any) {
     info.error('getColetas', error);

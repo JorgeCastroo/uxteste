@@ -1,5 +1,5 @@
-import { RoutesNames } from "../../../../interfaces/RoutesNames"
+import {RoutesNames} from '../../../../interfaces/RoutesNames';
 
 export interface HeaderMenuProps {
-    screenName?: RoutesNames
+  screenName?: RoutesNames;
 }

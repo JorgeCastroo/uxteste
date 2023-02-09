@@ -23,6 +23,7 @@ import {getCoords} from '../../../app/scripts/geolocationService';
 import {idStatusLista} from '../../../../constants/idStatusLista';
 import themes from '../../../../styles/themes';
 import {useNetInfo} from '@react-native-community/netinfo';
+import storage from '../../../../utils/storage';
 
 const ColetasList: React.FC = () => {
   const netInfo = useNetInfo();
@@ -80,8 +81,6 @@ const ColetasList: React.FC = () => {
     dispatch(setLoadingColetasAprovadas(false));
   };
 
-  console.log(netInfo.isInternetReachable);
-
   const handleAceitarColetas = async () => {
     dispatch(setLoadingColetasAprovadas(true));
 
@@ -94,7 +93,6 @@ const ColetasList: React.FC = () => {
         longitude: (location?.coords.longitude ?? 0).toString(),
       });
     }
-
     dispatch(setLoadingColetasAprovadas(false));
 
     if (!!responseAprovadas) {
