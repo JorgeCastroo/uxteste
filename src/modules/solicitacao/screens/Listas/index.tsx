@@ -2,37 +2,28 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Text} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {SolicitacaoRoutesParams} from '../../interfaces/SolicitacaoRoutesParams';
-import {Endereco} from '../../interfaces/Lista';
+import {Lista} from '../../interfaces/Lista';
 import themes from '../../../../styles/themes';
 import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
-import {
-  setCurrentLista,
-  setCurrentSolicitacao,
-} from '../../reducers/lista/listaReducer';
-import {resetScannedSolicitacoes} from '../../reducers/solicitacaoScan/solicitacaoScanReducer';
 import Header from '../../../../components/Screen/Header';
 import Render from '../../../../components/Screen/Render';
 import Section from '../../../../components/Screen/Section';
-import SolicitacaoBox from '../../components/SolicitacaoBox';
 import NoData from '../../../../components/NoData';
-import SolicitacaoListSearchbar from './components/Searchbar';
 import FormError from '../../../../components/Form/Error';
 import Button from '../../../../components/Button';
 import Loader from './components/Loader';
 import localGetLista from '../../scripts/local/localGetLista';
 import {idStatusLista} from '../../../../constants/idStatusLista';
 import {syncValuesLista} from '../../scripts/sync';
-import getAddresses from '../../scripts/getAddresses';
-import findLista from '../../scripts/findLista';
 import closeLista from '../../scripts/requests/requestCloseLista';
 import getAprovados from '../../../coletas/scripts/getAprovado';
 import getColetando from '../../../coletas/scripts/getColetando';
 
-const SolicitacaoList: React.FC<
-  StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>
-> = ({route, navigation}) => {
-  const selectedLista = route.params;
+import CardBox from './components/CardRotas';
 
+const GroupListas: React.FC<
+  StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>
+> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const {lista, filteredEnderecos, loadingNewLista} = useAppSelector(
     s => s.lista,
@@ -62,12 +53,15 @@ const SolicitacaoList: React.FC<
 
   const loaderPercent = requestGetLista.data ? 100 : 0;
 
-  const handleNavigate = (item: Endereco) => {
-    dispatch(setCurrentLista(findLista(lista!, item.idLista)));
-    dispatch(setCurrentSolicitacao(item));
-    dispatch(resetScannedSolicitacoes());
-    navigation.navigate('solicitacaoReceivement');
+  const handleNavigate = (item: Lista) => {
+    navigation.navigate('solicitacaoList', item);
   };
+
+  useEffect(() => {
+    (async () => {
+      setAllIsSync(await syncValuesLista());
+    })();
+  }, [dispatch, lista]);
 
   useEffect(() => {
     (async () => {
@@ -87,9 +81,9 @@ const SolicitacaoList: React.FC<
         paddingBottom={20}
         align={SHOW_LOADING ? 'space-between' : undefined}
         onRefresh={async () => await localGetLista(dispatch)}>
-        <Header title="Listas" screenName="solicitacaoList" goBack={false} />
+        <Header title="Rotas" screenName="rotas" goBack={false} />
         {SHOW_LOADING && <Loader percent={loaderPercent} />}
-        {SHOW_NO_DATA && (
+        {!lista && (
           <NoData emoji="confused" message={['Você não possui listas!']} />
         )}
         <FormError
@@ -104,69 +98,25 @@ const SolicitacaoList: React.FC<
                 Última atualização: {dtUltimaAtualizacao}
               </Text>
             </Section>
-            <SolicitacaoListSearchbar />
             <Section marginTop={10}>
-              {SHOW_FILTERED_LISTA_NO_DATA && (
-                <NoData
-                  emoji="confused"
-                  message={['Nenhum endereço encontrado!']}
-                />
-              )}
-              {SHOW_FILTERED_LISTA_DATA &&
-                filteredEnderecos.map((item, index) => (
-                  <SolicitacaoBox
-                    {...item}
-                    key={index}
-                    //position = {findListaPosition(item, roteirizacao)}
-                    onPress={() => handleNavigate(item)}
-                  />
-                ))}
-
               {SHOW_LISTA_NO_DATA && (
                 <NoData
                   emoji="confused"
                   message={['Nenhum endereço em aberto!']}
                 />
               )}
-              {selectedLista &&
-                getAddresses([selectedLista]).map((item, index) => (
-                  <SolicitacaoBox
-                    {...item}
-                    key={index}
-                    //position = {findListaPosition(item, roteirizacao)}
+
+              {lista &&
+                lista.map(item => (
+                  <CardBox
+                    key={item.idLista}
+                    rota={item.rota}
+                    qtdeTotalVolumes={item.qtdeTotalVolumes}
+                    situacao={item.situacao}
+                    listaEnderecos={item.listaEnderecos}
                     onPress={() => handleNavigate(item)}
                   />
                 ))}
-            </Section>
-            <Section>
-              <Button
-                label="Finalizar Rota"
-                color={themes.gradient.success}
-                marginHorizontal
-                disabled={
-                  requestCloseLista.loading ||
-                  !lista.every(f =>
-                    [
-                      idStatusLista['FINALIZADO'],
-                      idStatusLista['CANCELADO'],
-                    ].includes(f.situacao),
-                  )
-                }
-                loading={requestCloseLista.loading}
-                onPress={() => {
-                  Alert.alert('Atenção', 'Deseja finalizar a rota?', [
-                    {text: 'Não', style: 'cancel'},
-                    {
-                      text: 'Sim',
-                      onPress: () =>
-                        closeLista(
-                          dispatch,
-                          lista.map(f => f.idLista),
-                        ),
-                    },
-                  ]);
-                }}
-              />
             </Section>
           </>
         )}
@@ -175,5 +125,4 @@ const SolicitacaoList: React.FC<
     </>
   );
 };
-
-export default SolicitacaoList;
+export default GroupListas;
