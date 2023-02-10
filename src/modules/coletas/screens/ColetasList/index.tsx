@@ -135,6 +135,11 @@ const ColetasList: React.FC = () => {
                           f => f.idLista === coleta.idLista,
                         )
                       }
+                      selected2={
+                        !!coletasReprovadas.find(
+                          f => f.idLista === coleta.idLista,
+                        )
+                      }
                     />
                   ))}
                 </Section>

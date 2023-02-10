@@ -12,7 +12,7 @@ import getFullAddress from '../../../solicitacao/scripts/getFullAddress'
 import copyAddress from '../../../solicitacao/scripts/copyAddress'
 import ColetaBoxSelect from './Select'
 
-const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, ...coleta }) => {
+const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, selected2,...coleta }) => {
 
     const dispatch = useAppDispatch()
     const theme = themes.colors.tertiary
@@ -28,8 +28,8 @@ const ColetasBox: React.FC <ColetaBoxProps & Lista> = ({ selected, ...coleta }) 
                 description = {`Endereços: ${coleta.listaEnderecos.length} | Volumes: ${coleta.qtdeTotalVolumes}`}
                 right = {props => 
                     <List.Icon 
-                        icon = {selected ? "check-circle" : props.isExpanded ? 'chevron-up' : "chevron-down"} 
-                        color = {selected ? status.success.primary : '#C4C4C4'}
+                        icon = {selected ? "check-circle" : selected2 ? "close":props.isExpanded ? 'chevron-up' : "chevron-down"} 
+                        color = {selected ? status.success.primary :  selected2? status.error.primary : '#C4C4C4'}
                     />
                 }
             >

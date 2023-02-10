@@ -33,16 +33,14 @@ const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
   };
 
   const handleCancel = () => {
-    const {idLista} = currentSolicitacao!;
-    cancel(
-      dispatch,
-      !!network,
-      () => navigation.navigate('solicitacaoList'),
-      userData!,
-      idLista,
-      motivoCancelamento,
-    );
-  };
+        if (lista) {
+            console.log("idLista", lista[0].idLista)
+            console.log("networknetwork", network)
+            console.log("userData", userData)
+            console.log("lista", lista)
+            cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!, lista[0].idLista, motivoCancelamento)
+        }
+    }
 
   return (
     <>
