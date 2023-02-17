@@ -26,10 +26,14 @@ import cancelEndereco from './scripts/cancelEndereco';
 import getVolumes from '../../scripts/getVolumes';
 import findLista from '../../scripts/findLista';
 import sleep from '../../../../utils/sleep';
+import {useNetInfo} from '@react-native-community/netinfo';
+import storage from '../../../../utils/storage';
 
 const SolicitacaoReceivement: React.FC<
   StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>
 > = ({navigation}) => {
+  const netInfo = useNetInfo();
+
   const dispatch = useAppDispatch();
   const {network, location} = useAppSelector(s => s.app);
   const {userData} = useAppSelector(s => s.auth);
@@ -98,20 +102,56 @@ const SolicitacaoReceivement: React.FC<
     const {idLista, idRemetente} = currentSolicitacao!;
     const openModal = () => setOpenSuccessModal(true);
 
-    await send(
-      dispatch,
-      !!network,
-      redirectList,
-      openModal,
-      userData!,
-      idLista,
-      idRemetente,
-      getVolumes(lista!, currentSolicitacao!),
-    );
+    if (netInfo.isInternetReachable) {
+      await send(
+        dispatch,
+        !!network,
+        redirectList,
+        openModal,
+        userData!,
+        idLista,
+        idRemetente,
+        getVolumes(lista!, currentSolicitacao!),
+      );
 
-    if (!checkSaveLista()) {
-      await sleep(500);
-      dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
+      if (!checkSaveLista()) {
+        await sleep(500);
+        dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
+      }
+    } else {
+      const result: any = await storage.getItem('@_ListaPeding');
+
+      if (!result) {
+        await storage.setItem('@_ListaPeding', [currentSolicitacao]);
+        await dispatch(
+          updateEnderecoSituacao({status: 'PENDENTE', idLista, idRemetente}),
+        );
+        await navigation.navigate('rotas');
+      } else {
+        const verify = result.filter(
+          (x: any) => x.idRemetente === currentSolicitacao?.idRemetente,
+        );
+        if (verify.length) {
+          await storage.setItem('@_ListaPeding', result);
+          await dispatch(
+            updateEnderecoSituacao({status: 'PENDENTE', idLista, idRemetente}),
+          );
+          await navigation.navigate('rotas');
+        } else {
+          const dataPrevius = [...result, currentSolicitacao];
+
+          await storage.setItem('@_ListaPeding', dataPrevius);
+          await dispatch(
+            updateEnderecoSituacao({status: 'PENDENTE', idLista, idRemetente}),
+          );
+          await navigation.navigate('rotas');
+        }
+
+        // // await dispatch(updateListaSituacao({status: 'PENDENTE', idLista}));
+        // await dispatch(
+        //   updateEnderecoSituacao({status: 'PENDENTE', idLista, idRemetente}),
+        // );
+      }
     }
   };
 
@@ -220,7 +260,7 @@ const SolicitacaoReceivement: React.FC<
                   }}
                 />
               )}
-              {[3, 5].includes(
+              {[3, 7].includes(
                 findEndereco(lista, currentSolicitacao).situacao ??
                   idStatusLista['APROVADO'],
               ) && (
@@ -247,7 +287,7 @@ const SolicitacaoReceivement: React.FC<
                     } else {
                       Alert.alert(
                         'Atenção',
-                        'Não é possível finalizar o recebimento sem escanear todos os volumes!',
+                        'Não é possível finalizar o recebimento sem escanear ao menos um volume!',
                         [{text: 'Ok'}],
                       );
                     }
