@@ -115,6 +115,7 @@ const Home: React.FC = () => {
       dispatch(
         updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}),
       );
+      dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
     });
     await storage.setItem('@_ListaPeding', null);
   }

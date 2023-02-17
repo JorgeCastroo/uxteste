@@ -144,13 +144,9 @@ const SolicitacaoReceivement: React.FC<
           await dispatch(
             updateEnderecoSituacao({status: 'PENDENTE', idLista, idRemetente}),
           );
+
           await navigation.navigate('rotas');
         }
-
-        // // await dispatch(updateListaSituacao({status: 'PENDENTE', idLista}));
-        // await dispatch(
-        //   updateEnderecoSituacao({status: 'PENDENTE', idLista, idRemetente}),
-        // );
       }
     }
   };

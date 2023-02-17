@@ -62,6 +62,7 @@ const ModalAlert: React.FC<IModal> = ({back, logout, close}) => {
       dispatch(
         updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}),
       );
+      dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
     });
     await storage.setItem('@_ListaPeding', null);
     await back;
