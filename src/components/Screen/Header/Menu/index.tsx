@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, Linking} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, Linking, Modal} from 'react-native';
 import {Appbar, Divider, Menu} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {HeaderMenuProps} from './types';
@@ -10,9 +10,14 @@ import cancel from '../../../../modules/solicitacao/screens/SolicitacaoReceiveme
 import {APP_VERSION} from '../../../../config';
 import copySolicitacao from '../../../../modules/solicitacao/scripts/copySolicitacao';
 import findEndereco from '../../../../modules/solicitacao/scripts/findEndereco';
+import storage from '../../../../utils/storage';
+import ModalAlert from '../../../ModalAlert/ModalAlert';
 
 const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
   const dispatch = useAppDispatch();
+  const [pending, sePending] = useState<any>();
+  const [modalVisible, setModalVisible] = useState(false);
+
   const {network, isVersionDeprected} = useAppSelector(s => s.app);
   const {userData} = useAppSelector(s => s.auth);
   const {lista, currentSolicitacao} = useAppSelector(s => s.lista);
@@ -32,15 +37,35 @@ const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
     setMenuVisible(false);
   };
 
-  const handleCancel = () => {
-        if (lista) {
-            console.log("idLista", lista[0].idLista)
-            console.log("networknetwork", network)
-            console.log("userData", userData)
-            console.log("lista", lista)
-            cancel(dispatch, !!network, () => navigation.navigate('solicitacaoList'), userData!, lista[0].idLista, motivoCancelamento)
-        }
+  const storeData = async () => {
+    try {
+      const result = await storage.getItem('@_ListaPeding');
+      sePending(result);
+    } catch (e) {
+      // saving error
     }
+  };
+
+  useEffect(() => {
+    storeData();
+  }, []);
+
+  const handleCancel = () => {
+    if (lista) {
+      console.log('idLista', lista[0].idLista);
+      console.log('networknetwork', network);
+      console.log('userData', userData);
+      console.log('lista', lista);
+      cancel(
+        dispatch,
+        !!network,
+        () => navigation.navigate('solicitacaoList'),
+        userData!,
+        lista[0].idLista,
+        motivoCancelamento,
+      );
+    }
+  };
 
   return (
     <>
@@ -100,11 +125,16 @@ const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
         <Menu.Item
           icon="logout"
           title="Sair"
-          onPress={() =>
-            handleOnPress(() =>
-              setUserLogout(dispatch, () => navigation.navigate('home')),
-            )
-          }
+          onPress={() => {
+            if (pending) {
+              setModalVisible(true);
+              setMenuVisible(!menuVisible);
+            } else {
+              handleOnPress(() =>
+                setUserLogout(dispatch, () => navigation.navigate('home')),
+              );
+            }
+          }}
         />
         <Divider />
         <Menu.Item
@@ -125,6 +155,21 @@ const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
         setMotivo={setMotivoCancelamento}
         onSubmit={handleCancel}
       />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <ModalAlert
+          back={() => navigation.navigate('home')}
+          close={() => setModalVisible(!modalVisible)}
+          logout={() => {
+            setUserLogout(dispatch, () => navigation.navigate('home'));
+          }}
+        />
+      </Modal>
     </>
   );
 };

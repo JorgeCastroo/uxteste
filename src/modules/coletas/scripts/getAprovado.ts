@@ -24,8 +24,9 @@ export default async function getAprovados(
 
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
+    const base_url = await storage.getItem('BASE_URL');
 
-    const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ListarRomaneio`;
+    const endpoint = `${base_url}Lista/FirstMile/ListarRomaneio`;
     const authorization = VVLOG_AUTHORIZATION;
     const body = {
       idTransportadora: userData.idTransportadora,

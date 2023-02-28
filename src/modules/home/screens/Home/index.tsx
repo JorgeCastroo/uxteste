@@ -23,13 +23,23 @@ import getRemainder from '../../../../utils/getRemainder';
 import checkListaUpdate from '../../../solicitacao/scripts/checkListaUpdate';
 import Button from '../../../../components/Button';
 import {useNetInfo} from '@react-native-community/netinfo';
-
-const requestInterval = interval(1000);
+import storage from '../../../../utils/storage';
+import {View} from 'react-native';
+import getVolumes from '../../../solicitacao/scripts/getVolumes';
+import send from '../../../solicitacao/screens/SolicitacaoReceivement/scripts/send';
+import {
+  updateEnderecoSituacao,
+  updateListaSituacao,
+} from '../../../solicitacao/reducers/lista/listaReducer';
 
 const Home: React.FC = () => {
+  const requestInterval = interval(1000);
+
   const netInfo = useNetInfo();
   const dispatch = useAppDispatch();
-  const {location} = useAppSelector(s => s.app);
+  const [peding, setpeding] = useState<any>();
+  const {network, location} = useAppSelector(s => s.app);
+
   const {userData} = useAppSelector(s => s.auth);
   const {lista} = useAppSelector(s => s.lista);
   const {coletas} = useAppSelector(s => s.coletas);
@@ -54,7 +64,16 @@ const Home: React.FC = () => {
     if (userData && isFocused) getColetas(dispatch, userData);
   }, [dispatch, userData, isFocused]);
 
+  const storeData = async () => {
+    try {
+      const result = await storage.getItem('@_ListaPeding');
+      setpeding(result);
+    } catch (e) {}
+  };
+
   useEffect(() => {
+    storeData();
+
     if (getRemainder(seconds, 5)) getGeolocation(dispatch);
 
     if (
@@ -74,6 +93,32 @@ const Home: React.FC = () => {
     if (getRemainder(seconds, 60) && SHOW_DATA)
       checkListaUpdate(dispatch, userData);
   }, [dispatch, seconds, SHOW_DATA]);
+
+  const redirectList = () => {};
+  const openModal = () => {};
+
+  async function SendAtt() {
+    await peding.map((item: any) => {
+      const idLista = item.idLista;
+      const idRemetente = item.idRemetente;
+
+      send(
+        dispatch,
+        !!network,
+        redirectList,
+        openModal,
+        userData!,
+        idLista,
+        idRemetente,
+        getVolumes(lista!, item!),
+      );
+      dispatch(
+        updateEnderecoSituacao({status: 'FINALIZADO', idLista, idRemetente}),
+      );
+      dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
+    });
+    await storage.setItem('@_ListaPeding', null);
+  }
 
   return (
     <>
@@ -109,6 +154,7 @@ const Home: React.FC = () => {
                 onPress={() => getColetas(dispatch, userData!)}
               />
             )}
+
             {!netInfo.isInternetReachable
               ? SHOW_COLETAS_LOADING && <SkeletonHomeMessage />
               : SHOW_COLETAS_DATA && <HomeMessage />}
@@ -118,6 +164,29 @@ const Home: React.FC = () => {
               {/* <GroupInfo /> */}
               <GroupStatus />
             </>
+          )}
+
+          {peding && (
+            <Section marginTop={30} marginBottom={20}>
+              <Text
+                style={{color: '#333333', fontSize: 24, fontWeight: 'bold'}}>
+                Você possui coletas não sincronizadas !
+              </Text>
+
+              <View style={{marginTop: 20}}>
+                <Button
+                  disabled={!netInfo.isInternetReachable}
+                  color={themes.gradient.tertiary}
+                  label={
+                    netInfo.isInternetReachable
+                      ? 'Sincronizar'
+                      : 'Sem conexão com a internet'
+                  }
+                  marginHorizontal={true}
+                  onPress={SendAtt}
+                />
+              </View>
+            </Section>
           )}
         </Container>
         <AppVersion />
