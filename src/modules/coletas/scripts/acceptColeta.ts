@@ -21,7 +21,9 @@ export default async function acceptColeta(dispatch: Function, body: Body) {
 
     dispatch(setRequestAcceptColetasLoading());
 
-    const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/AlterarStatusRomaneio`;
+    const base_url = await storage.getItem('BASE_URL');
+
+    const endpoint = `${base_url}Lista/FirstMile/AlterarStatusRomaneio`;
     const authorization = VVLOG_AUTHORIZATION;
     const response = await request.post<ResponsePattern<any>>({
       authorization,

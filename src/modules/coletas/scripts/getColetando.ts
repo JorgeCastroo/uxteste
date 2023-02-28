@@ -11,6 +11,7 @@ import info from '../../../utils/info';
 import request from '../../../utils/request';
 import {ResponsePattern} from '../../../utils/response/types';
 import {setLista} from '../../solicitacao/reducers/lista/listaReducer';
+import storage from '../../../utils/storage';
 
 export default async function getColetando(
   dispatch: Function,
@@ -23,7 +24,9 @@ export default async function getColetando(
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
 
-    const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ListarRomaneio`;
+    const base_url = await storage.getItem('BASE_URL');
+
+    const endpoint = `${base_url}Lista/FirstMile/ListarRomaneio`;
     const authorization = VVLOG_AUTHORIZATION;
     const body = {
       idTransportadora: userData.idTransportadora,

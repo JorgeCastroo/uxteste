@@ -1,50 +1,65 @@
-import { VVLOG_ENDPOINT, VVLOG_AUTHORIZATION } from "@env"
-import { showMessage } from "react-native-flash-message"
-import { Volume } from "../../interfaces/Volume"
-import { UserData } from "../../../../interfaces/UserData"
-import { ResponsePattern } from "../../../../utils/response/types"
-import * as R from "../../reducers/lista/requestListaReducer"
-import { updateListaSituacao } from "../../reducers/lista/listaReducer"
-import request from "../../../../utils/request"
-import info from "../../../../utils/info"
+import {VVLOG_ENDPOINT, VVLOG_AUTHORIZATION} from '@env';
+import {showMessage} from 'react-native-flash-message';
+import {Volume} from '../../interfaces/Volume';
+import {UserData} from '../../../../interfaces/UserData';
+import {ResponsePattern} from '../../../../utils/response/types';
+import * as R from '../../reducers/lista/requestListaReducer';
+import {updateListaSituacao} from '../../reducers/lista/listaReducer';
+import request from '../../../../utils/request';
+import info from '../../../../utils/info';
+import storage from '../../../../utils/storage';
 
-export default async function saveLista(dispatch: Function, redirect: () => void, sync: boolean, userData: UserData, idLista: number, listaVolumes: Volume[]){
-    try {
-        dispatch(R.setRequestSaveListaLoading())
+export default async function saveLista(
+  dispatch: Function,
+  redirect: () => void,
+  sync: boolean,
+  userData: UserData,
+  idLista: number,
+  listaVolumes: Volume[],
+) {
+  try {
+    dispatch(R.setRequestSaveListaLoading());
+    const base_url = await storage.getItem('BASE_URL');
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ConcluirRecebimento`
-        const authorization = VVLOG_AUTHORIZATION
-        const body = {
-            idLista,
-            idTransportadora: userData.idTransportadora,
-            idMotorista: userData.idUsuarioSistema,
-            listaVolumes,
+    const endpoint = `${base_url}Lista/FirstMile/ConcluirRecebimento`;
+    const authorization = VVLOG_AUTHORIZATION;
+    const body = {
+      idLista,
+      idTransportadora: userData.idTransportadora,
+      idMotorista: userData.idUsuarioSistema,
+      listaVolumes,
+    };
+    const response = await request.post<ResponsePattern<any>>({
+      endpoint,
+      authorization,
+      body,
+    });
+
+    if (response && 'flagErro' in response) {
+      dispatch(R.setRequestSaveListaData(response));
+      if (!response.flagErro) {
+        if (!sync) {
+          dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
+          redirect();
         }
-        const response = await request.post<ResponsePattern<any>>({ endpoint, authorization, body })
-
-        if(response && 'flagErro' in response){
-            dispatch(R.setRequestSaveListaData(response))
-            if(!response.flagErro){
-                if(!sync){
-                    dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}))
-                    redirect()
-                }
-                return true
-            }else throw new Error(response.listaMensagens[0])
-        }else throw new Error('Erro na requisição')
-    } catch (error: any) {
-        info.error('saveLista',error)
-        dispatch(R.setRequestSaveListaMessage(error.message ?? JSON.stringify(error)))
-        dispatch(R.setRequestSaveListaError())
-        if(!sync){
-            showMessage({
-                message: "Erro ao finalizar lista!",
-                description: error.message ?? JSON.stringify(error),
-                type: "danger",
-                duration: 10000,
-                floating: true,
-            })
-        }
-        return false
+        return true;
+      } else throw new Error(response.listaMensagens[0]);
+    } else throw new Error('Erro na requisição');
+  } catch (error: any) {
+    info.error('saveLista', error);
+    dispatch(
+      R.setRequestSaveListaMessage(error.message ?? JSON.stringify(error)),
+    );
+    dispatch(R.setRequestSaveListaError());
+    if (!sync) {
+      showMessage({
+        message: 'Erro ao finalizar lista!',
+        description: error.message ?? JSON.stringify(error),
+        type: 'danger',
+        duration: 10000,
+        floating: true,
+      });
     }
+    return false;
+  }
 }

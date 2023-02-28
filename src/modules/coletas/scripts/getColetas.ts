@@ -11,6 +11,7 @@ import info from '../../../utils/info';
 import request from '../../../utils/request';
 import {ResponsePattern} from '../../../utils/response/types';
 import storage from '../../../utils/storage';
+import {showMessage} from 'react-native-flash-message';
 
 export default async function getColetas(
   dispatch: Function,
@@ -22,7 +23,9 @@ export default async function getColetas(
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
 
-    const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/ListarRomaneio`;
+    const base_url = await storage.getItem('BASE_URL');
+
+    const endpoint = `${base_url}Lista/FirstMile/ListarRomaneio`;
     const authorization = VVLOG_AUTHORIZATION;
     const body = {
       idTransportadora: userData.idTransportadora,
@@ -37,6 +40,21 @@ export default async function getColetas(
 
     if (response) {
       dispatch(setRequestColetasData(response));
+      if (response.listaMensagens[0] === 'Nenhuma lista para carregar!') {
+        showMessage({
+          message: `${response.listaMensagens[0]}`,
+          type: 'warning',
+          duration: 3000,
+          floating: true,
+        });
+      } else {
+        showMessage({
+          message: `${response.listaMensagens[0]}`,
+          type: 'success',
+          duration: 3000,
+          floating: true,
+        });
+      }
       if (!response.flagErro) {
         dispatch(setColetas(response.listaResultados));
       } else throw new Error(response.listaMensagens[0]);
