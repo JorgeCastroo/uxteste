@@ -1,9 +1,8 @@
-import {VVLOG_ENDPOINT, VVLOG_AUTHORIZATION} from '@env';
+import {VVLOG_AUTHORIZATION} from '@env';
 import {UserData} from '../../../interfaces/UserData';
 import {setColetas} from '../reducers/coletas/coletas';
 import {Lista} from '../../solicitacao/interfaces/Lista';
 import {
-  setRequestColetasData,
   setRequestColetasErro,
   setRequestColetasLoading,
 } from '../reducers/coletas/requestColetasReducer';
@@ -45,17 +44,45 @@ export default async function getColetando(
         dispatch(setLista(response.listaResultados));
       }
 
-      var listadd = response.listaResultados.filter(
-        item => !lista.some(item2 => item2.idLista === item.idLista),
-      );
-      if (listadd.length > 0) {
-        const newlista = lista.concat(listadd);
-        dispatch(setLista(newlista));
+      var listaReferencia: Lista[] = JSON.parse(JSON.stringify(lista));
 
-        console.log('Adicionada Lista status 3');
-      } else {
-        console.log('Lista atualizada !');
-      }
+      response.listaResultados.forEach(i => {
+        var listaR = listaReferencia.find(i2 => i2.idLista == i.idLista);
+        if (!listaR) {
+          console.log('lista nova');
+          listaReferencia.push(i);
+        } else {
+          console.log('lista existente');
+          listaR.qtdeTotalVolumes = i.qtdeTotalVolumes;
+
+          i.listaEnderecos.forEach(endereco => {
+            var enderecoResult = listaR?.listaEnderecos.find(
+              enderecoR => enderecoR.idRemetente === endereco.idRemetente,
+            );
+
+            if (enderecoResult) {
+              endereco.listaVolumes.forEach(volume => {
+                var volumeExist = enderecoResult?.listaVolumes.some(
+                  volumeR => volume.idVolume === volumeR.idVolume,
+                );
+
+                if (!volumeExist && enderecoResult) {
+                  enderecoResult?.listaVolumes.push(volume);
+                  enderecoResult.qtdeVolumes = endereco.qtdeVolumes;
+                  console.log('Volume Adicionado');
+                }
+              });
+            } else {
+              listaR?.listaEnderecos.push(endereco);
+              console.log('Endereço adicionado');
+            }
+          });
+        }
+      });
+
+      dispatch(setLista(listaReferencia));
+
+      console.log('Saiu');
 
       return response.listaResultados;
       // dispatch(setRequestColetasData(response));
@@ -64,6 +91,7 @@ export default async function getColetando(
     } else throw new Error('Erro na requisição');
   } catch (error: any) {
     info.error('getColetas', error);
+    console.log(error);
     dispatch(setRequestColetasErro());
   }
 }

@@ -78,6 +78,7 @@ const SolicitacaoReceivement: React.FC<
     dispatch(
       updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}),
     );
+
     redirectScan();
   };
 

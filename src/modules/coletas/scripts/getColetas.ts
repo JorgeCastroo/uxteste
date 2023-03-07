@@ -40,6 +40,9 @@ export default async function getColetas(
 
     if (response) {
       dispatch(setRequestColetasData(response));
+
+      console.log(response);
+
       if (response.listaMensagens[0] === 'Nenhuma lista para carregar!') {
         showMessage({
           message: `${response.listaMensagens[0]}`,
