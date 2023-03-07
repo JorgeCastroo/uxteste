@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Alert, Text} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {SolicitacaoRoutesParams} from '../../interfaces/SolicitacaoRoutesParams';
@@ -21,12 +21,9 @@ import Button from '../../../../components/Button';
 import Loader from './components/Loader';
 import localGetLista from '../../scripts/local/localGetLista';
 import {idStatusLista} from '../../../../constants/idStatusLista';
-import {syncValuesLista} from '../../scripts/sync';
 import getAddresses from '../../scripts/getAddresses';
 import findLista from '../../scripts/findLista';
 import closeLista from '../../scripts/requests/requestCloseLista';
-import getAprovados from '../../../coletas/scripts/getAprovado';
-import getColetando from '../../../coletas/scripts/getColetando';
 
 const SolicitacaoList: React.FC<
   StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>
@@ -40,8 +37,6 @@ const SolicitacaoList: React.FC<
   const {userData} = useAppSelector(s => s.auth);
   const {dtUltimaAtualizacao} = useAppSelector(s => s.app);
 
-  //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-  //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
   const {requestGetLista, requestCloseLista} = useAppSelector(
     s => s.requestLista,
   );
@@ -68,14 +63,6 @@ const SolicitacaoList: React.FC<
     dispatch(resetScannedSolicitacoes());
     navigation.navigate('solicitacaoReceivement');
   };
-
-  useEffect(() => {
-    (async () => {
-      setAllIsSync(await syncValuesLista());
-      await getAprovados(dispatch, userData!, lista!);
-      await getColetando(dispatch, userData!, lista!);
-    })();
-  }, [dispatch, lista]);
 
   return (
     <>

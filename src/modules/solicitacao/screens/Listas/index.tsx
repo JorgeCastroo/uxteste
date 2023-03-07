@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Text} from 'react-native';
+import {Text} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {SolicitacaoRoutesParams} from '../../interfaces/SolicitacaoRoutesParams';
 import {Lista} from '../../interfaces/Lista';
@@ -10,12 +10,9 @@ import Render from '../../../../components/Screen/Render';
 import Section from '../../../../components/Screen/Section';
 import NoData from '../../../../components/NoData';
 import FormError from '../../../../components/Form/Error';
-import Button from '../../../../components/Button';
 import Loader from './components/Loader';
 import localGetLista from '../../scripts/local/localGetLista';
-import {idStatusLista} from '../../../../constants/idStatusLista';
 import {syncValuesLista} from '../../scripts/sync';
-import closeLista from '../../scripts/requests/requestCloseLista';
 import getAprovados from '../../../coletas/scripts/getAprovado';
 import getColetando from '../../../coletas/scripts/getColetando';
 
@@ -31,11 +28,7 @@ const GroupListas: React.FC<
   const {userData} = useAppSelector(s => s.auth);
   const {dtUltimaAtualizacao} = useAppSelector(s => s.app);
 
-  //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
-  //const { requestGetRoteirizacao } = useAppSelector(s => s.requestRoteirizacao)
-  const {requestGetLista, requestCloseLista} = useAppSelector(
-    s => s.requestLista,
-  );
+  const {requestGetLista} = useAppSelector(s => s.requestLista);
 
   const [allIsSync, setAllIsSync] = useState(true);
 
@@ -60,14 +53,10 @@ const GroupListas: React.FC<
   useEffect(() => {
     (async () => {
       setAllIsSync(await syncValuesLista());
-    })();
-  }, [dispatch, lista]);
-
-  useEffect(() => {
-    (async () => {
-      setAllIsSync(await syncValuesLista());
-      await getAprovados(dispatch, userData!, lista!);
-      await getColetando(dispatch, userData!, lista!);
+      await navigation.addListener('focus', () => {
+        getColetando(dispatch, userData!, lista!);
+        getAprovados(dispatch, userData!, lista!);
+      });
     })();
   }, [dispatch, lista]);
 
@@ -80,10 +69,14 @@ const GroupListas: React.FC<
         }}
         paddingBottom={20}
         align={SHOW_LOADING ? 'space-between' : undefined}
-        onRefresh={async () => await localGetLista(dispatch)}>
+        onRefresh={async () => {
+          await localGetLista(dispatch);
+          await getAprovados(dispatch, userData!, lista!);
+          await getColetando(dispatch, userData!, lista!);
+        }}>
         <Header title="Rotas" screenName="rotas" goBack={false} />
         {SHOW_LOADING && <Loader percent={loaderPercent} />}
-        {!lista && (
+        {lista && lista?.length < 0 && (
           <NoData emoji="confused" message={['Você não possui listas!']} />
         )}
         <FormError
@@ -107,9 +100,9 @@ const GroupListas: React.FC<
               )}
 
               {lista &&
-                lista.map(item => (
+                lista.map((item, index) => (
                   <CardBox
-                    key={item.idLista}
+                    key={index}
                     rota={item.rota}
                     qtdeTotalVolumes={item.qtdeTotalVolumes}
                     situacao={item.situacao}

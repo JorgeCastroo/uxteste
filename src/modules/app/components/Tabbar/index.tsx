@@ -19,7 +19,7 @@ const Tabbar: React.FC<BottomTabBarProps> = ({navigation, state}) => {
           />
           {/* <TabCenterItem onPress = {() => navigation.navigate('map')} /> */}
           <TabItem
-            icon="reorder-horizontal"
+            icon="route"
             active={state.index === 2}
             onPress={() =>
               navigation.reset({
