@@ -40,22 +40,48 @@ export default async function getAprovados(
     });
 
     if (response) {
-      var listadd = response.listaResultados.filter(
-        item => !lista.some(item2 => item2.idLista === item.idLista),
-      );
-
       if (!lista) {
         dispatch(setLista(response.listaResultados));
       }
 
-      if (listadd.length > 0) {
-        const newlista = lista.concat(listadd);
-        dispatch(setLista(newlista));
+      var listaReferencia: Lista[] = JSON.parse(JSON.stringify(lista));
+      response.listaResultados.forEach(i => {
+        var listaR = listaReferencia.find(i2 => i2.idLista == i.idLista);
+        if (!listaR) {
+          console.log('lista nova status 2');
+          listaReferencia.push(i);
+        } else {
+          console.log('lista existente status 2');
+          listaR.qtdeTotalVolumes = i.qtdeTotalVolumes;
 
-        console.log('Adicionada Lista status 2');
-      } else {
-        console.log('Lista atualizada !');
-      }
+          i.listaEnderecos.forEach(endereco => {
+            var enderecoResult = listaR?.listaEnderecos.find(
+              enderecoR => enderecoR.idRemetente === endereco.idRemetente,
+            );
+
+            if (enderecoResult) {
+              endereco.listaVolumes.forEach(volume => {
+                var volumeExist = enderecoResult?.listaVolumes.some(
+                  volumeR => volume.idVolume === volumeR.idVolume,
+                );
+
+                if (!volumeExist && enderecoResult) {
+                  enderecoResult?.listaVolumes.push(volume);
+                  enderecoResult.qtdeVolumes = endereco.qtdeVolumes;
+                  console.log('Volume Adicionado lista status 2');
+                }
+              });
+            } else {
+              listaR?.listaEnderecos.push(endereco);
+              console.log('Endereço adicionado lista status 2');
+            }
+          });
+        }
+      });
+
+      dispatch(setLista(listaReferencia));
+
+      console.log('Saiu');
 
       // dispatch(setRequestColetasData(response));
       // if (!response.flagErro) dispatch(setColetas(response.listaResultados));

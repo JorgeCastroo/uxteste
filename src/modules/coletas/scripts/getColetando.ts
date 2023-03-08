@@ -45,14 +45,13 @@ export default async function getColetando(
       }
 
       var listaReferencia: Lista[] = JSON.parse(JSON.stringify(lista));
-
       response.listaResultados.forEach(i => {
         var listaR = listaReferencia.find(i2 => i2.idLista == i.idLista);
         if (!listaR) {
-          console.log('lista nova');
+          console.log('lista nova status 3');
           listaReferencia.push(i);
         } else {
-          console.log('lista existente');
+          console.log('lista existente status 3');
           listaR.qtdeTotalVolumes = i.qtdeTotalVolumes;
 
           i.listaEnderecos.forEach(endereco => {
@@ -69,12 +68,12 @@ export default async function getColetando(
                 if (!volumeExist && enderecoResult) {
                   enderecoResult?.listaVolumes.push(volume);
                   enderecoResult.qtdeVolumes = endereco.qtdeVolumes;
-                  console.log('Volume Adicionado');
+                  console.log('Volume Adicionado lista status 3');
                 }
               });
             } else {
               listaR?.listaEnderecos.push(endereco);
-              console.log('Endereço adicionado');
+              console.log('Endereço adicionado lista status 3');
             }
           });
         }

@@ -31,6 +31,8 @@ import {
   updateEnderecoSituacao,
   updateListaSituacao,
 } from '../../../solicitacao/reducers/lista/listaReducer';
+import getAprovados from '../../../coletas/scripts/getAprovado';
+import getColetando from '../../../coletas/scripts/getColetando';
 
 const Home: React.FC = () => {
   const requestInterval = interval(1000);
@@ -43,7 +45,6 @@ const Home: React.FC = () => {
   const {userData} = useAppSelector(s => s.auth);
   const {lista} = useAppSelector(s => s.lista);
   const {coletas} = useAppSelector(s => s.coletas);
-  //const { roteirizacao } = useAppSelector(s => s.roteirizacao)
   const {requestColeta} = useAppSelector(s => s.requestColetas);
   const isFocused = useIsFocused();
 
@@ -61,7 +62,11 @@ const Home: React.FC = () => {
   }, [dispatch, userData]);
 
   useEffect(() => {
-    if (userData && isFocused) getColetas(dispatch, userData);
+    if (userData && isFocused) {
+      getColetas(dispatch, userData);
+      getAprovados(dispatch, userData!, lista!);
+      getColetando(dispatch, userData!, lista!);
+    }
   }, [dispatch, userData, isFocused]);
 
   const storeData = async () => {
@@ -129,7 +134,11 @@ const Home: React.FC = () => {
         }}
         align="space-between"
         paddingBottom={24}
-        onRefresh={async () => await getColetas(dispatch, userData!)}>
+        onRefresh={async () => {
+          await getColetas(dispatch, userData!);
+          await getAprovados(dispatch, userData!, lista!);
+          await getColetando(dispatch, userData!, lista!);
+        }}>
         <Container padding={false}>
           <HomeHeader />
           <TopBox />
@@ -151,7 +160,11 @@ const Home: React.FC = () => {
                 }
                 marginHorizontal={true}
                 disabled={!netInfo.isInternetReachable}
-                onPress={() => getColetas(dispatch, userData!)}
+                onPress={async () => {
+                  await getColetas(dispatch, userData!);
+                  await getAprovados(dispatch, userData!, lista!);
+                  await getColetando(dispatch, userData!, lista!);
+                }}
               />
             )}
 
@@ -161,7 +174,6 @@ const Home: React.FC = () => {
           </Section>
           {lista && lista?.length > 0 && (
             <>
-              {/* <GroupInfo /> */}
               <GroupStatus />
             </>
           )}
