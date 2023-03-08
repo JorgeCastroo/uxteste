@@ -12,9 +12,9 @@ import NoData from '../../../../components/NoData';
 import FormError from '../../../../components/Form/Error';
 import Loader from './components/Loader';
 import localGetLista from '../../scripts/local/localGetLista';
-import {syncValuesLista} from '../../scripts/sync';
 import getAprovados from '../../../coletas/scripts/getAprovado';
 import getColetando from '../../../coletas/scripts/getColetando';
+import {useIsFocused} from '@react-navigation/native';
 
 import CardBox from './components/CardRotas';
 
@@ -31,16 +31,13 @@ const GroupListas: React.FC<
   const {requestGetLista} = useAppSelector(s => s.requestLista);
 
   const [allIsSync, setAllIsSync] = useState(true);
+  const isFocused = useIsFocused();
 
   const SHOW_LOADING = loadingNewLista;
-  const SHOW_NO_DATA = !SHOW_LOADING && !lista;
   const SHOW_DATA = !SHOW_LOADING && !!lista && lista.length > 0;
 
   const SHOW_FILTERED_LISTA_DATA = !SHOW_LOADING && !!filteredEnderecos;
-  const SHOW_FILTERED_LISTA_NO_DATA =
-    !SHOW_LOADING && !!filteredEnderecos && filteredEnderecos.length === 0;
 
-  const SHOW_LISTA_DATA = !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista;
   const SHOW_LISTA_NO_DATA =
     !SHOW_LOADING && !SHOW_FILTERED_LISTA_DATA && !!lista && lista.length === 0;
 
@@ -51,14 +48,11 @@ const GroupListas: React.FC<
   };
 
   useEffect(() => {
-    (async () => {
-      setAllIsSync(await syncValuesLista());
-      await navigation.addListener('focus', () => {
-        getColetando(dispatch, userData!, lista!);
-        getAprovados(dispatch, userData!, lista!);
-      });
-    })();
-  }, [dispatch, lista]);
+    if (userData && isFocused) {
+      getAprovados(dispatch, userData!, lista!);
+      getColetando(dispatch, userData!, lista!);
+    }
+  }, [dispatch, userData, isFocused]);
 
   return (
     <>
@@ -76,7 +70,7 @@ const GroupListas: React.FC<
         }}>
         <Header title="Rotas" screenName="rotas" goBack={false} />
         {SHOW_LOADING && <Loader percent={loaderPercent} />}
-        {lista && lista?.length < 0 && (
+        {!lista && (
           <NoData emoji="confused" message={['Você não possui listas!']} />
         )}
         <FormError
