@@ -13,7 +13,7 @@ import findEndereco from '../../../../modules/solicitacao/scripts/findEndereco';
 import storage from '../../../../utils/storage';
 import ModalAlert from '../../../ModalAlert/ModalAlert';
 
-const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
+const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName, idList}) => {
   const dispatch = useAppDispatch();
   const [pending, sePending] = useState<any>();
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,17 +51,13 @@ const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName}) => {
   }, []);
 
   const handleCancel = () => {
-    if (lista) {
-      console.log('idLista', lista[0].idLista);
-      console.log('networknetwork', network);
-      console.log('userData', userData);
-      console.log('lista', lista);
+    if (idList) {
       cancel(
         dispatch,
         !!network,
-        () => navigation.navigate('solicitacaoList'),
+        () => navigation.navigate('rotas'),
         userData!,
-        lista[0].idLista,
+        idList,
         motivoCancelamento,
       );
     }

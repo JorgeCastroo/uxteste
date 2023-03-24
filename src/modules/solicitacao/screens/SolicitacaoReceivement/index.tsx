@@ -19,15 +19,17 @@ import {idStatusLista} from '../../../../constants/idStatusLista';
 import StatusBox from './components/StatusBox';
 import SuccessModal from './components/SuccessModal';
 import {getCoords} from '../../../app/scripts/geolocationService';
-import findListaPosition from '../../scripts/findListaPosition';
 import findEndereco from '../../scripts/findEndereco';
 import checkStatus from '../../scripts/checkStatus';
-import cancelEndereco from './scripts/cancelEndereco';
 import getVolumes from '../../scripts/getVolumes';
 import findLista from '../../scripts/findLista';
 import sleep from '../../../../utils/sleep';
 import {useNetInfo} from '@react-native-community/netinfo';
 import storage from '../../../../utils/storage';
+import getScannedVolumes from '../../scripts/getScannedVolumes';
+import {Lista} from '../../interfaces/Lista';
+import moment from 'moment';
+import {current} from '@reduxjs/toolkit';
 
 const SolicitacaoReceivement: React.FC<
   StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoReceivement'>
@@ -81,23 +83,7 @@ const SolicitacaoReceivement: React.FC<
 
     redirectScan();
   };
-
-  const handleCancelEndereco = async () => {
-    const {idLista, idRemetente} = currentSolicitacao!;
-    await cancelEndereco(
-      dispatch,
-      !!network,
-      redirectList,
-      userData!,
-      idLista,
-      idRemetente,
-    );
-
-    if (!checkSaveLista()) {
-      await sleep(500);
-      dispatch(updateListaSituacao({status: 'FINALIZADO', idLista}));
-    }
-  };
+  console.log(currentSolicitacao);
 
   const handleSend = async () => {
     const {idLista, idRemetente} = currentSolicitacao!;
@@ -235,62 +221,66 @@ const SolicitacaoReceivement: React.FC<
                 findEndereco(lista, currentSolicitacao).situacao ??
                   idStatusLista['APROVADO'],
               ) && (
-                <Button
-                  label="Cancelar Recebimento"
-                  color={[
-                    themes.status.error.primary,
-                    themes.status.error.secondary,
-                  ]}
-                  marginHorizontal
-                  marginBottom={8}
-                  loading={requestCancelEnderecoLista.loading}
-                  disabled={requestCancelEnderecoLista.loading}
-                  onPress={() => {
-                    Alert.alert(
-                      'Atenção',
-                      'Deseja cancelar o recebimento desse endereço?',
-                      [
-                        {text: 'Não', style: 'cancel'},
-                        {text: 'Sim', onPress: handleCancelEndereco},
-                      ],
-                    );
-                  }}
-                />
-              )}
-              {[3, 7].includes(
-                findEndereco(lista, currentSolicitacao).situacao ??
-                  idStatusLista['APROVADO'],
-              ) && (
-                <Button
-                  label="Finalizar Recebimento"
-                  color={[
-                    themes.status.success.primary,
-                    themes.status.success.secondary,
-                  ]}
-                  marginHorizontal
-                  loading={
-                    requestSaveLista.loading || requestSendLeituraLista.loading
-                  }
-                  disabled={
-                    requestSaveLista.loading || requestSendLeituraLista.loading
-                  }
-                  onPress={() => {
-                    if (
-                      findEndereco(lista, currentSolicitacao).listaVolumes.some(
-                        f => f.dtLeituraFirstMile !== '',
-                      )
-                    ) {
-                      handleSend();
-                    } else {
-                      Alert.alert(
-                        'Atenção',
-                        'Não é possível finalizar o recebimento sem escanear ao menos um volume!',
-                        [{text: 'Ok'}],
-                      );
+                  <></>
+                  //   <Button
+                  //     label="Cancelar Recebimento"
+                  //     color={[
+                  //       themes.status.error.primary,
+                  //       themes.status.error.secondary,
+                  //     ]}
+                  //     marginHorizontal
+                  //     marginBottom={8}
+                  //     loading={requestCancelEnderecoLista.loading}
+                  //     disabled={requestCancelEnderecoLista.loading}
+                  //     onPress={() => {
+                  //       Alert.alert(
+                  //         'Atenção',
+                  //         'Deseja cancelar o recebimento desse endereço?',
+                  //         [
+                  //           {text: 'Não', style: 'cancel'},
+                  //           {text: 'Sim', onPress: handleCancelEndereco},
+                  //         ],
+                  //       );
+                  //     }}
+                  //   />
+                  // )}
+                  // {[3, 7].includes(
+                  //   findEndereco(lista, currentSolicitacao).situacao ??
+                  //     idStatusLista['APROVADO'],
+                ) && (
+                  <Button
+                    label="Finalizar Recebimento"
+                    color={[
+                      themes.status.success.primary,
+                      themes.status.success.secondary,
+                    ]}
+                    marginHorizontal
+                    loading={
+                      requestSaveLista.loading ||
+                      requestSendLeituraLista.loading
                     }
-                  }}
-                />
-              )}
+                    disabled={
+                      requestSaveLista.loading ||
+                      requestSendLeituraLista.loading
+                    }
+                    onPress={() => {
+                      if (
+                        findEndereco(
+                          lista,
+                          currentSolicitacao,
+                        ).listaVolumes.some(f => f.dtLeituraFirstMile !== '')
+                      ) {
+                        handleSend();
+                      } else {
+                        Alert.alert(
+                          'Atenção',
+                          'Não é possível finalizar o recebimento sem escanear ao menos um volume!',
+                          [{text: 'Ok'}],
+                        );
+                      }
+                    }}
+                  />
+                )}
             </Section>
           </>
         )}

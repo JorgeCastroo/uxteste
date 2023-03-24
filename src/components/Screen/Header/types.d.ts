@@ -1,9 +1,10 @@
-import { RoutesNames } from "../../../interfaces/RoutesNames"
+import {RoutesNames} from '../../../interfaces/RoutesNames';
 
 export interface ScreenHeaderProps {
-    goBack?: boolean
-    backRoute?: string
-    title?: string
-    subtitle?: string
-    screenName?: RoutesNames
+  goBack?: boolean;
+  backRoute?: string;
+  title?: string;
+  subtitle?: string;
+  screenName?: RoutesNames;
+  idList?: number;
 }
