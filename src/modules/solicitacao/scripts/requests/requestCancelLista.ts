@@ -6,6 +6,7 @@ import {updateListaSituacao} from '../../reducers/lista/listaReducer';
 import request from '../../../../utils/request';
 import info from '../../../../utils/info';
 import storage from '../../../../utils/storage';
+import removeLista from '../removeLista';
 
 export default async function cancelLista(
   dispatch: Function,
@@ -32,10 +33,13 @@ export default async function cancelLista(
       authorization,
       body,
     });
-
     if (response && 'flagErro' in response) {
       dispatch(R.setRequestCancelListaData(response));
+      removeLista(dispatch);
+
       if (!response.flagErro) {
+        removeLista(dispatch);
+
         if (!sync) {
           dispatch(updateListaSituacao({status: 'CANCELADO', idLista}));
           redirect();

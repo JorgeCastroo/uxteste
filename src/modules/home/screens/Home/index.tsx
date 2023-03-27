@@ -162,8 +162,6 @@ const Home: React.FC = () => {
                 disabled={!netInfo.isInternetReachable}
                 onPress={async () => {
                   await getColetas(dispatch, userData!);
-                  await getAprovados(dispatch, userData!, lista!);
-                  await getColetando(dispatch, userData!, lista!);
                 }}
               />
             )}

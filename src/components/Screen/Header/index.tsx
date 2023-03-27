@@ -12,6 +12,7 @@ const Header: React.FC<ScreenHeaderProps> = ({
   title,
   subtitle,
   screenName,
+  idList,
 }) => {
   const {location} = useAppSelector(s => s.app);
   const {syncLoading} = useAppSelector(s => s.sync);
@@ -34,7 +35,7 @@ const Header: React.FC<ScreenHeaderProps> = ({
 
       {syncLoading && <Appbar.Action icon="sync" />}
       {!!lista && !location && <Appbar.Action icon="map-marker-off-outline" />}
-      <HeaderMenu screenName={screenName} />
+      <HeaderMenu idList={idList} screenName={screenName} />
     </Appbar.Header>
   );
 };

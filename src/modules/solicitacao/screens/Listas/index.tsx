@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text} from 'react-native';
+import {Alert, Text} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {SolicitacaoRoutesParams} from '../../interfaces/SolicitacaoRoutesParams';
 import {Lista} from '../../interfaces/Lista';
@@ -17,14 +17,24 @@ import getColetando from '../../../coletas/scripts/getColetando';
 import {useIsFocused} from '@react-navigation/native';
 
 import CardBox from './components/CardRotas';
+import Button from '../../../../components/Button';
+import closeLista from '../../scripts/requests/requestCloseLista';
+import storage from '../../../../utils/storage';
+import getVolumes from '../../scripts/getVolumes';
+import send from '../SolicitacaoReceivement/scripts/send';
+import cancel from '../SolicitacaoReceivement/scripts/cancel';
 
 const GroupListas: React.FC<
   StackScreenProps<SolicitacaoRoutesParams, 'solicitacaoList'>
 > = ({navigation}) => {
   const dispatch = useAppDispatch();
+  const [peding, setpeding] = useState<any>();
+
   const {lista, filteredEnderecos, loadingNewLista} = useAppSelector(
     s => s.lista,
   );
+  const {network} = useAppSelector(s => s.app);
+
   const {userData} = useAppSelector(s => s.auth);
   const {dtUltimaAtualizacao} = useAppSelector(s => s.app);
 
@@ -47,10 +57,70 @@ const GroupListas: React.FC<
     navigation.navigate('solicitacaoList', item);
   };
 
+  const redirectList = () => navigation.navigate('rotas');
+  const storeData = async () => {
+    try {
+      const result = await storage.getItem('@_ListaPeding');
+      setpeding(result);
+    } catch (e) {}
+  };
+  const openModal = () => {};
+
+  const handleFinishi = async () => {
+    if (peding) {
+      await peding.map((item: any) => {
+        const idLista = item.idLista;
+        const idRemetente = item.idRemetente;
+        send(
+          dispatch,
+          !!network,
+          redirectList,
+          openModal,
+          userData!,
+          idLista,
+          idRemetente,
+          getVolumes(lista!, item!),
+        );
+      });
+      await storage.setItem('@_ListaPeding', null);
+    }
+
+    lista!.forEach(i => {
+      var status = i.listaEnderecos.map(endereco => {
+        return (
+          endereco.listaVolumes.filter(f => f.dtLeituraFirstMile !== '')
+            .length > 0
+        );
+      });
+
+      if (status?.filter(item => item == true).length > 0) {
+        console.log({rota: i.rota, status: 'Finalizada'});
+
+        closeLista(dispatch, [i.idLista]);
+      } else {
+        console.log({rota: i.rota, status: 'Cancelada'});
+        cancel(
+          dispatch,
+          !!network,
+          () => {},
+          userData!,
+          i.idLista,
+          'Cancelamento de romaneio first mile, devido nenhuma leitura de volume.',
+        );
+      }
+    });
+
+    await redirectList();
+  };
+
   useEffect(() => {
     if (userData && isFocused) {
-      getAprovados(dispatch, userData!, lista!);
-      getColetando(dispatch, userData!, lista!);
+      const fetchData = async () => {
+        await getColetando(dispatch, userData!, lista!);
+        await getAprovados(dispatch, userData!, lista!);
+      };
+      fetchData();
+      storeData();
     }
   }, [dispatch, userData, isFocused]);
 
@@ -107,6 +177,29 @@ const GroupListas: React.FC<
             </Section>
           </>
         )}
+        <Section>
+          {lista && (
+            <Button
+              label="Finalizar trajeto"
+              color={themes.gradient.success}
+              marginHorizontal
+              onPress={() => {
+                Alert.alert(
+                  'Atenção',
+                  'Deseja finalizar a rota? \n\n Os endereços que não tiveram itens lidos vão ser cancelados!',
+                  [
+                    {text: 'Não', style: 'cancel'},
+                    {
+                      text: 'Sim',
+                      onPress: handleFinishi,
+                    },
+                  ],
+                );
+              }}
+            />
+          )}
+        </Section>
+
         <Section />
       </Render>
     </>
