@@ -19,9 +19,11 @@ export default async function cancelLista(
   try {
     dispatch(R.setRequestCancelListaLoading());
     const base_url = await storage.getItem('BASE_URL');
+    const api_key = await storage.getItem('BASE_API_KEY');  
 
     const endpoint = `${base_url}Lista/FirstMile/CancelarRecebimento`;
-    const authorization = VVLOG_AUTHORIZATION;
+    const authorization: string = api_key as string;
+    
     const body = {
       idTransportadora: userData.idTransportadora,
       idMotorista: userData.idUsuarioSistema,

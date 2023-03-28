@@ -13,9 +13,11 @@ export default async function confirmUpdateVolume(
   try {
     dispatch(R.setRequestConfirmUpdateVolumeLoading());
     const base_url = await storage.getItem('BASE_URL');
+    const api_key = await storage.getItem('BASE_API_KEY');  
 
     const endpoint = `${base_url}Lista/FirstMile/ConfirmarRecebimento`;
-    const authorization = VVLOG_AUTHORIZATION;
+    const authorization: string = api_key as string;
+    
     const body = {listaAtualizados};
     const response = await request.post<ResponsePattern<any>>({
       endpoint,

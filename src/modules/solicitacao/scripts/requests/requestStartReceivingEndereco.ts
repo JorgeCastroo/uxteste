@@ -21,9 +21,11 @@ export default async function startReceivingEndereco(
   try {
     dispatch(R.setRequestStartReceivingEnderecoLoading());
     const base_url = await storage.getItem('BASE_URL');
+    const api_key = await storage.getItem('BASE_API_KEY');  
 
     const endpoint = `${base_url}Lista/FirstMile/`;
-    const authorization = VVLOG_AUTHORIZATION;
+    const authorization: string = api_key as string;
+    
     const body = {
       idLista,
       idRemetente,

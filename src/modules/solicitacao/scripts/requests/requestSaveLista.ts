@@ -20,9 +20,11 @@ export default async function saveLista(
   try {
     dispatch(R.setRequestSaveListaLoading());
     const base_url = await storage.getItem('BASE_URL');
+    const api_key = await storage.getItem('BASE_API_KEY');  
 
     const endpoint = `${base_url}Lista/FirstMile/ConcluirRecebimento`;
-    const authorization = VVLOG_AUTHORIZATION;
+    const authorization: string = api_key as string;
+    
     const body = {
       idLista,
       idTransportadora: userData.idTransportadora,

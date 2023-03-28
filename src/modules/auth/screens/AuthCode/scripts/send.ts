@@ -77,6 +77,8 @@ export default async function send(
 
     if (token && config) {
       await storage.setItem('BASE_URL', config.FirstMileApiMobile);
+      await storage.setItem('BASE_API_KEY', config.FirstMileApiKey);
+      console
       await storage.setItem('transportadora', config);
       dispatch(R.setRequestSendAuthCodeData(config));
       navigation.navigate('authLogin');

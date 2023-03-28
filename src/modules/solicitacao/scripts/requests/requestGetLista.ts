@@ -13,9 +13,11 @@ export default async function getLista(dispatch: Function, userData: UserData) {
   try {
     dispatch(R.setRequestGetListaLoading());
     const base_url = await storage.getItem('BASE_URL');
+    const api_key = await storage.getItem('BASE_API_KEY');  
 
     const endpoint = `${base_url}Lista/FirstMile/ListarRomaneio`;
-    const authorization = VVLOG_AUTHORIZATION;
+    const authorization: string = api_key as string;
+    
     const body = {
       idTransportadora: userData.idTransportadora,
       idMotorista: userData.idUsuarioSistema,

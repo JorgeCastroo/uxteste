@@ -18,9 +18,11 @@ export default async function startReceivingLista(
   try {
     dispatch(R.setRequestStartReceivingListaLoading());
     const base_url = await storage.getItem('BASE_URL');
+    const api_key = await storage.getItem('BASE_API_KEY');  
 
     const endpoint = `${base_url}Lista/FirstMile/AlterarStatusRomaneio`;
-    const authorization = VVLOG_AUTHORIZATION;
+    const authorization: string = api_key as string;
+    
     const body = {
       idLista,
       idRemetente,

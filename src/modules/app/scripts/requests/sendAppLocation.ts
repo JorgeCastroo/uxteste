@@ -7,13 +7,16 @@ import request from "../../../../utils/request"
 import info from "../../../../utils/info"
 import { ResponsePattern } from "../../../../utils/response/types"
 import isoDateTime from "../../../../utils/isoDateTime"
+import storage from '../../../../utils/storage';
 
 export default async function sendAppLocation(dispatch: Function, { idTransportadora, idUsuarioSistema }: UserData, idsLista: number[], coords: Coordinates){
     try {
         dispatch(R.setRequestAppLocationLoading())
+        const base_url = await storage.getItem('BASE_URL');
+        const api_key = await storage.getItem('BASE_API_KEY');  
 
-        const endpoint = `${VVLOG_ENDPOINT}/Lista/FirstMile/EnviarPosicaoMotorista`
-        const authorization = VVLOG_AUTHORIZATION
+        const endpoint = `${base_url}Lista/FirstMile/EnviarPosicaoMotorista`
+        const authorization: string = api_key as string;
         const body = {
             idMotorista: idUsuarioSistema,
             idsLista,
