@@ -77,14 +77,23 @@ const SolicitacaoReceivement: React.FC<
     );
     //await startEndereco(dispatch, !!network, handleNavigate, idLista, idRemetente, getCoords(location!))
 
+    //GAMBIS DEVIDO AO REDUX 
+    let lista = await storage.getItem<Lista[]>('lista')
+    lista!.find(f => f.idLista === idLista)!
+        .listaEnderecos.find(
+          f =>
+            f.idLista === idLista &&
+            f.idRemetente === idRemetente,
+        )!.situacao = idStatusLista["COLETANDO"];
+    await storage.setItem('lista', lista);
+
+    //TO-DO: REMOVER REDUX DAQUI 5 ANOS
     dispatch(
       updateEnderecoSituacao({status: 'COLETANDO', idLista, idRemetente}),
     );
 
     redirectScan();
   };
-  console.log(currentSolicitacao);
-
   const handleSend = async () => {
     const {idLista, idRemetente} = currentSolicitacao!;
     const openModal = () => setOpenSuccessModal(true);

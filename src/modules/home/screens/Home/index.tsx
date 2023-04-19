@@ -33,6 +33,7 @@ import {
 } from '../../../solicitacao/reducers/lista/listaReducer';
 import getAprovados from '../../../coletas/scripts/getAprovado';
 import getColetando from '../../../coletas/scripts/getColetando';
+import { Lista } from '../../../solicitacao/interfaces/Lista';
 
 const Home: React.FC = () => {
   const requestInterval = interval(1000);
@@ -43,7 +44,8 @@ const Home: React.FC = () => {
   const {network, location} = useAppSelector(s => s.app);
 
   const {userData} = useAppSelector(s => s.auth);
-  const {lista} = useAppSelector(s => s.lista);
+  // const {lista} = useAppSelector(s => s.lista);
+  const [lista, setLista] = useState<Lista[]>();
   const {coletas} = useAppSelector(s => s.coletas);
   const {requestColeta} = useAppSelector(s => s.requestColetas);
   const isFocused = useIsFocused();
@@ -63,9 +65,15 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (userData && isFocused) {
-      getColetas(dispatch, userData);
-      getAprovados(dispatch, userData!, lista!);
-      getColetando(dispatch, userData!, lista!);
+      const fetchData = async () => {
+        let lista = await storage.getItem<Lista[]>('lista');
+        setLista(lista!);
+        getColetas(dispatch, userData);
+        getAprovados(dispatch, userData!, lista!);
+        getColetando(dispatch, userData!, lista!);
+    };
+      fetchData();
+      storeData();
     }
   }, [dispatch, userData, isFocused]);
 

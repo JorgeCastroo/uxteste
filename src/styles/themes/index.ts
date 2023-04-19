@@ -25,6 +25,11 @@ export const status = {
     secondary: '#febc3f',
     tertiary: '#ffffbb',
   },
+  progress: {
+    primary: '#9F33FF',
+    secondary: '#D9C0EF',
+    tertiary: '#D9C0EF',
+  },
 };
 
 export const gradient = {

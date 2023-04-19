@@ -82,7 +82,7 @@ const HeaderMenu: React.FC<HeaderMenuProps> = ({screenName, idList}) => {
             ) : (
               <Menu.Item
                 icon="file-cancel"
-                title="Cancelar lista"
+                title="Cancelar rotas"
                 onPress={() => {
                   Alert.alert('Atenção', 'Deseja cancelar a lista?', [
                     {text: 'Não', style: 'cancel'},

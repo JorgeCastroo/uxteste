@@ -17,8 +17,6 @@ interface Body {
 
 export default async function acceptColeta(dispatch: Function, body: Body) {
   try {
-    console.log('acceptColeta');
-
     dispatch(setRequestAcceptColetasLoading());
 
     const base_url = await storage.getItem('BASE_URL');

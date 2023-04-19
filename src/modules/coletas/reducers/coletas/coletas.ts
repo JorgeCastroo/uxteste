@@ -29,7 +29,6 @@ const coletasSlice = createSlice({
         },
 
         setColetasAprovadas: (state, action: PayloadAction<Lista>) => {
-            console.log("setColetasAprovadas");
             if(!state.coletasAprovadas.some(item => item.idLista === action.payload.idLista)){
                 if(state.coletasReprovadas.some(item => item.idLista === action.payload.idLista)) state.coletasReprovadas.splice(state.coletasReprovadas.findIndex(id => id.idLista === action.payload.idLista), 1)
                 state.coletasAprovadas.push(action.payload)

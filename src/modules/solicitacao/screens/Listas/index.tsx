@@ -29,8 +29,10 @@ const GroupListas: React.FC<
 > = ({navigation}) => {
   const dispatch = useAppDispatch();
   const [peding, setpeding] = useState<any>();
+  
+  const [lista, setLista] = useState<Lista[]>();
 
-  const {lista, filteredEnderecos, loadingNewLista} = useAppSelector(
+  const {filteredEnderecos, loadingNewLista} = useAppSelector(
     s => s.lista,
   );
   const {network} = useAppSelector(s => s.app);
@@ -94,18 +96,15 @@ const GroupListas: React.FC<
       });
 
       if (status?.filter(item => item == true).length > 0) {
-        console.log({rota: i.rota, status: 'Finalizada'});
-
         closeLista(dispatch, [i.idLista]);
       } else {
-        console.log({rota: i.rota, status: 'Cancelada'});
         cancel(
           dispatch,
           !!network,
           () => {},
           userData!,
           i.idLista,
-          'Cancelamento de romaneio first mile, devido nenhuma leitura de volume.',
+          'App Sistema: Cancelamento de romaneio first mile, devido nenhuma leitura de volume.',
         );
       }
     });
@@ -116,8 +115,11 @@ const GroupListas: React.FC<
   useEffect(() => {
     if (userData && isFocused) {
       const fetchData = async () => {
-        await getColetando(dispatch, userData!, lista!);
+        let lista = await storage.getItem<Lista[]>('lista');
+        setLista(lista!);
+        await localGetLista(dispatch);
         await getAprovados(dispatch, userData!, lista!);
+        await getColetando(dispatch, userData!, lista!);
       };
       fetchData();
       storeData();

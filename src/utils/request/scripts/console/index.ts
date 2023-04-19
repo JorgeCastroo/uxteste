@@ -5,43 +5,34 @@ const line = () => console.log('------------------------------------------------
 
 function requestLog(method: RequestMethods, endpoint: string){
     if(SHOW_RESPONSE_LOG.REQUEST){
-        line()
-        console.log(`REQUEST: ${method} ${endpoint}`)
+        line()        
         line()
     }
 }
 
 function headerLog(endpoint: string, header: HeadersInit_){
     if(SHOW_RESPONSE_LOG.HEADER){
-        line()
-        console.log('INIT:',endpoint)
-        console.log('HEADER:',header)
+        line()       
         line()
     }
 }
 
 function bodyLog(body: any, endpoint: string){
     if(SHOW_RESPONSE_LOG.BODY){
-        line()
-        console.log('INIT:',endpoint)
-        console.log('BODY:',body)
+        line()       
         line()
     }
 }
 
 function responseLog(response: any, endpoint: string){
     if(SHOW_RESPONSE_LOG.RESPONSE){
-        line()
-        console.log('INIT:',endpoint)
-        console.log('RESPONSE:',response)
+        line()       
         line()
     }
 }
 
 function errorLog(method: RequestMethods, endpoint: string, error: any){
-    if(SHOW_RESPONSE_LOG.ERROR){
-        console.log(`ERROR: ${method} ${endpoint}`)
-        console.log('ERROR:',error)
+    if(SHOW_RESPONSE_LOG.ERROR){      
     }
 }
 

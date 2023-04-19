@@ -105,20 +105,18 @@ const SolicitacaoList: React.FC<
     }
 
     if (status?.filter(item => item == true).length > 0) {
-      console.log('Lista Finalizada');
       await closeLista(
         dispatch,
         [selectedLista].map(f => f.idLista),
       );
     } else {
-      console.log('Lista Cancelada');
       cancel(
         dispatch,
         !!network,
         redirectList,
         userData!,
         selectedLista.idLista,
-        'Cancelamento de romaneio first mile, devido nenhuma leitura de volume.',
+        'App Sistema: Cancelamento de romaneio first mile, devido nenhuma leitura de volume.',
       );
     }
     await redirectList();
@@ -177,7 +175,6 @@ const SolicitacaoList: React.FC<
                     onPress={() => handleNavigate(item)}
                   />
                 ))}
-
               {SHOW_LISTA_NO_DATA && (
                 <NoData
                   emoji="confused"

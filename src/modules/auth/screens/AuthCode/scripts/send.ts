@@ -38,8 +38,6 @@ async function getToken() {
 }
 
 async function getConfiguracao(codigoAcesso: any, token: TruxDiscoveryLogin) {
-  console.log('codigoAcesso', codigoAcesso);
-  console.log('token.access_token', token.access_token);
 
   const serverApi = 'https://trux-discovery-api.uxsolutions.com.br';
 
@@ -59,8 +57,6 @@ async function getConfiguracao(codigoAcesso: any, token: TruxDiscoveryLogin) {
   if (response.status == 200) {
     jsonResponse = await response.json();
   }
-
-  console.log('jsonResponse', JSON.stringify(jsonResponse));
 
   return jsonResponse as TruxDiscovery;
 }
@@ -90,9 +86,7 @@ export default async function send(
       R.setRequestSendAuthCodeMessage(
         'O código de transportadora informado é inválido',
       ),
-    );
-    console.log(error);
-    console.log('ERROR SUBMIT CODIGO ACESSO: ', error);
+    );   
     return 'erro';
   } finally {
   }

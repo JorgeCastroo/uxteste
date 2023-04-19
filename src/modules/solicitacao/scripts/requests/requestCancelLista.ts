@@ -30,6 +30,7 @@ export default async function cancelLista(
       idLista,
       motivoCancelamento,
     };
+
     const response = await request.post<ResponsePattern<any>>({
       endpoint,
       authorization,

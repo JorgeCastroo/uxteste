@@ -16,15 +16,10 @@ export default async function send(dispatch: Function, body: typeof loginFormVal
 
         const transportadora = await storage.getItem<TruxDiscovery>('transportadora');
 
-        console.log("storage", JSON.stringify(transportadora));
-
         const endpoint = `${transportadora?.FirstMileApiMobile}Permissao/Login`
         const authorization = transportadora?.FirstMileApiKey
         const response = await request.post<UserData>({ endpoint, authorization, body })
-
-        console.log("endpoint",endpoint);
-        console.log("authorization",authorization);
-        console.log("response",response);
+       
 
         if (response) {
             dispatch(R.setRequestSendAuthLoginData(response))

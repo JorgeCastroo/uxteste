@@ -47,7 +47,6 @@ export default async function cancelEnderecoLista(
           );
           redirect();
         }
-        console.log(response);
         return true;
       } else throw new Error(response.listaMensagens[0]);
     } else throw new Error('Erro na requisição');

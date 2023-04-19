@@ -11,8 +11,7 @@ import copyAddress from '../../scripts/copyAddress';
 
 const BoxContent: React.FC<Endereco> = endereco => {
   const enderecoCompleto = getFullAddress(endereco);
-  const status = getStatus(endereco.situacao);
-
+  const status = getStatus(endereco.situacao);  
   return (
     <>
       {/* <S.PositionIndicator theme = {status.theme.tertiary}>

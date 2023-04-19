@@ -5,14 +5,14 @@ export default function getStatus(idStatus?: number) {
   if (idStatus) {
     if ([1, 2].includes(idStatus)) {
       return {
-        label: 'Em Aberto',
+        label: 'Pedidos Pendentes',
         theme: themes.status.info,
       };
     }
     if (idStatus === idStatusLista.COLETANDO) {
       return {
         label: 'Coletando',
-        theme: themes.status.info,
+        theme: themes.status.progress,
       };
     }
     if (idStatus === idStatusLista.FINALIZADO) {
@@ -35,7 +35,7 @@ export default function getStatus(idStatus?: number) {
     }
   }
   return {
-    label: 'Em Aberto',
+    label: 'Pedidos Pendentes',
     theme: themes.status.info,
   };
 }

@@ -55,8 +55,6 @@ const ColetasList: React.FC = () => {
       coleta => !coletasAprovadas.map(c => c.idLista).includes(coleta.idLista),
     );
 
-    console.log('coletasNaoAprovadas', coletasNaoAprovadas.length);
-
     if (coletasNaoAprovadas && coletasNaoAprovadas.length > 0) {
       for (const coleta of coletasNaoAprovadas) {
         responseReprovadas = await acceptColeta(dispatch, {

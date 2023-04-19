@@ -20,8 +20,6 @@ export default async function getAprovados(
   lista: Lista[],
 ) {
   try {
-    console.log('getAprovados');
-
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
     const base_url = await storage.getItem('BASE_URL');
@@ -50,10 +48,8 @@ export default async function getAprovados(
       response.listaResultados.forEach(i => {
         var listaR = listaReferencia.find(i2 => i2.idLista == i.idLista);
         if (!listaR) {
-          console.log('lista nova status 2');
           listaReferencia.push(i);
         } else {
-          console.log('lista existente status 2');
           listaR.qtdeTotalVolumes = i.qtdeTotalVolumes;
 
           i.listaEnderecos.forEach(endereco => {
@@ -70,20 +66,16 @@ export default async function getAprovados(
                 if (!volumeExist && enderecoResult) {
                   enderecoResult?.listaVolumes.push(volume);
                   enderecoResult.qtdeVolumes = endereco.qtdeVolumes;
-                  console.log('Volume Adicionado lista status 2');
                 }
               });
             } else {
               listaR?.listaEnderecos.push(endereco);
-              console.log('Endereço adicionado lista status 2');
             }
           });
         }
       });
 
       dispatch(setLista(listaReferencia));
-
-      console.log('Saiu');
 
       // dispatch(setRequestColetasData(response));
       // if (!response.flagErro) dispatch(setColetas(response.listaResultados));

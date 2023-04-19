@@ -18,7 +18,6 @@ export default async function getColetando(
   lista: Lista[],
 ) {
   try {
-    console.log('getColetando');
 
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
@@ -41,18 +40,26 @@ export default async function getColetando(
     });
 
     if (response) {
+      console.log('LISTA REDUX ANTES:');
+      console.log(JSON.stringify(lista) );
       if (!lista) {
+        console.log('SET LISTA DA API:');
         dispatch(setLista(response.listaResultados));
       }
 
       var listaReferencia: Lista[] = JSON.parse(JSON.stringify(lista));
+      console.log('LISTA API:');
+      console.log(JSON.stringify(response.listaResultados) );
+      console.log('REDUX LISTA:');
+      console.log(JSON.stringify(listaReferencia));
       response.listaResultados.forEach(i => {
         var listaR = listaReferencia.find(i2 => i2.idLista == i.idLista);
         if (!listaR) {
-          console.log('lista nova status 3');
+          console.log('1) ADICIONEI A LISTA');
+          console.log(i);
           listaReferencia.push(i);
         } else {
-          console.log('lista existente status 3');
+          console.log('2) LISTA EXISTE');
           listaR.qtdeTotalVolumes = i.qtdeTotalVolumes;
 
           i.listaEnderecos.forEach(endereco => {
@@ -61,28 +68,26 @@ export default async function getColetando(
             );
 
             if (enderecoResult) {
+              console.log('4) ENDEREÇO EXISTE');
               endereco.listaVolumes.forEach(volume => {
                 var volumeExist = enderecoResult?.listaVolumes.some(
                   volumeR => volume.idVolume === volumeR.idVolume,
                 );
 
                 if (!volumeExist && enderecoResult) {
+                  console.log('5) VOLUME ADD');
                   enderecoResult?.listaVolumes.push(volume);
                   enderecoResult.qtdeVolumes = endereco.qtdeVolumes;
-                  console.log('Volume Adicionado lista status 3');
                 }
               });
             } else {
-              listaR?.listaEnderecos.push(endereco);
-              console.log('Endereço adicionado lista status 3');
-            }
+              console.log('3) ENDEREÇO ADD');
+              listaR?.listaEnderecos.push(endereco);}
           });
         }
       });
 
       dispatch(setLista(listaReferencia));
-
-      console.log('Saiu');
 
       return response.listaResultados;
       // dispatch(setRequestColetasData(response));
@@ -91,7 +96,6 @@ export default async function getColetando(
     } else throw new Error('Erro na requisição');
   } catch (error: any) {
     info.error('getColetas', error);
-    console.log(error);
     dispatch(setRequestColetasErro());
   }
 }

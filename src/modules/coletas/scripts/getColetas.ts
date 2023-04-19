@@ -18,7 +18,6 @@ export default async function getColetas(
   userData: UserData,
 ) {
   try {
-    console.log('getColetas');
 
     dispatch(setRequestColetasLoading());
     dispatch(setColetas(null));
@@ -41,8 +40,6 @@ export default async function getColetas(
 
     if (response) {
       dispatch(setRequestColetasData(response));
-
-      console.log('resposta!', response);
 
       if (response.listaMensagens[0] === 'Nenhuma lista para carregar!') {
         showMessage({
