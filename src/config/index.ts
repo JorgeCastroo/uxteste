@@ -15,4 +15,4 @@ export const SHOW_LOG = {
 
 export const REQUEST_TIMEOUT = 1000 * 60
 
-export const APP_VERSION = '6.4.8'
+export const APP_VERSION = '6.5.1'
