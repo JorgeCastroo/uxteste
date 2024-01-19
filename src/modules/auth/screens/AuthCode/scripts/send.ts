@@ -38,7 +38,6 @@ async function getToken() {
 }
 
 async function getConfiguracao(codigoAcesso: any, token: TruxDiscoveryLogin) {
-
   const serverApi = 'https://trux-discovery-api.uxsolutions.com.br';
 
   let newHeaders = new Headers();
@@ -74,7 +73,7 @@ export default async function send(
     if (token && config) {
       await storage.setItem('BASE_URL', config.FirstMileApiMobile);
       await storage.setItem('BASE_API_KEY', config.FirstMileApiKey);
-      console
+
       await storage.setItem('transportadora', config);
       dispatch(R.setRequestSendAuthCodeData(config));
       navigation.navigate('authLogin');
@@ -86,7 +85,7 @@ export default async function send(
       R.setRequestSendAuthCodeMessage(
         'O código de transportadora informado é inválido',
       ),
-    );   
+    );
     return 'erro';
   } finally {
   }
